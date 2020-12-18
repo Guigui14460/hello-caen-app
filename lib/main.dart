@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hello_caen/constants.dart';
 import 'package:hello_caen/routes.dart';
-import 'package:hello_caen/screens/home/home_screen.dart';
+import 'package:hello_caen/screens/splash/splash_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(HelloCaenApplication());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class HelloCaenApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(backgroundColor: Colors.white),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.routeName,
+      initialRoute: SplashScreen.routeName,
       routes: routes,
     );
   }

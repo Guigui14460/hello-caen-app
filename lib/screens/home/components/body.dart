@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hello_caen/screens/sign_in/sign_in_screen.dart';
+import 'package:hello_caen/size_config.dart';
+
+import '../../sign_in/sign_in_screen.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -18,6 +20,7 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context); // if the user doesn't come from SplashScreen
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -26,14 +29,13 @@ class _BodyState extends State<Body> {
         centerTitle: true,
         title: SizedBox(
           height: 60,
-          child:
-              SvgPicture.asset("assets/images/hello-caen-logo-lightmode.svg"),
+          child: SvgPicture.asset("assets/images/logo.svg"),
         ),
         leading: IconButton(
           icon: Icon(Icons.menu),
           color: Colors.black,
           onPressed: () {
-            print("menu");
+            Navigator.pop(context);
           },
         ),
         actions: [

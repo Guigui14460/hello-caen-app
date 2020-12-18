@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Dimensions of the Pixel 3a used for development
-const width = 1080, height = 2220;
-
 /// Allow to use the size configuration of any device
 /// where the app is running.
 class SizeConfig {
@@ -32,7 +29,7 @@ class SizeConfig {
 /// The [inputHeight] is a number of pixels.
 double getProportionateScreenHeight(double inputHeight) {
   double screenHeight = SizeConfig.screenHeight;
-  return (inputHeight / height) * screenHeight;
+  return (inputHeight / 812.0) * screenHeight;
 }
 
 /// Get the proportionate width of the screen to
@@ -40,5 +37,5 @@ double getProportionateScreenHeight(double inputHeight) {
 /// The [inputWidth] is a number of pixels.
 double getProportionateScreenWidth(double inputWidth) {
   double screenWidth = SizeConfig.screenWidth;
-  return (inputWidth / width) * screenWidth;
+  return (inputWidth / 375.0) * screenWidth;
 }

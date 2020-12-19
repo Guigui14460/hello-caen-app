@@ -3,14 +3,10 @@ import 'package:flutter_svg/svg.dart';
 
 class SplashContent extends StatelessWidget {
   const SplashContent({
-    Key key,
     @required this.text,
     @required this.image,
     @required this.imageWidth,
-  })  : assert(text != null),
-        assert(image != null),
-        assert(imageWidth > 0),
-        super(key: key);
+  }) : assert(imageWidth > 0);
   final String image, text;
   final double imageWidth;
 

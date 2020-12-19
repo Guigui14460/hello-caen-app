@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 /// where the app is running.
 class SizeConfig {
   /// Current media query used.
-  static MediaQueryData _mediaQueryData;
+  static MediaQueryData _mediaQueryData = MediaQueryData();
 
   /// Current width of the screen.
-  static double screenWidth;
+  static double screenWidth = 0;
 
   /// Current height of the screen.
-  static double screenHeight;
+  static double screenHeight = 0;
 
   /// Current orientation of the screen.
-  static Orientation orientation;
+  static Orientation orientation = Orientation.portrait;
 
   /// Initialize the attributes via the [context].
   void init(BuildContext context) {

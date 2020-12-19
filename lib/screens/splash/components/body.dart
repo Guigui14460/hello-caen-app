@@ -12,19 +12,19 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  List<Map<String, Object>> splashData = [
+  List<Map<String, dynamic>> splashData = [
     {
       "text": "Bienvenue sur l\'application Hello CAEN.\nMarchez dans CAEN ...",
       "image": "assets/images/walk.svg",
       "imageSize": getProportionateScreenWidth(350),
     },
     {
-      "text": "... Activez les données mobiles\net la localisation ...",
+      "text": "... activez les données mobiles\net la localisation ...",
       "image": "assets/images/activations.png",
       "imageSize": getProportionateScreenWidth(350),
     },
     {
-      "text": "... Et découvrez de nouveaux lieux\ntout en vous déplaçant !",
+      "text": "... et découvrez de nouveaux lieux\ntout en vous déplaçant !",
       "image": "assets/images/map2.svg",
       "imageSize": getProportionateScreenWidth(350),
     },
@@ -41,6 +41,7 @@ class _BodyState extends State<Body> {
       press: () {
         Navigator.popAndPushNamed(context, HomeScreen.routeName);
       },
+      longPress: () {},
     );
 
     return SafeArea(
@@ -115,7 +116,7 @@ class _BodyState extends State<Body> {
     );
   }
 
-  AnimatedContainer buildDot({int index}) {
+  AnimatedContainer buildDot({@required int index}) {
     return AnimatedContainer(
       margin: EdgeInsets.only(right: 5),
       height: 6,

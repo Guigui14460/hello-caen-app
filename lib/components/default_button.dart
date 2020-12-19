@@ -13,15 +13,13 @@ import '../size_config.dart';
 /// negative value.
 class DefaultButton extends StatelessWidget {
   const DefaultButton({
-    Key key,
     double width = -1,
     @required this.height,
     @required this.text,
     @required this.press,
+    @required this.longPress,
     this.fontSize = 20,
-    this.longPress,
-  })  : this.width = (width < 0 ? double.infinity : width),
-        super(key: key);
+  }) : this.width = (width < 0 ? double.infinity : width);
 
   /// Width of the button.
   final double width;
@@ -36,10 +34,10 @@ class DefaultButton extends StatelessWidget {
   final String text;
 
   /// Calls when the user press quickly the button.
-  final Function press;
+  final VoidCallback press;
 
   /// Calls when the user press longly the button.
-  final Function longPress;
+  final VoidCallback longPress;
 
   @override
   Widget build(BuildContext context) {

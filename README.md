@@ -59,6 +59,8 @@ Géolocalisation : https://pub.dev/packages/geolocation ou https://pub.dev/packa
 Base de données (Firebase) : https://pub.dev/packages/firebase_core
 Envoie de notification à tous les utilisateurs via Firebase : https://pub.dev/packages/firebase_messaging
 
+Sauvegarde des préférences sur appareil : https://pub.dev/packages/shared_preferences
+
 Envoie de notifications locales : https://pub.dev/packages/flutter_local_notifications
 
 Si besoin, un package pour rendre des widgets plus réutilisable (regardez des tuto dessus avant de voir le fonctionnement et l'utilité dans l'application) : https://pub.dev/packages/provider

@@ -27,3 +27,9 @@ class HelloCaenApplication extends StatelessWidget {
     );
   }
 }
+
+// TODO: les administrateurs pourront démarcher les commerçants
+// donc implémenter un système de modération et d'ajout d'établissement
+// et les display sur une Google Map
+// Mode sombre
+// Ajout de vidéos (si youtube, possibilité de les display directement dans l'application)

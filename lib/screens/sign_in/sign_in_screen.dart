@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../size_config.dart';
-import 'components/body.dart';
+import '../../services/size_config.dart';
+import 'components/sign_in_body.dart';
 
+/// Screen displayed when the user try to log in
+/// on the application.
 class SignInScreen extends StatelessWidget {
+  /// Name of the route where is the screen.
   static final String routeName = "/login";
 
   @override
@@ -11,7 +14,7 @@ class SignInScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       body: SafeArea(
-        child: Body(),
+        child: SignInBody(),
       ),
     );
   }

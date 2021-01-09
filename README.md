@@ -63,7 +63,7 @@ Sauvegarde des préférences sur appareil : https://pub.dev/packages/shared_pref
 
 Envoie de notifications locales : https://pub.dev/packages/flutter_local_notifications
 
-Si besoin, un package pour rendre des widgets plus réutilisable (regardez des tuto dessus avant de voir le fonctionnement et l'utilité dans l'application) : https://pub.dev/packages/provider
+Si besoin, un package pour rendre des widgets plus réutilisable : https://pub.dev/packages/provider
 
 ### Tutoriels pour avoir des idées sur le visuel
 
@@ -80,6 +80,10 @@ https://mightytechno.com/flutter-app-bar/
 https://mightytechno.com/dark-light-theme-flutter-app/
 
 Certains widgets qu'on pourrait utiliser (rappel : Material vient d'Android et Cupertino d'iOS mais chacun utilisable sur les 2 plateformes mobiles) : https://gallery.flutter.dev/#/
+
+Mode sombre : https://www.youtube.com/watch?v=MnTEHs-ZP0E
+
+Sidebar : https://www.youtube.com/watch?v=n2wtljWWnpU
 
 ### Tutoriels pour avoir des idées pour le backend
 
@@ -98,6 +102,12 @@ https://github.com/bkonyi/FlutterGeofencing
 https://flutter.dev/docs/cookbook/networking/fetch-data
 
 https://www.youtube.com/playlist?list=PL342JVRNQxEAcQdnNeN0JmMzfcm6VtLxS
+
+Local storage : https://www.youtube.com/watch?v=auspHSmtVII, https://www.raywenderlich.com/7426050-firebase-tutorial-for-flutter-getting-started
+
+Fetch data in the background : https://pub.dev/packages/background_fetch, https://medium.com/vrt-digital-studio/flutter-workmanager-81e0cfbd6f6e
+
+Ajout de tâches répétitives en arrière-plan : https://github.com/fluttercommunity/flutter_workmanager
 
 #### Google Maps
 

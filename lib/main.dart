@@ -1,35 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:hello_caen/constants.dart';
-import 'package:hello_caen/routes.dart';
-import 'package:hello_caen/screens/splash/splash_screen.dart';
+import 'dart:io';
 
-void main() {
-  runApp(HelloCaenApplication());
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+
+import 'routes.dart';
+import 'settings.dart';
+import 'screens/splash/splash_screen.dart';
+import 'services/firebase_settings.dart';
+import 'services/theme_manager.dart';
+
+/// Entry point function.
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseApp app = await Firebase.initializeApp(
+    options: Platform.isIOS || Platform.isMacOS
+        ? FirebaseOptions(
+            projectId: firebaseProjectId,
+            appId: iosAppId,
+            databaseURL: firebaseDBLink,
+            storageBucket: firebaseStorageLink,
+            apiKey: iosApiKey,
+            messagingSenderId: firebaseMessagingSenderID,
+          )
+        : FirebaseOptions(
+            projectId: firebaseProjectId,
+            appId: androidAppId,
+            databaseURL: firebaseDBLink,
+            storageBucket: firebaseStorageLink,
+            apiKey: androidApiKey,
+            messagingSenderId: firebaseMessagingSenderID,
+          ),
+  );
+  FirebaseSettings.createInstance(app);
+  runApp(ChangeNotifierProvider<ThemeManager>(
+    create: (_) => ThemeManager(),
+    child: HelloCaenApplication(),
+  ));
 }
 
+/// Application itself.
 class HelloCaenApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Hello Caen',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: TextTheme(
-          headline1: TextStyle(color: primaryColor),
-          bodyText1: TextStyle(color: textColor),
-        ),
-        appBarTheme: AppBarTheme(backgroundColor: Colors.white),
-      ),
+      theme: Provider.of<ThemeManager>(context).getTheme(),
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.routeName,
       routes: routes,
     );
   }
 }
-
-// TODO: les administrateurs pourront démarcher les commerçants
-// donc implémenter un système de modération et d'ajout d'établissement
-// et les display sur une Google Map
-// Mode sombre
-// Ajout de vidéos (si youtube, possibilité de les display directement dans l'application)

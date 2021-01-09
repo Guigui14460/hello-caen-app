@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "426795396848",
+    "firebase_url": "https://hello-caen-test-default-rtdb.firebaseio.com",
+    "project_id": "hello-caen-test",
+    "storage_bucket": "hello-caen-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426795396848:android:33fe6a9ef33b0befef1c35",
+        "android_client_info": {
+          "package_name": "com.helloCaen.helloCaenApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426795396848-9k65vcoghoki8hmp4mjbvco9ncht4rtj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjDbtTJ_GYm0mnv5xNrmhUBpgXiKGSEvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426795396848-9k65vcoghoki8hmp4mjbvco9ncht4rtj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "426795396848-q5amgd0vroltvmntq7r8fo8lhfqk8vpp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.helloCaen.helloCaenApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

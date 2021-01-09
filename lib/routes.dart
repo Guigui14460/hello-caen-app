@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/screens/home/home_screen.dart';
-import 'package:hello_caen/screens/sign_in/sign_in_screen.dart';
-import 'package:hello_caen/screens/splash/splash_screen.dart';
 
+import 'screens/home/home_screen.dart';
+import 'screens/sign_in/sign_in_screen.dart';
+import 'screens/splash/splash_screen.dart';
+
+/// All routes used in our app.
 final Map<String, WidgetBuilder> routes = {
   SplashScreen.routeName: (context) => SplashScreen(),
   HomeScreen.routeName: (context) => HomeScreen(),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/size_config.dart';
-import 'components/body.dart';
 
+import '../../services/size_config.dart';
+import 'components/splash_body.dart';
+
+/// Screen displayed when the user comes to the first time
+/// on the app. This is a mini-tutorial.
 class SplashScreen extends StatelessWidget {
+  /// Name of the route where is the screen.
   static final String routeName = "/splash";
 
   @override
@@ -10,7 +14,7 @@ class SplashScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Container(
       child: Scaffold(
-        body: Body(),
+        body: SplashBody(),
       ),
     );
   }

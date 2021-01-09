@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import '../size_config.dart';
+import '../services/size_config.dart';
 
 /// Allows to use a default button.
 /// You can pass differents arguments to create the button.

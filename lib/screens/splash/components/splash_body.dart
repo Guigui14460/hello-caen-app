@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/default_button.dart';
 import '../../../constants.dart';
-import '../../../services/firebase_settings.dart';
 import '../../../services/size_config.dart';
-import '../../../services/theme_manager.dart';
 import '../../home/home_screen.dart';
 import 'splash_content.dart';
 
@@ -47,26 +43,10 @@ class _SplashBodyState extends State<SplashBody> {
       fontSize: 20,
       text: 'Continuer',
       press: () {
-        Provider.of<ThemeManager>(context, listen: false).toggleThemeMode();
-        // Navigator.popAndPushNamed(context, HomeScreen.routeName);
+        Navigator.popAndPushNamed(context, HomeScreen.routeName);
       },
       longPress: () {},
     );
-
-    Query query;
-    try {
-      query = FirebaseSettings.instance
-          .getFirestore()
-          .collection("test-collection");
-      query.get().then((querySnapchot) => {
-            querySnapchot.docs.forEach((document) {
-              print(document['ok']);
-              print(document['u']);
-            })
-          });
-    } catch (e) {
-      print(e);
-    }
 
     return SafeArea(
       child: SizedBox(

@@ -65,6 +65,10 @@ Envoie de notifications locales : https://pub.dev/packages/flutter_local_notific
 
 Si besoin, un package pour rendre des widgets plus réutilisable : https://pub.dev/packages/provider
 
+Scanner de code barre : https://pub.dev/packages/flutter_barcode_scanner/example
+
+Générateur de code barre : https://pub.dev/packages/barcode/example
+
 ### Tutoriels pour avoir des idées sur le visuel
 
 https://www.youtube.com/c/TheFlutterWay/videos
@@ -84,6 +88,12 @@ Certains widgets qu'on pourrait utiliser (rappel : Material vient d'Android et C
 Mode sombre : https://www.youtube.com/watch?v=MnTEHs-ZP0E
 
 Sidebar : https://www.youtube.com/watch?v=n2wtljWWnpU
+
+Animation d'un collapse : https://stackoverflow.com/questions/49029841/how-to-animate-collapse-elements-in-flutter
+
+Graphique pour les statistiques (pro et admin) : https://medium.com/flutter/beautiful-animated-charts-for-flutter-164940780b8c
+
+Video Player : https://www.youtube.com/watch?v=XP-4BiWsuaQ
 
 ### Tutoriels pour avoir des idées pour le backend
 
@@ -108,6 +118,12 @@ Local storage : https://www.youtube.com/watch?v=auspHSmtVII, https://www.raywend
 Fetch data in the background : https://pub.dev/packages/background_fetch, https://medium.com/vrt-digital-studio/flutter-workmanager-81e0cfbd6f6e
 
 Ajout de tâches répétitives en arrière-plan : https://github.com/fluttercommunity/flutter_workmanager
+
+QR Code : https://medium.com/flutter-community/building-flutter-qr-code-generator-scanner-and-sharing-app-703e73b228d3
+
+Video player : https://www.youtube.com/watch?v=7IG5kRFIMZw
+
+Geolocalisation : https://medium.com/swlh/working-with-geolocation-and-geocoding-in-flutter-and-integration-with-maps-16fb0bc35ede
 
 #### Google Maps
 

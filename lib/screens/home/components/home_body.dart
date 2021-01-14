@@ -66,6 +66,13 @@ class _HomeBodyState extends State<HomeBody> {
               onPressed: () {
                 Navigator.pushNamed(context, SignInScreen.routeName);
               },
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              color: Colors.red,
+              onPressed: () {
+                Navigator.pushNamed(context, SignInScreen.routeName);
+              },
             )
           ],
         ),

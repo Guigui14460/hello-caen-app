@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'routes.dart';
 import 'settings.dart';
-import 'screens/splash/splash_screen.dart';
+import 'screens/explanations/explanations_screen.dart';
 import 'services/firebase_settings.dart';
 import 'services/theme_manager.dart';
 
@@ -47,7 +47,7 @@ class HelloCaenApplication extends StatelessWidget {
       title: 'Hello Caen',
       theme: Provider.of<ThemeManager>(context).getTheme(),
       debugShowCheckedModeBanner: false,
-      initialRoute: SplashScreen.routeName,
+      initialRoute: ExplanationsScreen.routeName,
       routes: routes,
     );
   }

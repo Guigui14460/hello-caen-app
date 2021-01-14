@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../utils.dart';
-import 'type_enterprise.dart';
 import 'comment.dart';
+import 'type_enterprise.dart';
+import '../utils.dart';
 
 class Enterprise {
   String name;

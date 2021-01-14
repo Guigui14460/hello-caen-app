@@ -2,7 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Manager of the local storage of the app.
 class StorageManager {
-  /// Saves or modifies a [value] to a [key] in the local storage of the app.
+  /// Saves or modifies a [value] to a [key] in the local storage
+  /// of the app.
   static void saveData(String key, dynamic value) async {
     final prefs = await SharedPreferences.getInstance();
     if (value is int) {
@@ -27,7 +28,8 @@ class StorageManager {
     return obj;
   }
 
-  /// Deletes a [key] and associated value from the local storage of the app.
+  /// Deletes a [key] and associated value from the local
+  /// storage of the app.
   static Future<bool> deleteData(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);
@@ -37,5 +39,11 @@ class StorageManager {
   static Future<bool> deleteStorage() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.clear();
+  }
+
+  /// Verifies if the [key] exists in the local storage.
+  static Future<bool> exists(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(key);
   }
 }

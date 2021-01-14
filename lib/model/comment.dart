@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../utils.dart';
 import 'sub_comment.dart';
 import 'user_account.dart';
+import '../utils.dart';
 
 class Comment {
   DateTime dateAdded;

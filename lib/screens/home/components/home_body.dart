@@ -76,10 +76,17 @@ class _HomeBodyState extends State<HomeBody> {
             )
           ],
         ),
-        body: Column(
+        body: GridView.count(
+          primary: false,
+          padding: const EdgeInsets.all(10),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          crossAxisCount: 2,
+          childAspectRatio: 0.87,
           children: [
             DefaultButton(
-                height: 50,
+              // width: 150,
+              // height: 150,
                 text: "Localisation",
                 press: () => {
                       LocationService.getInstance().getLocationData(),
@@ -88,17 +95,69 @@ class _HomeBodyState extends State<HomeBody> {
                       }),
                     },
                 longPress: () => {}),
-            (_location != null ? _location : Text("No location")),
+            //(_location != null ? _location : Text("No location")),
             DefaultButton(
-                height: 50,
+                height: 150,
+                width: 150,
                 text: "Changer de mode",
                 press: () => {
                       Provider.of<ThemeManager>(context, listen: false)
                           .toggleThemeMode()
                     },
                 longPress: () => {}),
-          ],
+            Container(
+            child :DefaultButton(
+                height: 150,
+                width: 150,
+                press: () => {
+                Navigator.popAndPushNamed(context,SafeArea());
+              },
+              longPress: () => {},
+              text: "Liste des bars")
+
+           ),
+            Container(
+                child :DefaultButton(
+                    height: 150,
+                    width: 150,
+                    press: () => {
+                      Provider.of<ThemeManager>(context, listen: false)
+                          .toggleThemeMode()
+                    },
+                    longPress: () => {},
+                    text: "Bons Plans")
+
+            ),
+            Container(
+                child :DefaultButton(
+                    height: 150,
+                    width: 150,
+                    press: () => {
+                      Provider.of<ThemeManager>(context, listen: false)
+                          .toggleThemeMode()
+                    },
+                    longPress: () => {},
+                    text: "Filler")
+
+            ),
+            Container(
+                child :DefaultButton(
+                    height: 150,
+                    width: 150,
+                    press: () => {
+                      Provider.of<ThemeManager>(context, listen: false)
+                          .toggleThemeMode()
+                    },
+                    longPress: () => {},
+                    text: "Filler")
+
+            ),
+          ]
+          ,
         ),
+
+
+
       ),
     );
   }

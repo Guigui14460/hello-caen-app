@@ -42,17 +42,17 @@ class DefaultButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: getProportionateScreenWidth(width),
-      height: getProportionateScreenHeight(height),
+      //width: getProportionateScreenWidth(width), // Useless
+      //height: getProportionateScreenHeight(height), // Useless
       child: TextButton(
         onPressed: press,
         onLongPress: longPress,
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(ternaryColor),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
             shape: MaterialStateProperty.all<OutlinedBorder>(
                 RoundedRectangleBorder(
                     side: BorderSide(style: BorderStyle.none),
-                    borderRadius: BorderRadius.circular(12))),
+                    borderRadius: BorderRadius.circular(0))),
             animationDuration: animationDuration),
         child: Text(
           text,

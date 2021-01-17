@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hello_caen/screens/splash/splash_screen.dart';
+import 'package:hello_caen/screens/stores/stores_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../sign_in/sign_in_screen.dart';
@@ -106,14 +108,13 @@ class _HomeBodyState extends State<HomeBody> {
                     },
                 longPress: () => {}),
             Container(
-            child :DefaultButton(
-                height: 150,
-                width: 150,
-                press: () => {
-                Navigator.popAndPushNamed(context,SafeArea());
-              },
-              longPress: () => {},
-              text: "Liste des bars")
+            child :IconButton(
+                icon: ImageIcon(NetworkImage("https://i.pinimg.com/originals/4e/24/f5/4e24f523182e09376bfe8424d556610a.png")),
+                iconSize: 96,
+                onPressed : () => {
+                Navigator.popAndPushNamed(context,StoresScreen.routeName)
+                },
+            )
 
            ),
             Container(

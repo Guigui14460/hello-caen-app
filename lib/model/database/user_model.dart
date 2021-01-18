@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hello_caen/model/sex.dart';
 
 import 'firebase_firestore_db.dart';
+import '../sex.dart';
 import '../user_account.dart';
 import '../../utils.dart';
 
@@ -14,11 +14,12 @@ class UserModel extends FirebaseFirestoreDB<User> {
   @override
   User getTElement(DocumentSnapshot value) {
     return User(
+        id: value.id,
         firstName: value['firstName'],
         lastName: value['lastName'],
         profilePicture: value['profilePicture'],
         sex: Sex.values[value['sex']],
-        favoriteEnterprises: value['favoriteEnterprises'].toString().split(","),
+        favoriteCommerces: value['favoriteCommerces'].toString().split(","),
         dateOfBirth: convertStringToDatetime(value['dateOfBirth']),
         adminAccount: value['admin'],
         proAccount: value['pro']);
@@ -32,7 +33,7 @@ class UserModel extends FirebaseFirestoreDB<User> {
       'profilePicture': object.profilePicture,
       'sex': object.sex.index,
       'dateOfBirth': convertDatetimeToString(object.dateOfBirth),
-      'favoriteEnterprises': object.favoriteEnterprises.join(","),
+      'favoriteCommerces': object.favoriteCommerces.join(","),
       'admin': object.adminAccount,
       'pro': object.proAccount,
     };

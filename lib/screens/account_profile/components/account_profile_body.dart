@@ -39,7 +39,7 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                 press: () {
                   model.getAll().then((value) => {
                         setState(() {
-                          results = value.map((e) => e.getName()).join(", ");
+                          results = value.map((e) => e.name).join(", ");
                         })
                       });
                 },
@@ -50,7 +50,7 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                 press: () async {
                   CommerceType type = await model.getById(id);
                   setState(() {
-                    results = (type == null ? "null" : type.getName());
+                    results = (type == null ? "null" : type.name);
                   });
                 },
                 longPress: () {}),
@@ -71,7 +71,7 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                   await model.createWithId(id, test);
                   List<CommerceType> list = await model.getAll();
                   setState(() {
-                    results = list.map((e) => e.getName()).join(", ");
+                    results = list.map((e) => e.name).join(", ");
                   });
                 },
                 longPress: () {}),
@@ -84,7 +84,7 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
 
                   List<CommerceType> list = await model.getAll();
                   setState(() {
-                    results = list.map((e) => e.getName()).join(", ");
+                    results = list.map((e) => e.name).join(", ");
                   });
                 },
                 longPress: () {}),
@@ -96,7 +96,7 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
 
                   List<CommerceType> list = await model.getAll();
                   setState(() {
-                    results = list.map((e) => e.getName()).join(", ");
+                    results = list.map((e) => e.name).join(", ");
                   });
                 },
                 longPress: () {}),

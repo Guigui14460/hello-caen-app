@@ -11,13 +11,16 @@ class CommerceTypeModel extends FirebaseFirestoreDB<CommerceType> {
 
   @override
   CommerceType getTElement(DocumentSnapshot value) {
-    return CommerceType(name: value['name']);
+    return CommerceType(
+      name: value['name'],
+      id: value.id,
+    );
   }
 
   @override
   Map<String, dynamic> getElementData(CommerceType object) {
     return {
-      'name': object.getName(),
+      'name': object.name,
     };
   }
 }

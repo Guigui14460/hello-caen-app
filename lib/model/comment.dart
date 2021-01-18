@@ -7,8 +7,11 @@ import '../utils.dart';
 
 /// Represents a comment.
 class Comment {
+  // ID of the object in database.
+  String id;
+
   /// Date of creation.
-  DateTime dateAdded;
+  final DateTime dateAdded;
 
   /// Date of last modification.
   DateTime dateModified;
@@ -23,17 +26,19 @@ class Comment {
   String text;
 
   /// Comment author.
-  User author;
+  final User author;
 
   /// Constructor.
   Comment(
-      {@required this.dateAdded,
+      {this.id,
+      @required this.dateAdded,
       @required this.dateModified,
       @required this.rating,
       this.subcomments,
       @required this.text,
       @required this.author});
 
+  /// Builds the comment widget.
   Widget build(context) {
     return Column(
       children: [
@@ -51,10 +56,12 @@ class Comment {
     );
   }
 
+  /// Gets the added date widget.
   Widget _getDateAdded() {
     return Text(convertDatetimeToString(this.dateAdded));
   }
 
+  /// Gets the modified date widget.
   Widget _getDateModified() {
     return Text(
       "Modifié le " + convertDatetimeToString(this.dateModified),
@@ -62,6 +69,7 @@ class Comment {
     );
   }
 
+  /// Gets the rating bar widget.
   Widget _getRatingBar() {
     return RatingBarIndicator(
       rating: this.rating,
@@ -75,6 +83,7 @@ class Comment {
     );
   }
 
+  /// Gets the widget which contains all subcomments.
   Widget _getSubComments(context) {
     return ExpansionTile(
       title: Text("Sous-commentaires"),

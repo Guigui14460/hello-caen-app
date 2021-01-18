@@ -2,65 +2,81 @@ import 'package:flutter/material.dart';
 
 import '../model/sex.dart';
 
+/// Represents a user account.
 class User {
+  // ID of the object in database.
+  String id;
+
+  /// First name of the user.
   String firstName;
+
+  /// Last name of the user.
   String lastName;
+
+  /// URL profile picture.
   String profilePicture;
+
+  /// Date of birth of the user.
   DateTime dateOfBirth;
+
+  /// Sex of the user.
   Sex sex;
-  List<String> favoriteEnterprises = [];
+
+  /// List of the favorite commerce.
+  List<String> favoriteCommerces = [];
+
+  /// Is a PRO account.
   bool proAccount = false;
+
+  /// Is an admin account.
   bool adminAccount = false;
 
+  /// Constructor.
   User(
-      {@required this.firstName,
+      {this.id,
+      @required this.firstName,
       @required this.lastName,
       @required this.profilePicture,
       @required this.dateOfBirth,
       @required this.sex,
-      this.favoriteEnterprises,
+      this.favoriteCommerces,
       this.proAccount,
       this.adminAccount});
 
+  /// Private constructor.
   User._() {
     this.firstName = null;
     this.lastName = null;
     this.profilePicture = null;
     this.dateOfBirth = null;
     this.sex = null;
-    this.favoriteEnterprises = null;
+    this.favoriteCommerces = null;
   }
 
-  String getFirstName() => this.firstName;
-  void setFirstName(String value) => this.firstName = value;
-  String getLastName() => this.lastName;
-  void setLastName(String value) => this.lastName = value;
-  String getProfilePicture() => this.profilePicture;
-  void setProfilePicture(String value) => this.profilePicture = value;
-  DateTime getDateOfBirth() => this.dateOfBirth;
-  void setDateOfBirth(DateTime value) => this.dateOfBirth = value;
-  Sex getSex() => this.sex;
-  void setSex(Sex value) => this.sex = value;
-  List<String> getFavoriteEnterprises() => this.favoriteEnterprises;
+  /// Adds a commerce to favorites list.
   void addFavoriteEnterprise(String valueId) =>
-      this.favoriteEnterprises.add(valueId);
-  void removeFavoriteEnterprise(String valueId) =>
-      this.favoriteEnterprises.remove(valueId);
-  bool isAdmin() => this.adminAccount;
-  bool isPro() => this.proAccount;
+      this.favoriteCommerces.add(valueId);
 
+  /// Removes a commerce from favorites list.
+  void removeFavoriteEnterprise(String valueId) =>
+      this.favoriteCommerces.remove(valueId);
+
+  /// Gets the widget to display the profile picture.
   Widget getProfilePictureWdget() {
     return null;
   }
 
+  /// Gets the widget to display the full name.
   Widget getFullNameWidget() {
     return Text(firstName + " " + lastName);
   }
 
-  Widget getFavoriteEnterprisesWidget() {
+  /// Gets the widgets to display favorite commerces.
+  Widget getFavoriteCommercesWidget() {
     return null;
   }
 
+  /// Gets the widget to display user sex.
   Widget getSexWidget() {
     String sex;
     switch (this.sex) {
@@ -78,20 +94,24 @@ class User {
     return Text(sex);
   }
 
+  /// Gets the actual age of the user.
   int getAge() {
     int diff = DateTime.now().millisecondsSinceEpoch -
         dateOfBirth.millisecondsSinceEpoch;
     return DateTime.fromMillisecondsSinceEpoch(diff).year;
   }
 
+  /// Is an anonymous user.
   bool isAnonymous() {
     return this.firstName == null;
   }
 
+  /// Builds the widget representing the small profile.
   Widget buildSmallProfile() {
     return null;
   }
 
+  /// Gets and creates an anonymous user.
   static getAnonymousUser() {
     return User._();
   }

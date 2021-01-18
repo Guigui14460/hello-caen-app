@@ -5,19 +5,40 @@ import 'comment.dart';
 import 'commerce_type.dart';
 import '../utils.dart';
 
+/// Represents a commerce.
 class Commerce {
+  // ID of the object in database.
+  String id;
+
+  /// Name of the commerce.
   String name;
+
+  /// Location
   String location;
-  String timetables;
-  CommerceType type;
-  List<Comment> comments;
-  DateTime dateAdded;
+
+  /// Date of creation.
+  final DateTime dateAdded;
+
+  /// Date of last modification.
   DateTime dateModified;
+
+  /// Time tables of the merchant.
+  String timetables;
+
+  /// Type of commerce.
+  CommerceType type;
+
+  /// All comments related to this commerce.
+  List<Comment> comments;
+
+  /// Link for the image representing the commerce.
   String
       imageLink; // donnée via une image sur un site ou via un upload de fichier
 
+  /// Constructor.
   Commerce(
-      {@required this.name,
+      {this.id,
+      @required this.name,
       @required this.location,
       @required this.timetables,
       @required this.type,
@@ -26,6 +47,7 @@ class Commerce {
       @required this.dateModified,
       @required this.imageLink});
 
+  /// Gets the mean of all ratings.
   double _getRating() {
     double rating = 0;
     for (int i = 0; i < comments.length; i++) {
@@ -35,6 +57,7 @@ class Commerce {
     return rating;
   }
 
+  /// Gets the rating bar widget.
   Widget getRatingBar() {
     return RatingBarIndicator(
       rating: this._getRating(),
@@ -48,30 +71,23 @@ class Commerce {
     );
   }
 
-  String getLocation() {
-    return this.location;
-  }
-
-  String getName() {
-    return this.name;
-  }
-
-  CommerceType getType() {
-    return this.type;
-  }
-
+  /// Gets the added date in the database widget.
   Widget getDateAdded() {
     return Text(convertDatetimeToString(this.dateAdded));
   }
 
+  /// Gets the last modified date widget.
   Widget getDateModified() {
     return Text(convertDatetimeToString(this.dateModified));
   }
 
+  /// Gets the image widget.
   Image getImage() {
     return Image.network(this.imageLink);
   }
 
+  /// Gets all comments related to commerce in a
+  /// widget.
   Widget getCommentsWidget(context) {
     return ListView.builder(
       itemCount: this.comments.length,

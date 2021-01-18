@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hello_caen/screens/account_profile/account_profile_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/account_profile/account_profile_screen.dart';
 import '../services/theme_manager.dart';
 import '../screens/explanations/explanations_screen.dart';
 

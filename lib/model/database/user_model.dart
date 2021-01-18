@@ -27,14 +27,14 @@ class UserModel extends FirebaseFirestoreDB<User> {
   @override
   Map<String, dynamic> getElementData(User object) {
     return {
-      'firstName': object.getFirstName(),
-      'lastName': object.getLastName(),
-      'profilePicture': object.getProfilePicture(),
-      'sex': object.getSex().index,
-      'dateOfBirth': convertDatetimeToString(object.getDateOfBirth()),
-      'favoriteEnterprises': object.getFavoriteEnterprises().join(","),
-      'admin': object.isAdmin(),
-      'pro': object.isPro(),
+      'firstName': object.firstName,
+      'lastName': object.lastName,
+      'profilePicture': object.profilePicture,
+      'sex': object.sex.index,
+      'dateOfBirth': convertDatetimeToString(object.dateOfBirth),
+      'favoriteEnterprises': object.favoriteEnterprises.join(","),
+      'admin': object.adminAccount,
+      'pro': object.proAccount,
     };
   }
 }

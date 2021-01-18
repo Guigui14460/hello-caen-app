@@ -5,19 +5,32 @@ import 'sub_comment.dart';
 import 'user_account.dart';
 import '../utils.dart';
 
+/// Represents a comment.
 class Comment {
+  /// Date of creation.
   DateTime dateAdded;
+
+  /// Date of last modification.
   DateTime dateModified;
+
+  /// Rating associated to the comment
   double rating;
-  List<SubComment> subcomments;
+
+  /// All subcomments of this comment.
+  List<SubComment> subcomments = [];
+
+  /// Main text.
   String text;
+
+  /// Comment author.
   User author;
 
+  /// Constructor.
   Comment(
       {@required this.dateAdded,
       @required this.dateModified,
       @required this.rating,
-      @required this.subcomments,
+      this.subcomments,
       @required this.text,
       @required this.author});
 
@@ -33,7 +46,7 @@ class Comment {
         ),
         this._getRatingBar(),
         Text(this.text),
-        this._getSubComments(context),
+        (this.subcomments.length > 0 ? this._getSubComments(context) : null),
       ],
     );
   }

@@ -2,13 +2,19 @@ import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// Converts [DateTime] object to a [String] object.
-String convertDatetimeToString(DateTime datetime) {
-  return DateFormat("dd-MM-yyyy").format(datetime);
+String convertDatetimeToString(DateTime datetime, {bool full = false}) {
+  if (!full) {
+    return DateFormat("dd-MM-yyyy").format(datetime);
+  }
+  return DateFormat("dd-MM-yyyy HH:mm").format(datetime);
 }
 
 /// Converts [String] object to a [DateTime] object.
-DateTime convertStringToDatetime(String datetime) {
-  return DateFormat("dd-MM-yyyy").parse(datetime);
+DateTime convertStringToDatetime(String datetime, {bool full = false}) {
+  if (!full) {
+    return DateFormat("dd-MM-yyyy").parse(datetime);
+  }
+  return DateFormat("dd-MM-yyyy HH:mm").parse(datetime);
 }
 
 /// Gets the string of the timeago from a particular

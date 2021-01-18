@@ -56,24 +56,22 @@ class _StoresBodyState extends State<StoresBody> {
                 SizedBox(height: 10),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.98,
-                  height: MediaQuery.of(context).size.height * 0.2,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: NetworkImage(
                               'https://media-cdn.tripadvisor.com/media/photo-s/11/9e/75/70/sala-a-restaurant.jpg'),
                           fit: BoxFit.cover)),
-                  child: Column(
-                    children: <Widget>[
-                      Row(children: <Widget>[
-                        Card(
-                            child: FlatButton(
-                                child: Text("Detail"),
-                                onPressed: () {
-                                  print("oof");
-                                })),
-                      ]),
+                  child: GridView.count(  primary: false,
+                    crossAxisCount: 2,
+                    childAspectRatio: MediaQuery.of(context).size.height /333,
+                    children: [
+                      Container(child: Text(" Nom Du resto"),padding: EdgeInsets.all(10) ,),
+                      Container(child: Text(" Horraires"),padding: EdgeInsets.all(10) ,),
+                      Container(child: Text(" Description : "),padding: EdgeInsets.all(10) ,),
+                      Container(child: Opacity(opacity:0.5,child:FlatButton( color : Colors.black ,child:Text(" Detail"),onPressed: () {},) ,)),
                     ],
-                  ),
+
+                  )
                 ),
                 SizedBox(height: 10),
                 Container(
@@ -108,15 +106,21 @@ class _StoresBodyState extends State<StoresBody> {
                           fit: BoxFit.cover)),
                   child: Column(
                     children: <Widget>[
-                      Row(children: <Widget>[
-                        Card(
-                            child: FlatButton(
-                                child: Text("Detail"),
-                                onPressed: () {
-                                  print("oof");
-                                })),
-                      ]),
-                    ],
+                      Opacity(opacity:0.4,child :Container(
+                          color: Colors.black,
+                          width: MediaQuery.of(context).size.width * 0.98,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child:
+                            Row(children: <Widget>[
+                              Opacity(opacity:1,child:Card(
+                                child: FlatButton(
+
+                                  child: Text("Detail"),
+                                  onPressed: () {
+                                    print("oof");
+                                }))),
+                        ]),
+                      ))],
                   ),
                 ),
                 SizedBox(height: 10),

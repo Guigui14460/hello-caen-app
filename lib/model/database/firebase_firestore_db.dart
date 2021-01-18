@@ -23,6 +23,41 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
         FirebaseSettings.instance.getFirestore().collection(collectionName);
   }
 
+  Future<List<T>> where(dynamic field,
+      {dynamic isEqualTo,
+      dynamic isNotEqualTo,
+      dynamic isLessThan,
+      dynamic isLessThanOrEqualTo,
+      dynamic isGreaterThan,
+      dynamic isGreaterThanOrEqualTo,
+      dynamic arrayContains,
+      List<dynamic> arrayContainsAny,
+      List<dynamic> whereIn,
+      List<dynamic> whereNotIn,
+      bool isNull}) async {
+    List<T> list = [];
+    reference
+        .where(field,
+            isEqualTo: isEqualTo,
+            isNotEqualTo: isNotEqualTo,
+            isLessThan: isLessThan,
+            isLessThanOrEqualTo: isLessThanOrEqualTo,
+            isGreaterThan: isGreaterThan,
+            isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+            arrayContains: arrayContains,
+            arrayContainsAny: arrayContainsAny,
+            isNull: isNull,
+            whereIn: whereIn,
+            whereNotIn: whereNotIn)
+        .snapshots()
+        .listen((data) {
+      data.docs.forEach((element) {
+        list.add(getTElement(element));
+      });
+    });
+    return list;
+  }
+
   @override
   Future<bool> exists(String id) async {
     bool exists = false;

@@ -22,8 +22,8 @@ class UserManager with ChangeNotifier {
   UserManager() {
     StorageManager.exists(STORAGE_KEY).then((value) {
       if (value) {
-        StorageManager.readData(STORAGE_KEY).then((value) {
-          _currentLoggedInUser = UserModel().getById(value);
+        StorageManager.readData(STORAGE_KEY).then((value) async {
+          _currentLoggedInUser = await UserModel().getById(value);
         });
       } else {
         _currentLoggedInUser = User.getAnonymousUser();

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'comment.dart';
-import 'type_enterprise.dart';
+import 'commerce_type.dart';
 import '../utils.dart';
 
 class Enterprise {
   String name;
   String location;
   String timetables;
-  TypeEnterprise type;
+  CommerceType type;
   List<Comment> comments;
   DateTime dateAdded;
   DateTime dateModified;
@@ -56,7 +56,7 @@ class Enterprise {
     return this.name;
   }
 
-  TypeEnterprise getType() {
+  CommerceType getType() {
     return this.type;
   }
 

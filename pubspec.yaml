@@ -30,6 +30,8 @@ dependencies:
   cloud_firestore: ^0.14.4 # firebase cloud
   provider: ^4.3.2+3 # change of theme
   location: ^3.2.1 # localisation
+  intl: ^0.16.1 # pour convertir aisément les dates
+  timeago: ^2.0.29 # pour dater les modèles
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_caen/screens/account_profile/account_profile_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../services/theme_manager.dart';
-import '../screens/sign_in/sign_in_screen.dart';
 import '../screens/explanations/explanations_screen.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -35,7 +35,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.add),
           color: textColor,
           onPressed: () {
-            Navigator.pushNamed(context, SignInScreen.routeName);
+            Navigator.pushNamed(context, AccountProfileScreen.routeName);
           },
         )
       ],

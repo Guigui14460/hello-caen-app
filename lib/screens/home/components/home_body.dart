@@ -77,8 +77,6 @@ class _HomeBodyState extends State<HomeBody> {
           childAspectRatio: 0.87,
 
         // appBar: MyAppBar(),
-        children: [ Column(
-          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
             DefaultButton(
@@ -149,15 +147,12 @@ class _HomeBodyState extends State<HomeBody> {
                     text: "Filler")
             ),
           ],)
-
-          ]
-
         ),
 
 
 
-      ),
       );
+
 
   }
 }

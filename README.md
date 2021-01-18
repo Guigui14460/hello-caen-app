@@ -22,6 +22,19 @@ https://flutter.dev/docs/deployment/android
 
 https://flutter.dev/docs/deployment/ios
 
+## Quelques info
+Compte admin test (id `5ePTSGGFgnVxe6rhUA4Rg9Nyb2p1`) :
+- email : `admin.test@hellocaen.com`
+- mdp : `admin1`
+- 
+Compte pro test (id `JE0tQJgslDQ42gaTL771pSgKtht1`) :
+- email : `pro1.test@cafe1.com`
+- mdp : `pro123`
+- 
+Compte user test (id `97RehF9j2me9LWWLPQTJYQDqGn73`) :
+- email : `user.test@gmail.com`
+- mdp : `user12`
+
 ## Tutoriels à regarder et expérimenter
 
 https://www.youtube.com/playlist?list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ

@@ -9,6 +9,8 @@ class User {
   DateTime dateOfBirth;
   Sex sex;
   List<String> favoriteEnterprises = [];
+  bool proAccount = false;
+  bool adminAccount = false;
 
   User(
       {@required this.firstName,
@@ -16,7 +18,9 @@ class User {
       @required this.profilePicture,
       @required this.dateOfBirth,
       @required this.sex,
-      this.favoriteEnterprises});
+      this.favoriteEnterprises,
+      this.proAccount,
+      this.adminAccount});
 
   User._() {
     this.firstName = null;
@@ -42,6 +46,8 @@ class User {
       this.favoriteEnterprises.add(valueId);
   void removeFavoriteEnterprise(String valueId) =>
       this.favoriteEnterprises.remove(valueId);
+  bool isAdmin() => this.adminAccount;
+  bool isPro() => this.proAccount;
 
   Widget getProfilePictureWdget() {
     return null;

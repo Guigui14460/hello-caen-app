@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/screens/account_profile/account_profile_screen.dart';
 
 import 'screens/home/home_screen.dart';
 import 'screens/sign_in/sign_in_screen.dart';
@@ -15,4 +16,5 @@ final Map<String, WidgetBuilder> routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   SignInScreen.routeName: (context) => SignInScreen(),
   StoresScreen.routeName: (context) => StoresScreen(),
+  AccountProfileScreen.routeName: (context) => AccountProfileScreen(),
 };

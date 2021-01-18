@@ -24,21 +24,18 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
   }
 
   @override
-  bool exists(String id) {
+  Future<bool> exists(String id) async {
     bool exists = false;
-    reference.doc(id).get().then((document) {
-      if (document.exists)
-        exists = true;
-      else
-        exists = false;
+    await reference.doc(id).get().then((document) {
+      exists = document.exists;
     }).catchError((error) => print(error));
     return exists;
   }
 
   @override
-  List<T> getAll() {
+  Future<List<T>> getAll() async {
     List<T> list = [];
-    reference
+    await reference
         .get()
         .then((value) => {
               value.docs.forEach((element) {
@@ -50,9 +47,9 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
   }
 
   @override
-  T getById(String id) {
+  Future<T> getById(String id) async {
     T object;
-    reference
+    await reference
         .doc(id)
         .get()
         .then((value) => object = getTElement(value))
@@ -66,9 +63,9 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
   T getTElement(DocumentSnapshot value);
 
   @override
-  T create(T object) {
+  Future<T> create(T object) async {
     T results = object;
-    reference.add(getElementData(object)).catchError((error) {
+    await reference.add(getElementData(object)).catchError((error) {
       results = null;
       print(error);
     });
@@ -76,9 +73,19 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
   }
 
   @override
-  bool update(String id, T object) {
+  Future<T> createWithId(String id, T object) async {
+    T results = object;
+    await reference.doc(id).set(getElementData(object)).catchError((error) {
+      results = null;
+      print(error);
+    });
+    return results;
+  }
+
+  @override
+  Future<bool> update(String id, T object) async {
     bool ok = true;
-    reference.doc(id).update(getElementData(object)).catchError((error) {
+    await reference.doc(id).update(getElementData(object)).catchError((error) {
       ok = false;
       print(error);
     });
@@ -86,9 +93,9 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
   }
 
   @override
-  bool delete(String id) {
+  Future<bool> delete(String id) async {
     bool ok = true;
-    reference.doc(id).delete().catchError((error) {
+    await reference.doc(id).delete().catchError((error) {
       print(error);
       ok = false;
     });

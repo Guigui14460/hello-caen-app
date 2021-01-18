@@ -5,7 +5,7 @@ import 'comment.dart';
 import 'commerce_type.dart';
 import '../utils.dart';
 
-class Enterprise {
+class Commerce {
   String name;
   String location;
   String timetables;
@@ -16,7 +16,7 @@ class Enterprise {
   String
       imageLink; // donnée via une image sur un site ou via un upload de fichier
 
-  Enterprise(
+  Commerce(
       {@required this.name,
       @required this.location,
       @required this.timetables,

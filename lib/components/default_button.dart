@@ -11,6 +11,7 @@ import '../services/size_config.dart';
 /// used to interact with it. [width], [height], [fontSize] and [longPress]
 /// arguments are optionnal. If you want [width] takes all the available width,
 /// you can put a negative value. Same thing for [height].
+// ignore: must_be_immutable
 class DefaultButton extends StatelessWidget {
   DefaultButton({
     double width = -1,

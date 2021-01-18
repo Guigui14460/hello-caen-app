@@ -8,7 +8,7 @@ import '../services/storage_manager.dart';
 /// Extends [ChangeNotifier] to use it like a provider.
 class UserManager with ChangeNotifier {
   /// Key used in the local storage.
-  static String STORAGE_KEY = "user_id";
+  static String storageKey = "user_id";
 
   /// Current logged in user.
   User _currentLoggedInUser;
@@ -17,12 +17,12 @@ class UserManager with ChangeNotifier {
   User getLoggedInUser() => this._currentLoggedInUser;
 
   /// Constructor of the manager.
-  /// If the [STORAGE_KEY] is not in the local storage,
+  /// If the [storageKey] is not in the local storage,
   /// we initialize an anonymous user.
   UserManager() {
-    StorageManager.exists(STORAGE_KEY).then((value) {
+    StorageManager.exists(storageKey).then((value) {
       if (value) {
-        StorageManager.readData(STORAGE_KEY).then((value) async {
+        StorageManager.readData(storageKey).then((value) async {
           _currentLoggedInUser = await UserModel().getById(value);
         });
       } else {
@@ -42,10 +42,10 @@ class UserManager with ChangeNotifier {
   }
 
   /// Log out the current logged in user and deletes
-  /// the [STORAGE_KEY] and associated data in the local
+  /// the [storageKey] and associated data in the local
   /// storage.
   void logoutUser() {
-    StorageManager.deleteData(STORAGE_KEY).then((value) => null);
+    StorageManager.deleteData(storageKey).then((value) => null);
     _currentLoggedInUser = User.getAnonymousUser();
     notifyListeners();
   }

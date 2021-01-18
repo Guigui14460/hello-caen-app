@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter/widgets.dart';
-
-import 'package:hello_caen/screens/stores/stores_screen.dart';
-
 import 'package:provider/provider.dart';
 
+import '../../stores/stores_screen.dart';
 import '../../../components/app_bar.dart';
 import '../../../components/default_button.dart';
 import '../../../services/location_service.dart';
@@ -22,7 +18,7 @@ class HomeBody extends StatefulWidget {
 
 /// [State] of the [HomeBody].
 class _HomeBodyState extends State<HomeBody> {
-  Widget _location = Text("No Location");
+  String _location = "No Location";
 
   @override
   Widget build(BuildContext context) {
@@ -39,31 +35,22 @@ class _HomeBodyState extends State<HomeBody> {
             mainAxisSpacing: 10,
             crossAxisCount: 2,
             childAspectRatio: 0.87,
-
-            // appBar: MyAppBar(),
-
             children: [
               DefaultButton(
-                  // width: 150,
-                  // height: 150,
-                  text: "Localisation",
+                  text: "Localisation ",
                   press: () => {
                         LocationService.getInstance().getLocationData(),
                         setState(() {
-                          _location = LocationService.getInstance().getText();
+                          _location = LocationService.getInstance()
+                              .userLocation
+                              .toString();
+                          print(_location);
                         }),
                       },
                   longPress: () => {}),
-
-              //(_location != null ? _location : Text("No location")),
               DefaultButton(
-                  height: 150,
-                  width: 150,
                   text: "Changer de mode",
-                  press: () => {
-                        Provider.of<ThemeManager>(context, listen: false)
-                            .toggleThemeMode()
-                      },
+                  press: () => {themeManager.toggleThemeMode()},
                   longPress: () => {}),
               Container(
                   child: IconButton(
@@ -76,32 +63,17 @@ class _HomeBodyState extends State<HomeBody> {
               )),
               Container(
                   child: DefaultButton(
-                      height: 150,
-                      width: 150,
-                      press: () => {
-                            Provider.of<ThemeManager>(context, listen: false)
-                                .toggleThemeMode()
-                          },
+                      press: () => {themeManager.toggleThemeMode()},
                       longPress: () => {},
                       text: "Bons Plans")),
               Container(
                   child: DefaultButton(
-                      height: 150,
-                      width: 150,
-                      press: () => {
-                            Provider.of<ThemeManager>(context, listen: false)
-                                .toggleThemeMode()
-                          },
+                      press: () => {themeManager.toggleThemeMode()},
                       longPress: () => {},
                       text: "Filler")),
               Container(
                   child: DefaultButton(
-                      height: 150,
-                      width: 150,
-                      press: () => {
-                            Provider.of<ThemeManager>(context, listen: false)
-                                .toggleThemeMode()
-                          },
+                      press: () => {themeManager.toggleThemeMode()},
                       longPress: () => {},
                       text: "Filler")),
             ],

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hello_caen/screens/explanations/explanations_screen.dart';
 import 'package:hello_caen/screens/home/home_screen.dart';
 import 'package:hello_caen/screens/splash/splash_screen.dart';
 import 'package:flutter/src/painting/image_provider.dart';
@@ -35,7 +36,7 @@ class _StoresBodyState extends State<StoresBody> {
             icon: Icon(Icons.menu),
             color: Colors.black,
             onPressed: () {
-              Navigator.popAndPushNamed(context, SplashScreen.routeName);
+              Navigator.popAndPushNamed(context, ExplanationsScreen.routeName);
             },
           ),
           actions: [

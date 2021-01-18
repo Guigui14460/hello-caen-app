@@ -127,6 +127,8 @@ Video player : https://www.youtube.com/watch?v=7IG5kRFIMZw
 
 Geolocalisation : https://medium.com/swlh/working-with-geolocation-and-geocoding-in-flutter-and-integration-with-maps-16fb0bc35ede et https://medium.com/flutter-community/exploring-google-maps-in-flutter-8a86d3783d24 et https://gist.github.com/deven98/9925ed6bf2cba0aa6d13d307075c59cb
 
+Firebase upload images : https://www.c-sharpcorner.com/article/upload-image-file-to-firebase-storage-using-flutter/
+
 #### Google Maps
 
 https://github.com/marchdev-tk/flutter_google_maps

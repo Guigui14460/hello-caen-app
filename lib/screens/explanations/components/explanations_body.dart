@@ -4,18 +4,18 @@ import '../../../components/default_button.dart';
 import '../../../constants.dart';
 import '../../../services/size_config.dart';
 import '../../home/home_screen.dart';
-import 'splash_content.dart';
+import 'explanations_content.dart';
 
-/// Class to display all widgets of the [SplashScreen] class.
-class SplashBody extends StatefulWidget {
+/// Class to display all widgets of the [ExplanationsScreen] class.
+class ExplanationsBody extends StatefulWidget {
   @override
-  _SplashBodyState createState() => _SplashBodyState();
+  _ExplanationsBodyState createState() => _ExplanationsBodyState();
 }
 
-/// State of the [SplashBody] class.
-class _SplashBodyState extends State<SplashBody> {
+/// State of the [ExplanationsBody] class.
+class _ExplanationsBodyState extends State<ExplanationsBody> {
   /// Data to display on the screen.
-  List<Map<String, dynamic>> splashData = [
+  List<Map<String, dynamic>> explanationsData = [
     {
       "text": "Bienvenue sur l\'application Hello CAEN.\nMarchez dans CAEN ...",
       "image": "assets/images/walk.svg",
@@ -33,7 +33,7 @@ class _SplashBodyState extends State<SplashBody> {
     },
   ];
 
-  /// Represents the current displayed splash content.
+  /// Represents the current displayed explanations content.
   int _currentPage = 0;
 
   @override
@@ -81,11 +81,11 @@ class _SplashBodyState extends State<SplashBody> {
                     _currentPage = value;
                   });
                 },
-                itemCount: splashData.length,
-                itemBuilder: (context, index) => SplashContent(
-                  text: splashData[index]["text"],
-                  imageUrl: splashData[index]["image"],
-                  imageWidth: splashData[index]["imageSize"],
+                itemCount: explanationsData.length,
+                itemBuilder: (context, index) => ExplanationsContent(
+                  text: explanationsData[index]["text"],
+                  imageUrl: explanationsData[index]["image"],
+                  imageWidth: explanationsData[index]["imageSize"],
                 ),
               ),
             ),
@@ -100,12 +100,12 @@ class _SplashBodyState extends State<SplashBody> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
-                        splashData.length,
+                        explanationsData.length,
                         (index) => buildDot(index: index),
                       ),
                     ),
                     Spacer(flex: 2),
-                    (_currentPage == splashData.length - 1
+                    (_currentPage == explanationsData.length - 1
                         ? button
                         : Visibility(
                             child: button,
@@ -125,7 +125,7 @@ class _SplashBodyState extends State<SplashBody> {
     );
   }
 
-  /// Builds a dot which represents the different splash contents.
+  /// Builds a dot which represents the different explanations contents.
   AnimatedContainer buildDot({@required int index}) {
     return AnimatedContainer(
       margin: EdgeInsets.only(right: 5),

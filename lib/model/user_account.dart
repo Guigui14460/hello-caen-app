@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:hello_caen/model/enterprise.dart';
-import 'package:hello_caen/model/sex.dart';
+import 'package:flutter/material.dart';
+
+import '../model/sex.dart';
 
 class User {
   String firstName;
@@ -8,7 +8,7 @@ class User {
   String profilePicture;
   DateTime dateOfBirth;
   Sex sex;
-  Enterprise favorites;
+  List<String> favoriteEnterprises = [];
 
   User(
       {@required this.firstName,
@@ -16,21 +16,46 @@ class User {
       @required this.profilePicture,
       @required this.dateOfBirth,
       @required this.sex,
-      @required this.favorites});
+      this.favoriteEnterprises});
 
-  Widget getProfilePicture() {
+  User._() {
+    this.firstName = null;
+    this.lastName = null;
+    this.profilePicture = null;
+    this.dateOfBirth = null;
+    this.sex = null;
+    this.favoriteEnterprises = null;
+  }
+
+  String getFirstName() => this.firstName;
+  void setFirstName(String value) => this.firstName = value;
+  String getLastName() => this.lastName;
+  void setLastName(String value) => this.lastName = value;
+  String getProfilePicture() => this.profilePicture;
+  void setProfilePicture(String value) => this.profilePicture = value;
+  DateTime getDateOfBirth() => this.dateOfBirth;
+  void setDateOfBirth(DateTime value) => this.dateOfBirth = value;
+  Sex getSex() => this.sex;
+  void setSex(Sex value) => this.sex = value;
+  List<String> getFavoriteEnterprises() => this.favoriteEnterprises;
+  void addFavoriteEnterprise(String valueId) =>
+      this.favoriteEnterprises.add(valueId);
+  void removeFavoriteEnterprise(String valueId) =>
+      this.favoriteEnterprises.remove(valueId);
+
+  Widget getProfilePictureWdget() {
     return null;
   }
 
-  Widget getFullName() {
+  Widget getFullNameWidget() {
     return Text(firstName + " " + lastName);
   }
 
-  Widget getFavorites() {
+  Widget getFavoriteEnterprisesWidget() {
     return null;
   }
 
-  Widget getSex() {
+  Widget getSexWidget() {
     String sex;
     switch (this.sex) {
       case Sex.Female:
@@ -53,5 +78,15 @@ class User {
     return DateTime.fromMillisecondsSinceEpoch(diff).year;
   }
 
-  buildSmallProfile() {}
+  bool isAnonymous() {
+    return this.firstName == null;
+  }
+
+  Widget buildSmallProfile() {
+    return null;
+  }
+
+  static getAnonymousUser() {
+    return User._();
+  }
 }

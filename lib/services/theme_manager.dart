@@ -3,28 +3,34 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'storage_manager.dart';
 
-/// Manage the theme data of the application.
+/// Manages the theme data of the application.
 /// Extends [ChangeNotifier] to use it like a provider.
 class ThemeManager with ChangeNotifier {
   /// Dark theme of the app.
   final darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white12,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: TextTheme(
         // headline1: TextStyle(color: primaryColor),
         ),
     brightness: Brightness.dark,
     primaryColor: primaryColor,
-    appBarTheme: AppBarTheme(backgroundColor: Colors.white12),
+    appBarTheme: AppBarTheme(
+      elevation: 0.0,
+      centerTitle: true,
+    ),
+    backgroundColor: Colors.grey[900],
   );
 
   /// Light theme of the app.
   final lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    backgroundColor: Colors.white,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.light,
     primaryColor: primaryColor,
-    appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+    appBarTheme: AppBarTheme(
+      elevation: 0.0,
+      centerTitle: true,
+    ),
   );
 
   /// Actual theme currently display on the app.
@@ -44,6 +50,11 @@ class ThemeManager with ChangeNotifier {
       }
       notifyListeners();
     });
+  }
+
+  /// Is in dark mode.
+  bool isDarkMode() {
+    return this._themeData == darkTheme;
   }
 
   /// Toggle the theme mode between light and dark themes.

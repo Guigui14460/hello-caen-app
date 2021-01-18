@@ -1,3 +1,5 @@
+final debugMode = true;
+
 // firebase db and auth
 final String firebaseProjectId = "hello-caen-test";
 final String firebaseDBLink =

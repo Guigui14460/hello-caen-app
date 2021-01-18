@@ -13,7 +13,10 @@ import 'services/theme_manager.dart';
 
 /// Entry point function.
 Future<void> main() async {
+  // widgets initialization
   WidgetsFlutterBinding.ensureInitialized();
+
+  // firebase initialization
   FirebaseApp app = await Firebase.initializeApp(
     options: Platform.isIOS || Platform.isMacOS
         ? FirebaseOptions(
@@ -34,8 +37,12 @@ Future<void> main() async {
           ),
   );
   FirebaseSettings.createInstance(app);
+
+  // timeago initialization
   timeago.setLocaleMessages('fr_short', timeago.FrShortMessages());
   timeago.setDefaultLocale("fr_short");
+
+  // app and ThemeManager
   runApp(ChangeNotifierProvider<ThemeManager>(
     create: (_) => ThemeManager(),
     child: HelloCaenApplication(),

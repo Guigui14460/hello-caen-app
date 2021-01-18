@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../commerce.dart';
-import '../database/firebase_firestore_db.dart';
+import 'firebase_firestore_db.dart';
 import '../../utils.dart';
 
 /// Model used to communicate with the database for the
@@ -19,8 +19,9 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       "dateModified": convertDatetimeToString(object.dateModified),
       "timetables": object.timetables,
       "type": object.type,
-      "comments": object.comments,
+      "comments": object.commentIds,
       "imageLink": object.imageLink,
+      "owner": object.ownerId,
     };
   }
 
@@ -34,8 +35,9 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       dateModified: convertStringToDatetime(value['dateModified']),
       timetables: value['timetables'],
       type: value['type'],
-      comments: value['comments'],
+      commentIds: value['comments'],
       imageLink: value['imageLink'],
+      ownerId: value['owner'],
     );
   }
 }

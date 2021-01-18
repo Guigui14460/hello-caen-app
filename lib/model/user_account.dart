@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../model/sex.dart';
+import 'commerce.dart';
+import 'sex.dart';
+import 'database/commerce_model.dart';
 
 /// Represents a user account.
 class User {
@@ -23,7 +25,8 @@ class User {
   Sex sex;
 
   /// List of the favorite commerce.
-  List<String> favoriteCommerces = [];
+  List<String> favoriteCommerceIds = [];
+  List<Commerce> favoriteCommerces = [];
 
   /// Is a PRO account.
   bool proAccount = false;
@@ -39,7 +42,7 @@ class User {
       @required this.profilePicture,
       @required this.dateOfBirth,
       @required this.sex,
-      this.favoriteCommerces,
+      this.favoriteCommerceIds,
       this.proAccount,
       this.adminAccount});
 
@@ -50,16 +53,27 @@ class User {
     this.profilePicture = null;
     this.dateOfBirth = null;
     this.sex = null;
-    this.favoriteCommerces = null;
+    this.favoriteCommerceIds = null;
+  }
+
+  /// Initializes all favorite commerces associated to this user.
+  void init() async {
+    if (this.favoriteCommerceIds.length != null) {
+      Future.wait([
+        CommerceModel()
+            .getMultipleByIds(this.favoriteCommerceIds)
+            .then((value) => this.favoriteCommerces = value),
+      ]);
+    }
   }
 
   /// Adds a commerce to favorites list.
   void addFavoriteEnterprise(String valueId) =>
-      this.favoriteCommerces.add(valueId);
+      this.favoriteCommerceIds.add(valueId);
 
   /// Removes a commerce from favorites list.
   void removeFavoriteEnterprise(String valueId) =>
-      this.favoriteCommerces.remove(valueId);
+      this.favoriteCommerceIds.remove(valueId);
 
   /// Gets the widget to display the profile picture.
   Widget getProfilePictureWdget() {

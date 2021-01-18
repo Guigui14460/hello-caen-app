@@ -3,7 +3,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'comment.dart';
 import 'commerce_type.dart';
+import 'user_account.dart';
 import '../utils.dart';
+import 'database/comment_model.dart';
+import 'database/user_model.dart';
 
 /// Represents a commerce.
 class Commerce {
@@ -15,6 +18,10 @@ class Commerce {
 
   /// Location
   String location;
+
+  /// Owner of the commerce.
+  String ownerId;
+  User owner;
 
   /// Date of creation.
   final DateTime dateAdded;
@@ -30,30 +37,42 @@ class Commerce {
 
   /// All comments related to this commerce.
   List<Comment> comments;
+  List<String> commentIds;
 
   /// Link for the image representing the commerce.
-  String
-      imageLink; // donnée via une image sur un site ou via un upload de fichier
+  String imageLink;
 
   /// Constructor.
   Commerce(
       {this.id,
+      @required this.ownerId,
       @required this.name,
       @required this.location,
       @required this.timetables,
       @required this.type,
-      @required this.comments,
+      @required this.commentIds,
       @required this.dateAdded,
       @required this.dateModified,
       @required this.imageLink});
 
+  /// Initializes all comments associated to this commerce and
+  /// the owner user.
+  void init() async {
+    await Future.wait<void>([
+      CommentModel()
+          .getMultipleByIds(this.commentIds)
+          .then((value) => this.comments = value),
+      UserModel().getById(this.ownerId).then((value) => this.owner = value),
+    ]);
+  }
+
   /// Gets the mean of all ratings.
   double _getRating() {
     double rating = 0;
-    for (int i = 0; i < comments.length; i++) {
-      rating += comments[i].rating;
+    for (int i = 0; i < this.comments.length; i++) {
+      rating += this.comments[i].rating;
     }
-    rating /= comments.length;
+    rating /= this.comments.length;
     return rating;
   }
 
@@ -92,7 +111,7 @@ class Commerce {
     return ListView.builder(
       itemCount: this.comments.length,
       itemBuilder: (context, index) {
-        return comments[index].build(context);
+        return this.comments[index].build(context);
       },
     ).build(context);
   }

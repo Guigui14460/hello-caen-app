@@ -46,6 +46,22 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                 longPress: () {}),
             DefaultButton(
                 height: 40,
+                text: "Get all commerce types by IDs",
+                press: () {
+                  model.getMultipleByIds([
+                    "SkP4ctuE6eshxIOQ6Qel",
+                    "WtUCtvsfDSJymjuN6tsn",
+                    "b0hITsXqxCWkzmJeRqzB"
+                  ]).then((value) => {
+                        setState(() {
+                          results = "Multiple : " +
+                              value.map((e) => e.name).join(", ");
+                        })
+                      });
+                },
+                longPress: () {}),
+            DefaultButton(
+                height: 40,
                 text: "Get commerce type by id",
                 press: () async {
                   CommerceType type = await model.getById(id);

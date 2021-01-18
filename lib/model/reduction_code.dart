@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'commerce.dart';
+import 'database/commerce_model.dart';
 
 /// Represents a reduction code.
 class ReductionCode {
@@ -8,7 +9,8 @@ class ReductionCode {
   String id;
 
   /// Commerce associated.
-  final Commerce commerce;
+  final String commerceId;
+  Commerce commerce;
 
   /// Date of beginning.
   DateTime beginDate;
@@ -38,16 +40,27 @@ class ReductionCode {
   /// Constructor.
   ReductionCode({
     this.id,
-    @required this.commerce,
+    this.notifyAllUser,
+    this.commerce,
+    @required this.commerceId,
     @required this.beginDate,
     @required this.endDate,
-    this.notifyAllUser,
     @required this.maxAvailableCodes,
     @required this.usedCodes,
     @required this.conditions,
     @required this.usePercentage,
     @required this.reductionAmount,
   });
+
+  /// Initializes commerce associated to this
+  /// code.
+  void init() async {
+    await Future.wait([
+      CommerceModel()
+          .getById(this.commerceId)
+          .then((value) => this.commerce = value)
+    ]);
+  }
 
   /// Gets the QR Code image generated for this
   /// code.

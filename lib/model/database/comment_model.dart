@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'firebase_firestore_db.dart';
 import '../comment.dart';
-import '../database/firebase_firestore_db.dart';
 import '../../utils.dart';
 
 /// Model used to communicate with the database for the
@@ -14,10 +14,10 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
   Map<String, dynamic> getElementData(Comment object) {
     return {
       "text": object.text,
-      "author": object.author,
+      "author": object.authorId,
       "dateAdded": convertDatetimeToString(object.dateAdded),
       "dateModified": convertDatetimeToString(object.dateModified),
-      "subcomments": object.subcomments,
+      "subcomments": object.subcommentIds,
       "rating": object.rating,
     };
   }
@@ -27,10 +27,10 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
     return new Comment(
       id: value.id,
       text: value['text'],
-      author: value['author'],
+      authorId: value['author'],
       dateAdded: convertStringToDatetime(value['dateAdded']),
       dateModified: convertStringToDatetime(value['dateModified']),
-      subcomments: value['subcomments'],
+      subcommentIds: value['subcomments'],
       rating: value['rating'],
     );
   }

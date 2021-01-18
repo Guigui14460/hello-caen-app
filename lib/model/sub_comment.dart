@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'user_account.dart';
 import '../utils.dart';
+import 'database/user_model.dart';
 
 class SubComment {
   // ID of the object in database.
@@ -17,13 +18,14 @@ class SubComment {
   DateTime dateModified;
 
   /// Comment author.
-  final User author;
+  final String authorId;
+  User author;
 
   /// Constructor.
   SubComment(
       {this.id,
       @required this.text,
-      @required this.author,
+      @required this.authorId,
       @required this.dateAdded,
       @required this.dateModified});
 
@@ -41,6 +43,13 @@ class SubComment {
         Text(this.text),
       ],
     );
+  }
+
+  /// Initializes all favorite commerces associated to this user.
+  void init() async {
+    Future.wait([
+      UserModel().getById(this.authorId).then((value) => this.author = value),
+    ]);
   }
 
   /// Gets the added date widget.

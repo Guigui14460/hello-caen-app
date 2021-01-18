@@ -57,6 +57,14 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
     return object;
   }
 
+  @override
+  Future<List<T>> getMultipleByIds(List<String> ids) async {
+    List<T> list = [];
+    list = await Future.wait(ids.map(
+        (id) => reference.doc(id).get().then((value) => getTElement(value))));
+    return list;
+  }
+
   /// Gets [T] element from the [value] provided by
   /// [getAll] and [getById] methods.
   @protected

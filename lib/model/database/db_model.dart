@@ -13,6 +13,9 @@ mixin DBModel<T> {
   /// Gets a document by an [id] stored in the database collection.
   Future<T> getById(String id);
 
+  /// Gets multiple documents associated with the [ids].
+  Future<List<T>> getMultipleByIds(List<String> ids);
+
   /// Creates a document with the data of the [object]
   /// parameter in the database collection.
   /// <strong>N.B.:</strong> We recommend to use

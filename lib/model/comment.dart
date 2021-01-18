@@ -4,6 +4,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'sub_comment.dart';
 import 'user_account.dart';
 import '../utils.dart';
+import 'database/sub_comment_model.dart';
+import 'database/user_model.dart';
 
 /// Represents a comment.
 class Comment {
@@ -20,13 +22,15 @@ class Comment {
   double rating;
 
   /// All subcomments of this comment.
+  List<String> subcommentIds = [];
   List<SubComment> subcomments = [];
 
   /// Main text.
   String text;
 
   /// Comment author.
-  final User author;
+  final String authorId;
+  User author;
 
   /// Constructor.
   Comment(
@@ -34,9 +38,19 @@ class Comment {
       @required this.dateAdded,
       @required this.dateModified,
       @required this.rating,
-      this.subcomments,
+      this.subcommentIds,
       @required this.text,
-      @required this.author});
+      @required this.authorId});
+
+  /// Initializes all sub-comments associated to this comment.
+  void init() async {
+    Future.wait([
+      SubCommentModel()
+          .getMultipleByIds(this.subcommentIds)
+          .then((value) => this.subcomments = value),
+      UserModel().getById(this.authorId).then((value) => this.author = value),
+    ]);
+  }
 
   /// Builds the comment widget.
   Widget build(context) {
@@ -44,7 +58,7 @@ class Comment {
       children: [
         Row(
           children: [
-            this.author.buildSmallProfile(),
+            this._buildSmallProfile(),
             this._getDateAdded(),
             this._getDateModified(),
           ],
@@ -54,6 +68,18 @@ class Comment {
         (this.subcomments.length > 0 ? this._getSubComments(context) : null),
       ],
     );
+  }
+
+  Widget _buildSmallProfile() {
+    return FutureBuilder(
+        future: UserModel().getById(id),
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+          return (snapshot.hasData
+              ? snapshot.data.buildSmallProfile()
+              : snapshot.hasError
+                  ? Text("Erreur de chargement")
+                  : Center(child: CircularProgressIndicator()));
+        });
   }
 
   /// Gets the added date widget.

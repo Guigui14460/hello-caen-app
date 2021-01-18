@@ -14,7 +14,7 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
   ReductionCode getTElement(DocumentSnapshot value) {
     return ReductionCode(
       id: value.id,
-      commerce: value['commerce'],
+      commerceId: value['commerce'],
       beginDate: convertStringToDatetime(value['beginDate']),
       endDate: convertStringToDatetime(value['endDate']),
       notifyAllUser: value['notifyAllUser'],
@@ -29,7 +29,7 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
   @override
   Map<String, dynamic> getElementData(ReductionCode object) {
     return {
-      'commerce': object.commerce,
+      'commerce': object.commerceId,
       'beginDate': convertDatetimeToString(object.beginDate),
       'endDate': convertDatetimeToString(object.endDate),
       'notifyAllUser': object.notifyAllUser,

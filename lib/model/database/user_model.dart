@@ -19,7 +19,7 @@ class UserModel extends FirebaseFirestoreDB<User> {
         lastName: value['lastName'],
         profilePicture: value['profilePicture'],
         sex: Sex.values[value['sex']],
-        favoriteCommerces: value['favoriteCommerces'].toString().split(","),
+        favoriteCommerceIds: value['favoriteCommerces'].toString().split(","),
         dateOfBirth: convertStringToDatetime(value['dateOfBirth']),
         adminAccount: value['admin'],
         proAccount: value['pro']);
@@ -33,7 +33,7 @@ class UserModel extends FirebaseFirestoreDB<User> {
       'profilePicture': object.profilePicture,
       'sex': object.sex.index,
       'dateOfBirth': convertDatetimeToString(object.dateOfBirth),
-      'favoriteCommerces': object.favoriteCommerces.join(","),
+      'favoriteCommerceIds': object.favoriteCommerces.join(","),
       'admin': object.adminAccount,
       'pro': object.proAccount,
     };

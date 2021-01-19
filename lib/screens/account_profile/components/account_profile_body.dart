@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/services/firebase_settings.dart';
 import 'package:hello_caen/services/notification_service.dart';
 import 'package:hello_caen/utils.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../components/app_bar.dart';
 import '../../../components/default_button.dart';
@@ -125,6 +127,17 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                   await NotificationService.instance
                       .pushNotification("Test poto", "sa march b1 frr");
                   print("done");
+                },
+                longPress: () {}),
+            DefaultButton(
+                height: 40,
+                text: "Send image to storage",
+                press: () async {
+                  await FirebaseSettings.instance.uploadFile(
+                      await ImagePicker().getImage(source: ImageSource.gallery),
+                      context,
+                      "test",
+                      "test.jpg");
                 },
                 longPress: () {}),
           ],

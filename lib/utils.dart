@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -29,4 +30,11 @@ String getTimeAgoFrom(DateTime time) {
 /// duration from now.
 String getTimeAgo(Duration time) {
   return timeago.format(DateTime.now().subtract(time));
+}
+
+/// Copy [data] to the clipboard.
+Future<void> copyData(String data) async {
+  await Clipboard.setData(
+    ClipboardData(text: data),
+  );
 }

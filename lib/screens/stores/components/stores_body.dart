@@ -21,7 +21,7 @@ class _StoresBodyState extends State<StoresBody> {
                 SizedBox(height: 10),
                 Container(
                     width: MediaQuery.of(context).size.width * 0.98,
-                    height: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width * 0.4,
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(
@@ -81,7 +81,7 @@ class _StoresBodyState extends State<StoresBody> {
                 SizedBox(height: 10),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.98,
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  //height: MediaQuery.of(context).size.height * 0.2,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: NetworkImage(
@@ -157,7 +157,7 @@ class _StoresBodyState extends State<StoresBody> {
                     child: FlatButton(
                         onPressed: () => Navigator.popAndPushNamed(
                             context, HomeScreen.routeName),
-                        child: Text("Fuck Go Back"))),
+                        child: Text("Fuck ,Go Back"))),
               ],
             ),
           )),

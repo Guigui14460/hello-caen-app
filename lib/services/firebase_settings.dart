@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,9 @@ class FirebaseSettings {
   /// The firebase storage.
   FirebaseStorage _storage;
 
+  /// The firebase cloud messaging.
+  FirebaseMessaging _messaging;
+
   /// Constructor of the instance.
   /// [app] the firebase app instance.
   FirebaseSettings._(FirebaseApp app) {
@@ -31,6 +35,7 @@ class FirebaseSettings {
     // this._database = FirebaseDatabase(app: app);
     this._firestore = FirebaseFirestore.instance;
     this._storage = FirebaseStorage.instance;
+    this._messaging = FirebaseMessaging();
   }
 
   /// Gets the firebase settings single instance.
@@ -60,6 +65,11 @@ class FirebaseSettings {
   /// Gets the firebase storage instance.
   FirebaseStorage getStorage() {
     return this._storage;
+  }
+
+  /// Gets the firebase cloud messaging instance.
+  FirebaseMessaging getMessaging() {
+    return this._messaging;
   }
 
   /// Uploads a file in the firebase storage at [mainDirectory]/[fileName]

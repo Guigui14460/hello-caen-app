@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_caen/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/account_profile/account_profile_screen.dart';
@@ -7,16 +8,21 @@ import '../services/theme_manager.dart';
 import '../screens/explanations/explanations_screen.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  static Widget _title = SizedBox(
-    height: 60,
-    child: SvgPicture.asset("assets/images/logo.svg"),
-  );
   static Size _size = Size(double.minPositive, 65.0);
 
   @override
   Widget build(BuildContext context) {
     ThemeManager manager = Provider.of<ThemeManager>(context);
     Color textColor = manager.isDarkMode() ? Colors.white : Colors.black;
+    Widget _title = GestureDetector(
+      child: SizedBox(
+        height: 60,
+        child: SvgPicture.asset("assets/images/logo.svg"),
+      ),
+      onTap: () {
+        Navigator.pushNamed(context, HomeScreen.routeName);
+      },
+    );
     return AppBar(
       toolbarHeight: 65,
       backgroundColor: Colors.transparent,

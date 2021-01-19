@@ -74,7 +74,6 @@ class NotificationService {
       androidId,
       'Reminder notifications',
       'Remember about it',
-      icon: 'smile_icon',
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(

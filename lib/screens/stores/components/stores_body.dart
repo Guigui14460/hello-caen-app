@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../home/home_screen.dart';
 import '../../../components/app_bar.dart';
-import '../../../screens/home/home_screen.dart';
 
 class StoresBody extends StatefulWidget {
   StoresBody({Key key}) : super(key: key);
@@ -155,10 +155,8 @@ class _StoresBodyState extends State<StoresBody> {
                 ),
                 Container(
                     child: FlatButton(
-                        onPressed: () => {
-                              Navigator.popAndPushNamed(
-                                  context, HomeScreen.routeName)
-                            },
+                        onPressed: () => Navigator.popAndPushNamed(
+                            context, HomeScreen.routeName),
                         child: Text("Fuck Go Back"))),
               ],
             ),

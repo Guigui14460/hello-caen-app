@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/services/notification_service.dart';
 import 'package:hello_caen/utils.dart';
 
 import '../../../components/app_bar.dart';
@@ -117,6 +118,15 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                 },
                 longPress: () {}),
             Text(results),
+            DefaultButton(
+                height: 40,
+                text: "Push local notification",
+                press: () async {
+                  await NotificationService.instance
+                      .pushNotification("Test poto", "sa march b1 frr");
+                  print("done");
+                },
+                longPress: () {}),
           ],
         ),
       ),

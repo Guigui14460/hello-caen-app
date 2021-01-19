@@ -21,8 +21,8 @@ class LocationService {
   }
 
   /// Refreshes the location of the user.
-  void refresh() {
-    this._getLocation().then((value) => {_setLocation(value)});
+  Future<void> refresh() async {
+    await this._getLocation().then((value) => {_setLocation(value)});
   }
 
   /// Gets the current user location.
@@ -30,14 +30,16 @@ class LocationService {
     var currentLocation;
     try {
       currentLocation = await _location.getLocation();
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return currentLocation;
   }
 
   /// Gets the known location data.
-  LocationData getLocationData({refresh = true}) {
+  Future<LocationData> getLocationData({refresh = true}) async {
     if (refresh) {
-      this.refresh();
+      await this.refresh();
     }
     return this.userLocation;
   }

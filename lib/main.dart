@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hello_caen/services/notification_service.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,9 @@ Future<void> main() async {
   // timeago initialization
   timeago.setLocaleMessages('fr_short', timeago.FrShortMessages());
   timeago.setDefaultLocale("fr_short");
+
+  // local notification initialization
+  NotificationService.init();
 
   // app and ThemeManager
   runApp(ChangeNotifierProvider<ThemeManager>(

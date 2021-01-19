@@ -39,13 +39,16 @@ class _HomeBodyState extends State<HomeBody> {
               DefaultButton(
                   text: "Localisation ",
                   press: () => {
-                        LocationService.getInstance().getLocationData(),
-                        setState(() {
-                          _location = LocationService.getInstance()
-                              .userLocation
-                              .toString();
-                          print(_location);
-                        }),
+                        LocationService.getInstance()
+                            .getLocationData()
+                            .then((value) => {
+                                  setState(() {
+                                    _location = LocationService.getInstance()
+                                        .userLocation
+                                        .toString();
+                                    print(_location);
+                                  }),
+                                }),
                       },
                   longPress: () => {}),
               DefaultButton(

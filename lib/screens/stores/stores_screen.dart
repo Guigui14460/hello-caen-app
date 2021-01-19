@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../services/size_config.dart';
 import 'components/stores_body.dart';
 
 class StoresScreen extends StatelessWidget {
@@ -9,11 +8,6 @@ class StoresScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    return Scaffold(
-      body: SafeArea(
-        child: StoresBody(),
-      ),
-    );
+    return StoresBody();
   }
 }

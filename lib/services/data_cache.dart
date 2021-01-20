@@ -34,6 +34,19 @@ class DataCache {
     }
   }
 
+  /// Verify if the first level entry contains [key].
+  static bool containsKeyEntry(dynamic key) {
+    return _cachedData.containsKey(key);
+  }
+
+  /// Verify if the second level entry contains [subKey] which is contained in a first level entry of key [key].
+  static bool containsKeySubEntry(dynamic key, dynamic subKey) {
+    if (_cachedData.containsKey(key)) {
+      return _cachedData[key].containsKey(subKey);
+    }
+    return false;
+  }
+
   /// Gets a first level entry.
   static dynamic getEntry(dynamic key) {
     if (_cachedData.containsKey(key)) {

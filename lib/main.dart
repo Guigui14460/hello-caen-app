@@ -14,7 +14,7 @@ import 'services/notification_service.dart';
 import 'services/theme_manager.dart';
 
 // import 'package:carp_background_location/carp_background_location.dart';
-// demander icone, slogan, nom appli, description
+
 /// Entry point function.
 Future<void> main() async {
   // widgets initialization
@@ -41,9 +41,6 @@ Future<void> main() async {
           ),
   );
   FirebaseSettings.createInstance(app);
-  // FirebaseSettings.instance.getMessaging().configure(
-  //       onMessage: (Map<String, dynamic> message) async {},
-  //     );
 
   // timeago initialization
   timeago.setLocaleMessages('fr_short', timeago.FrShortMessages());
@@ -60,38 +57,10 @@ Future<void> main() async {
   ));
 }
 
-Future<dynamic> myBackgroundHandler(Map<String, dynamic> message) {
-  return HelloCaenApplication()._showNotification(message);
-}
-
 /// Application itself.
 class HelloCaenApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseSettings.instance.getMessaging().configure(
-      // onBackgroundMessage: myBackgroundHandler,
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('new message arived'),
-                content: Text(
-                    'i want ${message['notification']['title']} for ${message['notification']['body']}'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-      },
-    );
-    getTokenz();
     return MaterialApp(
       title: 'Hello Caen',
       theme: Provider.of<ThemeManager>(context).getTheme(),
@@ -99,16 +68,6 @@ class HelloCaenApplication extends StatelessWidget {
       initialRoute: ExplanationsScreen.routeName,
       routes: routes,
     );
-  }
-
-  Future _showNotification(Map<String, dynamic> message) async {
-    NotificationService.instance.pushNotification("new message arived",
-        'i want ${message['data']['title']} for ${message['data']['price']}');
-  }
-
-  getTokenz() async {
-    String token = await FirebaseSettings.instance.getMessaging().getToken();
-    print(token);
   }
 }
 

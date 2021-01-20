@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/services/firebase_settings.dart';
-import 'package:hello_caen/services/notification_service.dart';
-import 'package:hello_caen/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../components/app_bar.dart';
 import '../../../components/default_button.dart';
 import '../../../model/commerce_type.dart';
 import '../../../model/database/commerce_type_model.dart';
+import '../../../services/data_cache.dart';
+import '../../../services/firebase_settings.dart';
+import '../../../services/notification_service.dart';
+import '../../../utils.dart';
 
 /// Class to build all widgets of the [AccountProfileScreen].
 class AccountProfileBody extends StatefulWidget {
@@ -138,6 +139,14 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                       context,
                       "test",
                       "test.jpg");
+                },
+                longPress: () {}),
+            DefaultButton(
+                height: 40,
+                text: "Print data cache",
+                press: () {
+                  print(DataCache.getSubEntry("location", "actual"));
+                  DataCache.debug();
                 },
                 longPress: () {}),
           ],

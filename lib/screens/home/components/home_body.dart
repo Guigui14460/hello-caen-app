@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../stores/stores_screen.dart';
 import '../../../components/app_bar.dart';
 import '../../../components/default_button.dart';
+import '../../../services/data_cache.dart';
 import '../../../services/location_service.dart';
 import '../../../services/theme_manager.dart';
 import '../../../services/size_config.dart';
@@ -47,6 +48,8 @@ class _HomeBodyState extends State<HomeBody> {
                                         .userLocation
                                         .toString();
                                     print(_location);
+                                    DataCache.addOrUpdateSubEntry(
+                                        "location", "actual", _location);
                                   }),
                                 }),
                       },

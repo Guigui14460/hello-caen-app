@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore: ^0.14.4
   firebase_storage: ^5.0.0
   # firebase_messaging: ^6.0.9
+  # firebase_messaging: "^7.0.0"
 
   # other
   flutter_rating_bar: ^3.2.0+1

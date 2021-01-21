@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hello_caen/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/account_profile/account_profile_screen.dart';
+import '../screens/sign_in/sign_in_screen.dart';
+import '../screens/sign_up/sign_up_screen.dart';
+import '../screens/home/home_screen.dart';
 import '../services/theme_manager.dart';
+import '../services/firebase_settings.dart';
 import '../screens/explanations/explanations_screen.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   static Size _size = Size(double.minPositive, 65.0);
+
+  List<Icon> actions;
+  List<VoidCallback> actionsCallback;
+  Icon leading;
+  VoidCallback leadingCallback;
+
+  MyAppBar(
+      {this.leading,
+      this.leadingCallback,
+      this.actions,
+      this.actionsCallback}) {
+    assert((this.leading != null && this.leadingCallback != null) ||
+        (this.leading == null && this.leadingCallback == null));
+    assert((this.actions != null && this.actionsCallback != null) ||
+        (this.actions == null && this.actionsCallback == null));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +48,44 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: _title,
       foregroundColor: textColor,
-      leading: IconButton(
-        icon: Icon(Icons.menu),
-        color: textColor,
-        onPressed: () {
-          Navigator.popAndPushNamed(context, ExplanationsScreen.routeName);
-        },
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.add),
-          color: textColor,
-          onPressed: () {
-            Navigator.pushNamed(context, AccountProfileScreen.routeName);
-          },
-        )
-      ],
+      leading: this.leading != null
+          ? IconButton(
+              icon: this.leading,
+              color: textColor,
+              onPressed: this.leadingCallback,
+            )
+          : null,
+      // IconButton(
+      //     icon: Icon(Icons.menu),
+      //     color: textColor,
+      //     onPressed: () {
+      //       Navigator.popAndPushNamed(
+      //           context, ExplanationsScreen.routeName);
+      //     },
+      // ),
+      actions: this.actions != null
+          ? this.actions.asMap().keys.toList().map((index) {
+              IconButton(
+                icon: this.actions[index],
+                color: textColor,
+                onPressed: this.actionsCallback[index],
+              );
+            })
+          : [
+              IconButton(
+                icon: Icon(Icons.add),
+                color: textColor,
+                onPressed: () {
+                  if (FirebaseSettings.instance.getAuth().currentUser != null) {
+                    Navigator.pushNamed(
+                        context, AccountProfileScreen.routeName);
+                  } else {
+                    Navigator.pushNamed(context, SignUpScreen.routeName);
+                    // Navigator.pushNamed(context, SignInScreen.routeName);
+                  }
+                },
+              )
+            ],
     );
   }
 

@@ -149,6 +149,21 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                   DataCache.debug();
                 },
                 longPress: () {}),
+            DefaultButton(
+                height: 40,
+                text: "Print current user",
+                press: () {
+                  print(FirebaseSettings.instance.getAuth().currentUser.uid);
+                },
+                longPress: () {}),
+            DefaultButton(
+                height: 40,
+                text: "Logout current user",
+                press: () async {
+                  await FirebaseSettings.instance.getAuth().signOut();
+                  Navigator.pop(context);
+                },
+                longPress: () {}),
           ],
         ),
       ),

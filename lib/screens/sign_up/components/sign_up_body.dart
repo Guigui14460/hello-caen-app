@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'sign_in_form.dart';
+import 'sign_up_form.dart';
 import '../../../components/social_card.dart';
-import '../../../components/no_account_text.dart';
+import '../../../components/already_have_account_text.dart';
 import '../../../helper/keyboard.dart';
 import '../../../services/size_config.dart';
 
-/// Class to create all widgets of the [SignInScreen].
-class SignInBody extends StatelessWidget {
+class SignUpBody extends StatelessWidget {
+  const SignUpBody({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -20,7 +21,7 @@ class SignInBody extends StatelessWidget {
             children: [
               SizedBox(height: SizeConfig.screenHeight * 0.02),
               Text(
-                "Connectez-vous",
+                "Inscription",
                 style: TextStyle(
                   fontSize: getProportionateScreenWidth(28),
                   fontWeight: FontWeight.bold,
@@ -28,12 +29,12 @@ class SignInBody extends StatelessWidget {
               ),
               SizedBox(height: SizeConfig.screenHeight * 0.02),
               Text(
-                "Connectez-vous avec votre adresse email et mot de passe\nou continuez avec un réseaux social",
+                "Inscrivez-vous avec une adresse email \net un mot de passe\nou continuez avec un réseaux social",
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: SizeConfig.screenHeight * 0.08),
-              SignInForm(),
-              SizedBox(height: SizeConfig.screenHeight * 0.08),
+              SizedBox(height: SizeConfig.screenHeight * 0.04),
+              SignUpForm(),
+              SizedBox(height: SizeConfig.screenHeight * 0.04),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -56,7 +57,7 @@ class SignInBody extends StatelessWidget {
                 ],
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
-              NoAccountText(),
+              AlreadyHaveAnAccountText(),
               SizedBox(height: getProportionateScreenHeight(20)),
             ],
           ),

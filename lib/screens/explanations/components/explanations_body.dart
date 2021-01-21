@@ -43,7 +43,7 @@ class _ExplanationsBodyState extends State<ExplanationsBody> {
       fontSize: 20,
       text: 'Continuer',
       press: () {
-        Navigator.popAndPushNamed(context, HomeScreen.routeName);
+        Navigator.pushNamed(context, HomeScreen.routeName);
       },
       longPress: () {},
     );

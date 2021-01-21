@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../services/size_config.dart';
 import 'components/sign_in_body.dart';
+import '../../components/app_bar.dart';
+import '../../helper/keyboard.dart';
 
 /// Screen displayed when the user try to log in
 /// on the application.
@@ -11,10 +12,16 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    return Scaffold(
-      body: SafeArea(
-        child: SignInBody(),
+    return SafeArea(
+      child: Scaffold(
+        appBar: MyAppBar(
+          leading: Icon(Icons.arrow_back),
+          leadingCallback: () {
+            KeyboardUtil.hideKeyboard(context);
+            Navigator.pop(context);
+          },
+        ),
+        body: SignInBody(),
       ),
     );
   }

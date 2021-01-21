@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'components/sign_up_body.dart';
+import 'components/forgot_password_body.dart';
 import '../../components/app_bar.dart';
 import '../../helper/keyboard.dart';
 
-class SignUpScreen extends StatelessWidget {
-  static String routeName = "/signup";
-  const SignUpScreen({Key key}) : super(key: key);
+class ForgotPasswordScreen extends StatelessWidget {
+  static String routeName = "/forgot-password";
+  const ForgotPasswordScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class SignUpScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        body: SignUpBody(),
+        body: ForgotPasswordBody(),
       ),
     );
   }

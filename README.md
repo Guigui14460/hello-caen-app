@@ -24,7 +24,7 @@ https://flutter.dev/docs/deployment/ios
 
 ## Quelques info
 Compte admin test (id `5ePTSGGFgnVxe6rhUA4Rg9Nyb2p1`) :
-- email : `admin.test@hellocaen.com`
+- email : `admin@hellocaen.com`
 - mdp : `admin1`
 
 Compte pro test (id `JE0tQJgslDQ42gaTL771pSgKtht1`) :

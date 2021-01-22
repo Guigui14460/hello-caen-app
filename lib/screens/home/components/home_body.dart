@@ -29,61 +29,62 @@ class _HomeBodyState extends State<HomeBody> {
     return SafeArea(
       child: Scaffold(
           appBar: MyAppBar(),
-          body: GridView.count(
-            primary: false,
-            padding: const EdgeInsets.all(10),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            crossAxisCount: 2,
-            childAspectRatio: 0.87,
-            children: [
-              DefaultButton(
-                  text: "Localisation ",
-                  press: () => {
-                        LocationService.getInstance()
-                            .getLocationData()
-                            .then((value) => {
-                                  setState(() {
-                                    _location = LocationService.getInstance()
-                                        .userLocation
-                                        .toString();
-                                    print(_location);
-                                    DataCache.addOrUpdateSubEntry(
-                                        "location", "actual", _location);
-                                  }),
-                                }),
-                      },
-                  longPress: () => {}),
-              DefaultButton(
-                  text: "Changer de mode",
-                  press: () => {themeManager.toggleThemeMode()},
-                  longPress: () => {}),
-              Container(
-                  child: IconButton(
-                icon: ImageIcon(NetworkImage(
-                    "https://i.pinimg.com/originals/4e/24/f5/4e24f523182e09376bfe8424d556610a.png")),
-                iconSize: 96,
-                onPressed: () => {
-                  Navigator.popAndPushNamed(context, StoresScreen.routeName)
-                },
-              )),
-              Container(
-                  child: DefaultButton(
-                      press: () => {themeManager.toggleThemeMode()},
-                      longPress: () => {},
-                      text: "Bons Plans")),
-              Container(
-                  child: DefaultButton(
-                      press: () => {themeManager.toggleThemeMode()},
-                      longPress: () => {},
-                      text: "Filler")),
-              Container(
-                  child: DefaultButton(
-                      press: () => {themeManager.toggleThemeMode()},
-                      longPress: () => {},
-                      text: "Filler")),
-            ],
-          )),
-    );
+          body: Scaffold(
+            appBar : MyAppBar(),
+            body :SingleChildScrollView(
+              child:Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.99,
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    color: Colors.amber,
+                    child: Container(
+                      child :Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Row( children: [Container(width: MediaQuery.of(context).size.width * 0.40,height: MediaQuery.of(context).size.width * 0.15, color: Colors.red), ]   ),
+                            SizedBox(height: 10),
+                            SingleChildScrollView( scrollDirection: Axis.horizontal,child:Row( children: [Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red), ]),),
+                        ],
+                      )
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.99,
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    color: Colors.amber,
+                    child: Container(
+                        child :Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Row( children: [Container(width: MediaQuery.of(context).size.width * 0.40,height: MediaQuery.of(context).size.width * 0.15, color: Colors.red), ]   ),
+                            SizedBox(height: 10),
+                            SingleChildScrollView( scrollDirection: Axis.horizontal,child:Row( children: [Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red), ]),),
+                          ],
+                        )
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.99,
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    color: Colors.amber,
+                    child: Container(
+                        child :Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Row( children: [Container(width: MediaQuery.of(context).size.width * 0.40,height: MediaQuery.of(context).size.width * 0.15, color: Colors.red), ]   ),
+                            SizedBox(height: 10),
+                            SingleChildScrollView( scrollDirection: Axis.horizontal,child:Row( children: [Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red), ]),),
+                          ],
+                        )
+                    ),
+                  )
+              ]
+            ),
+          )
+        )
+      )
+      );
+
   }
 }

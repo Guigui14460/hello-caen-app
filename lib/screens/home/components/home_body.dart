@@ -64,8 +64,27 @@ class _HomeBodyState extends State<HomeBody> {
                                                 image: NetworkImage('https://media-cdn.tripadvisor.com/media/photo-s/11/9e/75/70/sala-a-restaurant.jpg'),
                                                 fit: BoxFit.cover)
                                             ),
-
-                                    ),),
+                                        child: GridView.count(
+                                          crossAxisCount: 2,
+                                          children: [Container(
+                                            //color:Colors.lightGreen,
+                                            width:100,
+                                            height: 100,),
+                                            Container(
+                                            //color:Colors.lightGreen,
+                                            width:100,
+                                            height: 100,),
+                                            Container(
+                                              //color:Colors.lightGreen,
+                                              width:100,
+                                              height: 100,),
+                                            Container(
+                                              color:Colors.lightGreen,
+                                              width:120,
+                                              height: 100,),],
+                                        ),
+                                      ),
+                                    ),
                                         SizedBox(width: 10),
                                         Container(
                                             width: MediaQuery.of(context).size.width * 0.55,

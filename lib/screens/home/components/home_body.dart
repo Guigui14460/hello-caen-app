@@ -36,22 +36,52 @@ class _HomeBodyState extends State<HomeBody> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.99,
-                    height: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.width * 0.8,
                     color: Colors.amber,
                     child: Container(
                       child :Column(
                           children: [
                             SizedBox(height: 10),
-                            Row( children: [Container(width: MediaQuery.of(context).size.width * 0.40,height: MediaQuery.of(context).size.width * 0.15, color: Colors.red), ]   ),
+                            Row( children: [
+                              Container(
+                                  width: MediaQuery.of(context).size.width * 0.40,
+                                  height: MediaQuery.of(context).size.width * 0.15,
+                                  color: Colors.red,),]),
                             SizedBox(height: 10),
-                            SingleChildScrollView( scrollDirection: Axis.horizontal,child:Row( children: [Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red),SizedBox(width: 10),Container(width: MediaQuery.of(context).size.width * 0.45,height: MediaQuery.of(context).size.width * 0.35, color: Colors.red), ]),),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child:Row(
+                                  children: [
+                                    GestureDetector(onTap: () {
+                                      print('click');
+                                        },
+                                      child:
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 0.55,
+                                        height: MediaQuery.of(context).size.width * 0.55,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage('https://media-cdn.tripadvisor.com/media/photo-s/11/9e/75/70/sala-a-restaurant.jpg'),
+                                                fit: BoxFit.cover)
+                                            ),
+
+                                    ),),
+                                        SizedBox(width: 10),
+                                        Container(
+                                            width: MediaQuery.of(context).size.width * 0.55,
+                                            height: MediaQuery.of(context).size.width * 0.55, color: Colors.red),
+                                        SizedBox(width: 10),
+                                    Container(
+                                        width: MediaQuery.of(context).size.width * 0.55,
+                                        height: MediaQuery.of(context).size.width * 0.55,
+                                        color: Colors.red), ]),),
                         ],
                       )
                     ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.99,
-                    height: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.width * 0.8,
                     color: Colors.amber,
                     child: Container(
                         child :Column(
@@ -78,7 +108,16 @@ class _HomeBodyState extends State<HomeBody> {
                           ],
                         )
                     ),
-                  )
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.99,
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    color: Colors.lightGreen,
+                    padding: EdgeInsets.all(16.0),
+                    child: Container(
+                      color: Colors.red,
+                      width: MediaQuery.of(context).size.width * 0.99 / 3,
+                      height: MediaQuery.of(context).size.width * 0.6 / 3,),)
               ]
             ),
           )

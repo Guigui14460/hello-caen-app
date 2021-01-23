@@ -19,12 +19,19 @@ class HomeBody extends StatefulWidget {
 /// [State] of the [HomeBody].
 class _HomeBodyState extends State<HomeBody> {
   int _currentIndex = 0;
-  final List<Widget> _children = [
-    Container(color: Colors.amber),
-    StoreListPage(),
-    Container(color: Colors.red),
-    AccountProfilePage(),
-  ];
+  List<Widget> _children = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _children = [
+      Container(color: Colors.amber),
+      StoreListPage(),
+      Container(color: Colors.blue),
+      Container(color: Colors.red),
+      AccountProfilePage(),
+    ];
+  }
 
   @override
   void dispose() {
@@ -48,6 +55,7 @@ class _HomeBodyState extends State<HomeBody> {
           unselectedIconTheme:
               IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
           showSelectedLabels: true,
+          selectedFontSize: 13,
           showUnselectedLabels: true,
           currentIndex: _currentIndex,
           elevation: 0,
@@ -72,6 +80,11 @@ class _HomeBodyState extends State<HomeBody> {
               icon: Icon(Icons.local_offer_outlined),
               label: 'Réductions',
               activeIcon: Icon(Icons.local_offer),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.place_outlined),
+              label: 'Localisation',
+              activeIcon: Icon(Icons.place),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),

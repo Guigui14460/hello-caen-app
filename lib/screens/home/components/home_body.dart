@@ -68,13 +68,19 @@ class _HomeBodyState extends State<HomeBody> {
                                         },
                                       child:
                                       Container(
+
                                         width: MediaQuery.of(context).size.width * 0.55,
                                         height: MediaQuery.of(context).size.width * 0.55,
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: NetworkImage('https://media-cdn.tripadvisor.com/media/photo-s/11/9e/75/70/sala-a-restaurant.jpg'),
-                                                fit: BoxFit.cover)
-                                            ),
+                                                fit: BoxFit.cover,
+                                                ),
+                                            borderRadius: BorderRadius.all(Radius.circular(15))
+
+
+
+                                        ),
                                         child: GridView.count(
                                           crossAxisCount: 2,
                                           children: [Container(
@@ -85,14 +91,20 @@ class _HomeBodyState extends State<HomeBody> {
                                             //color:Colors.lightGreen,
                                             width:100,
                                             height: 100,),
-                                            Container(
-                                              //color:Colors.lightGreen,
-                                              width:100,
-                                              height: 100,),
-                                            Container(
-                                              color:Colors.lightGreen,
+                                            Opacity(child:Container(
+                                              color:Colors.black,
                                               width:120,
-                                              height: 100,),],
+                                              height: 100,),
+                                              opacity: 0.6,
+                                            ),
+                                            Opacity(child:Container(
+                                              color:Colors.black,
+                                              width:120,
+                                              height: 100,),
+                                              opacity: 0.6,
+                                            ),
+
+                                              ],
                                         ),
                                       ),
                                     ),

@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'sign_up_form.dart';
 import '../../../components/social_card.dart';
 import '../../../components/already_have_account_text.dart';
 import '../../../helper/keyboard.dart';
+import '../../../helper/social_authentication.dart';
 import '../../../services/size_config.dart';
 
 class SignUpBody extends StatelessWidget {
@@ -40,18 +42,48 @@ class SignUpBody extends StatelessWidget {
                 children: [
                   SocalCard(
                     icon: "assets/icons/google.svg",
-                    press: () {
+                    press: () async {
                       KeyboardUtil.hideKeyboard(context);
-                      print("Google authentication");
-                      Navigator.pop(context);
+                      try {
+                        await SocialAuthentication.signInWithGoogle();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "Vous êtes désormais inscrit avec votre compte Google")));
+                        Navigator.pop(context);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code ==
+                            'account-exists-with-different-credential') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Votre adresse email est déjà assoiciée à un compte existant")));
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Erreur lors de la connection")));
+                      }
                     },
                   ),
                   SocalCard(
                     icon: "assets/icons/facebook.svg",
-                    press: () {
+                    press: () async {
                       KeyboardUtil.hideKeyboard(context);
-                      print("Facebook authentication");
-                      Navigator.pop(context);
+                      try {
+                        await SocialAuthentication.signInWithFacebook();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "Vous êtes désormais inscrit avec votre compte Facebook")));
+                        Navigator.pop(context);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code ==
+                            'account-exists-with-different-credential') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Votre adresse email est déjà assoiciée à un compte existant")));
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Erreur lors de la connection")));
+                      }
                     },
                   ),
                 ],

@@ -34,6 +34,48 @@
 	<array>
 		<string>location</string>
 	</array>
+
+	<!-- Google Sign-in Section -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- Facebook App ID -->
+				<string>fb191242689399479</string>
+				<!-- TODO Replace this value: -->
+				<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+				<string>com.googleusercontent.apps.426795396848-q5amgd0vroltvmntq7r8fo8lhfqk8vpp</string>
+			</array>
+		</dict>
+	</array>
+	
+	<key>FacebookAppID</key>
+	<string>191242689399479</string>
+	<key>FacebookDisplayName</key>
+	<string>Hello Caen App</string>
+
+	
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

@@ -86,6 +86,19 @@ class FirebaseSettings {
     final SettableMetadata metadata = SettableMetadata(
         customMetadata: {'picked-file-path': file.path},
         contentType: contentType);
-    Future.value(ref.putFile(File(file.path), metadata));
+    return Future.value(ref.putFile(File(file.path), metadata));
+  }
+
+  Future<File> downloadFile(Reference ref, BuildContext context) async {
+    final Directory systemTempDir = Directory.systemTemp;
+    final File tempFile = File('${systemTempDir.path}/temp-${ref.name}');
+    if (!tempFile.existsSync()) {
+      await ref.writeToFile(tempFile);
+    }
+    return tempFile;
+  }
+
+  Future<String> downloadLink(Reference ref) async {
+    return await ref.getDownloadURL();
   }
 }

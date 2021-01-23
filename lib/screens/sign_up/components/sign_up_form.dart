@@ -77,7 +77,15 @@ class _SignUpFormState extends State<SignUpForm> {
                     addError(error: kWeakPassword);
                   } else if (e.code == "email-already-in-use") {
                     addError(error: kAlreadyUsedEmail);
+                  } else if (e.code ==
+                      'account-exists-with-different-credential') {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            "Votre adresse email est déjà assoiciée à un compte existant")));
                   }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Erreur lors de l'inscription")));
                 }
               }
             },

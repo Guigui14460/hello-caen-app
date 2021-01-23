@@ -4,12 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../screens/account_profile/account_profile_screen.dart';
 import '../screens/sign_in/sign_in_screen.dart';
-import '../screens/sign_up/sign_up_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../services/theme_manager.dart';
 import '../services/firebase_settings.dart';
-import '../screens/explanations/explanations_screen.dart';
 
+// ignore: must_be_immutable
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   static Size _size = Size(double.minPositive, 65.0);
 
@@ -55,14 +54,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: this.leadingCallback,
             )
           : null,
-      // IconButton(
-      //     icon: Icon(Icons.menu),
-      //     color: textColor,
-      //     onPressed: () {
-      //       Navigator.popAndPushNamed(
-      //           context, ExplanationsScreen.routeName);
-      //     },
-      // ),
       actions: this.actions != null
           ? this.actions.asMap().keys.toList().map((index) {
               IconButton(
@@ -80,7 +71,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Navigator.pushNamed(
                         context, AccountProfileScreen.routeName);
                   } else {
-                    Navigator.pushNamed(context, SignUpScreen.routeName);
+                    Navigator.pushNamed(context, SignInScreen.routeName);
                     // Navigator.pushNamed(context, SignInScreen.routeName);
                   }
                 },

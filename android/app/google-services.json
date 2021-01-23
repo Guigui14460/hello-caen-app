@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "426795396848-tu2vhm9spmc9557klof4ott0mqog9uib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helloCaen.helloCaenApp",
+            "certificate_hash": "1f2df26fbb055d3d6b2264241e59bd7422cae56e"
+          }
+        },
+        {
           "client_id": "426795396848-9k65vcoghoki8hmp4mjbvco9ncht4rtj.apps.googleusercontent.com",
           "client_type": 3
         }

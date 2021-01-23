@@ -1,5 +1,16 @@
 # Appli Hello Caen
 
+## Instructions pour production
+- Créer un projet Firebase
+- Créer 2 applications (une pour iOS et une autre pour Android)
+- Activer L'authentification, le cloud storage, le cloud firestore et le cloud messaging
+- Pour l'authentification, activer les authentifications avec email/mdp, Google et Facebook
+- Lancer la commande `keytool -list -v -keystore your_keystore_name -alias your_alias_name` pour générer les clés SHA1 et SHA 256 pour la production (Remplacez your_keystore_name par le chemin d'accès complet et le nom du magasin de clés, y compris l'extension .keystore. Remplacez your_alias_name par l'alias que vous avez attribué au certificat lorsque vous l'avez créé)
+- Ajouter les 2 clés dans l'application android créée sur Firebase (https://stackoverflow.com/questions/54557479/flutter-and-google-sign-in-plugin-platformexceptionsign-in-failed-com-google/54696963#54696963)
+
+- If error with Google Auth, see this link https://github.com/flutter/flutter/issues/27599
+- See test with this link https://pub.dev/packages/flutter_facebook_auth#android
+
 ## Flutter
 
 ### Installation de Flutter

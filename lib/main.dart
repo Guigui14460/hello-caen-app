@@ -9,16 +9,26 @@ import 'package:provider/provider.dart';
 import 'routes.dart';
 import 'settings.dart';
 import 'screens/explanations/explanations_screen.dart';
+import 'screens/home/home_screen.dart';
 import 'services/firebase_settings.dart';
 import 'services/notification_service.dart';
+import 'services/storage_manager.dart';
 import 'services/theme_manager.dart';
 
 // import 'package:carp_background_location/carp_background_location.dart';
+String initialRoute = ExplanationsScreen.routeName;
 
 /// Entry point function.
 Future<void> main() async {
   // widgets initialization
   WidgetsFlutterBinding.ensureInitialized();
+  await StorageManager.readData("firstConnection").then((value) {
+    if (value == null) {
+      StorageManager.saveData("firstConnection", false);
+    } else {
+      initialRoute = HomeScreen.routeName;
+    }
+  });
 
   // firebase initialization
   FirebaseApp app = await Firebase.initializeApp(
@@ -65,7 +75,7 @@ class HelloCaenApplication extends StatelessWidget {
       title: 'Hello Caen',
       theme: Provider.of<ThemeManager>(context).getTheme(),
       debugShowCheckedModeBanner: false,
-      initialRoute: ExplanationsScreen.routeName,
+      initialRoute: initialRoute,
       routes: routes,
     );
   }

@@ -6,6 +6,8 @@
 	<string>426795396848-q5amgd0vroltvmntq7r8fo8lhfqk8vpp.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.426795396848-q5amgd0vroltvmntq7r8fo8lhfqk8vpp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>426795396848-tu2vhm9spmc9557klof4ott0mqog9uib.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBpwFrvuElPFYnXtac4Q-ZqDfma8PrZFGQ</string>
 	<key>GCM_SENDER_ID</key>
@@ -30,5 +32,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:426795396848:ios:ed952eba7ce202e8ef1c35</string>
+	<key>DATABASE_URL</key>
+	<string>https://hello-caen-test-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

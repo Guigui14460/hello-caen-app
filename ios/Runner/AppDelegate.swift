@@ -3,6 +3,7 @@ import Flutter
 
 import background_locator
 import Firebase
+import FBSDKCoreKit
 
 func registerPlugins(registry: FlutterPluginRegistry) -> () {
     if (!registry.hasPlugin("BackgroundLocatorPlugin")) {
@@ -21,6 +22,7 @@ func registerPlugins(registry: FlutterPluginRegistry) -> () {
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }
+    FlutterAppDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
     BackgroundLocatorPlugin.setPluginRegistrantCallback(registerPlugins)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

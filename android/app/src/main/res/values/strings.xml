@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hello Caen Facbook Auth</string>
+    <string name="facebook_app_id">191242689399479</string>
+    <string name="fb_login_protocol_scheme">fb191242689399479</string>
+</resources>

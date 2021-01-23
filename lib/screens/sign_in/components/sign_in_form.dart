@@ -18,7 +18,6 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   String email;
   String password;
-  bool remember = false;
   final List<String> errors = [];
 
   void addError({String error}) {
@@ -44,30 +43,21 @@ class _SignInFormState extends State<SignInForm> {
           buildEmailFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          SizedBox(height: getProportionateScreenHeight(20)),
           Row(
             children: [
-              Checkbox(
-                value: remember,
-                activeColor: Theme.of(context).primaryColor,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
-                },
-              ),
-              Text("Se souvenir de moi"),
               Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
                     context, ForgotPasswordScreen.routeName),
                 child: Text(
-                  "Forgot Password",
+                  "Mot de passe oublié ?",
                   style: TextStyle(decoration: TextDecoration.underline),
                 ),
               )
             ],
           ),
+          SizedBox(height: getProportionateScreenHeight(20)),
           FormError(errors: errors),
           DefaultButton(
             text: 'Continuer',
@@ -93,6 +83,9 @@ class _SignInFormState extends State<SignInForm> {
                   } else if (e.code == 'wrong-password') {
                     addError(error: kWrongPassword);
                   }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Erreur lors de la connection")));
                 }
               }
             },

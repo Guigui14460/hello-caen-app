@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/app_bar.dart';
 import '../../../components/default_button.dart';
@@ -8,6 +9,7 @@ import '../../../model/database/commerce_type_model.dart';
 import '../../../services/data_cache.dart';
 import '../../../services/firebase_settings.dart';
 import '../../../services/notification_service.dart';
+import '../../../services/theme_manager.dart';
 import '../../../utils.dart';
 
 /// Class to build all widgets of the [AccountProfileScreen].
@@ -147,6 +149,14 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                 press: () {
                   print(DataCache.getSubEntry("location", "actual"));
                   DataCache.debug();
+                },
+                longPress: () {}),
+            DefaultButton(
+                height: 40,
+                text: "Toggle theme",
+                press: () {
+                  Provider.of<ThemeManager>(context, listen: false)
+                      .toggleThemeMode();
                 },
                 longPress: () {}),
             DefaultButton(

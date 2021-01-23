@@ -26,7 +26,7 @@ class ThemeManager with ChangeNotifier {
           notifyListeners();
         });
       } else {
-        _themeData = _getLightTheme();
+        setLightMode();
       }
     });
   }

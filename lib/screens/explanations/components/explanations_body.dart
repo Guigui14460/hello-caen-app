@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'explanations_content.dart';
+import '../../home/home_screen.dart';
 import '../../../components/default_button.dart';
 import '../../../constants.dart';
 import '../../../services/size_config.dart';
-import '../../home/home_screen.dart';
-import 'explanations_content.dart';
 
 /// Class to display all widgets of the [ExplanationsScreen] class.
 class ExplanationsBody extends StatefulWidget {
@@ -43,7 +43,7 @@ class _ExplanationsBodyState extends State<ExplanationsBody> {
       fontSize: 20,
       text: 'Continuer',
       press: () {
-        Navigator.pushNamed(context, HomeScreen.routeName);
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       },
       longPress: () {},
     );

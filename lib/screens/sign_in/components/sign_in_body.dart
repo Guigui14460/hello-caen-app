@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'sign_in_form.dart';
-import '../../../components/social_card.dart';
 import '../../../components/no_account_text.dart';
+import '../../../components/social_card.dart';
 import '../../../helper/keyboard.dart';
 import '../../../helper/social_authentication.dart';
 import '../../../services/size_config.dart';

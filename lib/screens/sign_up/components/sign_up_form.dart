@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../constants.dart';
-import '../../../services/size_config.dart';
-import '../../../services/firebase_settings.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../helper/keyboard.dart';
+import '../../../services/firebase_settings.dart';
+import '../../../services/size_config.dart';
 
 class SignUpForm extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../commerce.dart';
 import 'firebase_firestore_db.dart';
+import '../commerce.dart';
 import '../../utils.dart';
 
 /// Model used to communicate with the database for the

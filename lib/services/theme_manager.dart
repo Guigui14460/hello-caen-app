@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 import 'storage_manager.dart';
+import '../constants.dart';
 
 /// Manages the theme data of the application.
 /// Extends [ChangeNotifier] to use it like a provider.
@@ -39,10 +39,7 @@ class ThemeManager with ChangeNotifier {
           ),
       brightness: Brightness.dark,
       primaryColor: ternaryColor,
-      appBarTheme: AppBarTheme(
-        elevation: 0.0,
-        centerTitle: true,
-      ),
+      appBarTheme: getAppBarTheme(),
       backgroundColor: Colors.grey[900],
       inputDecorationTheme: getInputDecorationTheme(),
     );
@@ -54,10 +51,7 @@ class ThemeManager with ChangeNotifier {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       brightness: Brightness.light,
       primaryColor: primaryColor,
-      appBarTheme: AppBarTheme(
-        elevation: 0.0,
-        centerTitle: true,
-      ),
+      appBarTheme: getAppBarTheme(),
       inputDecorationTheme: getInputDecorationTheme(),
     );
   }
@@ -97,11 +91,12 @@ class ThemeManager with ChangeNotifier {
   }
 
   InputDecorationTheme getInputDecorationTheme() {
+    bool darkMode = isDarkMode();
     OutlineInputBorder border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       gapPadding: 10,
-      borderSide: BorderSide(
-          color: isDarkMode() ? Color(0xff9e9e9e) : Color(0xff6e6e6e)),
+      borderSide:
+          BorderSide(color: darkMode ? Color(0xff9e9e9e) : Color(0xff6e6e6e)),
     );
     return InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -110,6 +105,23 @@ class ThemeManager with ChangeNotifier {
       focusedBorder: border,
       border: border,
       errorBorder: border,
+    );
+  }
+
+  AppBarTheme getAppBarTheme() {
+    bool darkMode = isDarkMode();
+    Color textColor = darkMode ? Colors.white : Colors.black;
+    IconThemeData iconTheme = IconThemeData(color: textColor);
+    return AppBarTheme(
+      foregroundColor: textColor,
+      color: textColor,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
+      brightness: darkMode ? Brightness.dark : Brightness.light,
+      iconTheme: iconTheme,
+      actionsIconTheme: iconTheme,
+      backwardsCompatibility: true,
     );
   }
 }

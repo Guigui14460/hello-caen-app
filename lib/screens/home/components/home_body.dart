@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'account_profile.dart';
+import 'store_list.dart';
+import '../../../constants.dart';
 import '../../../components/app_bar.dart';
 import '../../../services/size_config.dart';
+import '../../../services/theme_manager.dart';
 
 /// Class to build all widgets of the [HomeScreen].
 class HomeBody extends StatefulWidget {
@@ -13,197 +18,63 @@ class HomeBody extends StatefulWidget {
 
 /// [State] of the [HomeBody].
 class _HomeBodyState extends State<HomeBody> {
+  int _currentIndex = 0;
+  final List<Widget> _children = [
+    Container(color: Colors.amber),
+    StoreListPage(),
+    Container(color: Colors.red),
+    AccountProfilePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context); // if the user doesn't come from SplashScreen
-
+    bool isDarkMode = Provider.of<ThemeManager>(context).isDarkMode();
     return SafeArea(
-        child: Scaffold(
-            appBar: MyAppBar(),
-            body: SingleChildScrollView(
-              child: Column(children: [
-                SizedBox(
-                  height: 50,
-                  width: 500,
-                  child: ListView(
-                    children: [
-                      Container(width: 100, height: 50, color: Colors.white),
-                      Container(width: 100, height: 50, color: Colors.black),
-                      Container(width: 100, height: 50, color: Colors.white),
-                      Container(width: 100, height: 50, color: Colors.black),
-                      Container(width: 100, height: 50, color: Colors.white),
-                    ],
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.99,
-                  height: MediaQuery.of(context).size.width * 0.8,
-                  color: Colors.amber,
-                  child: Container(
-                      child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Row(children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.40,
-                          height: MediaQuery.of(context).size.width * 0.15,
-                          color: Colors.red,
-                        ),
-                      ]),
-                      SizedBox(height: 10),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(children: [
-                          GestureDetector(
-                            onTap: () {
-                              print('click');
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.55,
-                              height: MediaQuery.of(context).size.width * 0.55,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        'https://media-cdn.tripadvisor.com/media/photo-s/11/9e/75/70/sala-a-restaurant.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15))),
-                              child: GridView.count(
-                                crossAxisCount: 2,
-                                children: [
-                                  Container(
-                                    //color:Colors.lightGreen,
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                  Container(
-                                    //color:Colors.lightGreen,
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                  Opacity(
-                                    child: Container(
-                                      color: Colors.black,
-                                      width: 120,
-                                      height: 100,
-                                    ),
-                                    opacity: 0.6,
-                                  ),
-                                  Opacity(
-                                    child: Container(
-                                      color: Colors.black,
-                                      width: 120,
-                                      height: 100,
-                                    ),
-                                    opacity: 0.6,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.55,
-                              height: MediaQuery.of(context).size.width * 0.55,
-                              color: Colors.red),
-                          SizedBox(width: 10),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.55,
-                              height: MediaQuery.of(context).size.width * 0.55,
-                              color: Colors.red),
-                        ]),
-                      ),
-                    ],
-                  )),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.99,
-                  height: MediaQuery.of(context).size.width * 0.8,
-                  color: Colors.amber,
-                  child: Container(
-                      child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Row(children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.40,
-                            height: MediaQuery.of(context).size.width * 0.15,
-                            color: Colors.red),
-                      ]),
-                      SizedBox(height: 10),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.35,
-                              color: Colors.red),
-                          SizedBox(width: 10),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.35,
-                              color: Colors.red),
-                          SizedBox(width: 10),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.35,
-                              color: Colors.red),
-                        ]),
-                      ),
-                    ],
-                  )),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.99,
-                  height: MediaQuery.of(context).size.width * 0.6,
-                  color: Colors.amber,
-                  child: Container(
-                      child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Row(children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.40,
-                            height: MediaQuery.of(context).size.width * 0.15,
-                            color: Colors.red),
-                      ]),
-                      SizedBox(height: 10),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.35,
-                              color: Colors.red),
-                          SizedBox(width: 10),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.35,
-                              color: Colors.red),
-                          SizedBox(width: 10),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.35,
-                              color: Colors.red),
-                        ]),
-                      ),
-                    ],
-                  )),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.99,
-                  height: MediaQuery.of(context).size.width * 0.6,
-                  color: Colors.lightGreen,
-                  padding: EdgeInsets.all(16.0),
-                  child: Container(
-                    color: Colors.red,
-                    width: MediaQuery.of(context).size.width * 0.99 / 3,
-                    height: MediaQuery.of(context).size.width * 0.6 / 3,
-                  ),
-                )
-              ]),
-            )));
+      child: Scaffold(
+        appBar: MyAppBar(),
+        body: _children[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          selectedItemColor: isDarkMode ? ternaryColor : primaryColor,
+          unselectedItemColor: isDarkMode ? Colors.white : Colors.black,
+          selectedIconTheme:
+              IconThemeData(color: isDarkMode ? ternaryColor : primaryColor),
+          unselectedIconTheme:
+              IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          currentIndex: _currentIndex,
+          elevation: 0,
+          onTap: (value) {
+            setState(() {
+              _currentIndex = value;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: 'Accueil',
+              activeIcon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.store_outlined),
+              label: 'Commerces',
+              activeIcon: Icon(Icons.store),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_offer_outlined),
+              label: 'Réductions',
+              activeIcon: Icon(Icons.local_offer),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_outlined),
+              label: 'Profil',
+              activeIcon: Icon(Icons.account_circle),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

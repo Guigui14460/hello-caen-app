@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_caen/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/account_profile/account_profile_screen.dart';
-import '../screens/sign_in/sign_in_screen.dart';
-import '../screens/home/home_screen.dart';
 import '../services/theme_manager.dart';
-import '../services/firebase_settings.dart';
 
 // ignore: must_be_immutable
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -38,15 +35,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: SvgPicture.asset("assets/images/logo.svg"),
       ),
       onTap: () {
-        Navigator.pushNamed(context, HomeScreen.routeName);
+        // Navigator.pushNamed(context, HomeScreen.routeName);
       },
     );
     return AppBar(
       toolbarHeight: 65,
       backgroundColor: Colors.transparent,
-      elevation: 0,
+      primary: false,
+      // automaticallyImplyLeading: false,
       title: _title,
-      foregroundColor: textColor,
       leading: this.leading != null
           ? IconButton(
               icon: this.leading,
@@ -62,21 +59,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: this.actionsCallback[index],
               );
             })
-          : [
-              IconButton(
-                icon: Icon(Icons.add),
-                color: textColor,
-                onPressed: () {
-                  if (FirebaseSettings.instance.getAuth().currentUser != null) {
-                    Navigator.pushNamed(
-                        context, AccountProfileScreen.routeName);
-                  } else {
-                    Navigator.pushNamed(context, SignInScreen.routeName);
-                    // Navigator.pushNamed(context, SignInScreen.routeName);
-                  }
-                },
-              )
-            ],
+          : [],
     );
   }
 

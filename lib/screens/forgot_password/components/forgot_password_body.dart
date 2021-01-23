@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../services/size_config.dart';
 import '../../../constants.dart';
-import '../../../services/firebase_settings.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../components/no_account_text.dart';
 import '../../../helper/keyboard.dart';
+import '../../../services/firebase_settings.dart';
+import '../../../services/size_config.dart';
 
 class ForgotPasswordBody extends StatelessWidget {
   const ForgotPasswordBody({Key key}) : super(key: key);

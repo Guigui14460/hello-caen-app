@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../forgot_password/forgot_password_screen.dart';
 import '../../../constants.dart';
-import '../../../services/size_config.dart';
-import '../../../services/firebase_settings.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../helper/keyboard.dart';
+import '../../../services/firebase_settings.dart';
+import '../../../services/size_config.dart';
 
 class SignInForm extends StatefulWidget {
   @override

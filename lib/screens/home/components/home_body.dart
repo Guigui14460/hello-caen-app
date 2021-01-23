@@ -27,6 +27,11 @@ class _HomeBodyState extends State<HomeBody> {
   ];
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context); // if the user doesn't come from SplashScreen
     bool isDarkMode = Provider.of<ThemeManager>(context).isDarkMode();
@@ -43,9 +48,10 @@ class _HomeBodyState extends State<HomeBody> {
           unselectedIconTheme:
               IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
           showSelectedLabels: true,
-          showUnselectedLabels: false,
+          showUnselectedLabels: true,
           currentIndex: _currentIndex,
           elevation: 0,
+          type: BottomNavigationBarType.fixed,
           onTap: (value) {
             setState(() {
               _currentIndex = value;

@@ -161,22 +161,6 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                     ],
                   )
                 : SizedBox()),
-            (userManager.isLoggedIn()
-                ? Column(
-                    children: [
-                      _getButton(
-                        title: "Supprimer le compte définitivement",
-                        iconData: Icons.delete_forever,
-                        onTap: () => _showDeleteAccountDialog(context, picture),
-                        isDarkMode: isDarkMode,
-                        lightModeBackgroundcolor: Colors.red,
-                        darkModeBackgroundcolor: Colors.red,
-                        lightModeForegroundcolor: Colors.white,
-                      ),
-                      SizedBox(height: getProportionateScreenHeight(20)),
-                    ],
-                  )
-                : SizedBox()),
             _getButton(
               title: "Supprimer les données locales",
               iconData: Icons.delete,
@@ -199,6 +183,22 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
               showRightArrow: false,
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
+            (userManager.isLoggedIn()
+                ? Column(
+                    children: [
+                      _getButton(
+                        title: "Supprimer le compte définitivement",
+                        iconData: Icons.delete_forever,
+                        onTap: () => _showDeleteAccountDialog(context, picture),
+                        isDarkMode: isDarkMode,
+                        lightModeBackgroundcolor: Colors.red,
+                        darkModeBackgroundcolor: Colors.red,
+                        lightModeForegroundcolor: Colors.white,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20)),
+                    ],
+                  )
+                : SizedBox()),
           ],
         ),
       ),

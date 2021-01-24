@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/screens/account_parameters/account_parameters_screen.dart';
 import 'package:hello_caen/screens/admin/home/home_screen.dart';
 import 'package:hello_caen/screens/pro/home/home_screen.dart';
 
@@ -19,6 +20,7 @@ final Map<String, WidgetBuilder> routes = {
   SignInScreen.routeName: (context) => SignInScreen(),
   SignUpScreen.routeName: (context) => SignUpScreen(),
   ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
+  AccountParametersScreen.routeName: (context) => AccountParametersScreen(),
 
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),

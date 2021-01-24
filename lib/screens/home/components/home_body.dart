@@ -88,7 +88,7 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
-              label: 'Profil',
+              label: 'Compte',
               activeIcon: Icon(Icons.account_circle),
             ),
           ],

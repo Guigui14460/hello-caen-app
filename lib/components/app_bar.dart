@@ -41,6 +41,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 65,
       backgroundColor: Colors.transparent,
       primary: false,
+      iconTheme: IconThemeData(color: textColor),
       // automaticallyImplyLeading: false,
       title: _title,
       leading: this.leading != null
@@ -52,12 +53,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           : null,
       actions: this.actions != null
           ? this.actions.asMap().keys.toList().map((index) {
-              IconButton(
+              return IconButton(
                 icon: this.actions[index],
                 color: textColor,
                 onPressed: this.actionsCallback[index],
               );
-            })
+            }).toList()
           : [],
     );
   }

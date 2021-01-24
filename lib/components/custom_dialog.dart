@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'avatar.dart';
@@ -59,14 +58,17 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(widget.title,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600)),
               (widget.description != null
                   ? Column(
                       children: [
                         SizedBox(height: 15),
                         Text(
                           widget.description,
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(color: Colors.black, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -77,7 +79,8 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
                     onPressed: widget.onPressed,
-                    child: Text(widget.text, style: TextStyle(fontSize: 18))),
+                    child: Text(widget.text,
+                        style: TextStyle(color: Colors.black, fontSize: 18))),
               ),
             ],
           ),

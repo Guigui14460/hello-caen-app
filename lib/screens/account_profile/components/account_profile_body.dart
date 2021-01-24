@@ -129,7 +129,6 @@ class _AccountProfileBodyState extends State<AccountProfileBody> {
                 press: () async {
                   await NotificationService.instance
                       .pushNotification("Test poto", "sa march b1 frr");
-                  print("done");
                 },
                 longPress: () {}),
             DefaultButton(

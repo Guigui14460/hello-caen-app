@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'commerce.dart';
+import 'compare.dart';
 import 'sex.dart';
 import 'database/commerce_model.dart';
 
 /// Represents a user account.
-class User {
+class User with Compare<User> {
   // ID of the object in database.
   String id;
 
@@ -128,5 +129,15 @@ class User {
   /// Gets and creates an anonymous user.
   static getAnonymousUser() {
     return User._();
+  }
+
+  @override
+  bool equals(User other) {
+    return this.id == other.id &&
+        this.firstName == other.firstName &&
+        this.lastName == other.lastName &&
+        this.dateOfBirth == other.dateOfBirth &&
+        this.profilePicture == other.profilePicture &&
+        this.sex == other.sex;
   }
 }

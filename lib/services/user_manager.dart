@@ -19,14 +19,16 @@ class UserManager with ChangeNotifier {
 
   /// Gets the current logged in user.
   account.User getLoggedInUser() => _currentLoggedInUser;
+  void updateLoggedInUser(account.User user) {
+    _currentLoggedInUser = user;
+    notifyListeners();
+  }
 
   UserManager() {
     StorageManager.exists(storageKey).then((exists) {
       if (exists) {
         StorageManager.readData(storageKey).then((uid) {
-          print("read from shared : " + uid);
           UserModel().getById(uid).then((value) {
-            print(value);
             _currentLoggedInUser = value;
           });
         });
@@ -37,10 +39,7 @@ class UserManager with ChangeNotifier {
   }
 
   Future<void> signIn(String uid) async {
-    print("sign in : " + uid);
     await StorageManager.saveData(storageKey, uid);
-    await StorageManager.readData(storageKey)
-        .then((value) => print("saved in shared : " + value));
   }
 
   Future<UserCredential> signInWithEmailAndPassword(

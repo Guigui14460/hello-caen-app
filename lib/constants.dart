@@ -15,6 +15,11 @@ const animationDuration = Duration(milliseconds: 200);
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Veuillez entrer votre adresse email";
+const String kFirstNameNullError = "Veuillez entrer votre prénom";
+const String kLastNameNullError = "Veuillez entrer votre nom de famille";
+const String kDateOfBirthNullError = "Veuillez entrer votre date de naissance";
+const String kDateOfBirthDatetimeError =
+    "Veuillez entrer une date de naissance valide";
 const String kInvalidEmailError = "Veuillez entrer une adresse email valide";
 const String kPassNullError = "Veuillez entrer votre mot de passe";
 const String kPassConfirmNullError = "Veuillez confirmer votre mot de passe";

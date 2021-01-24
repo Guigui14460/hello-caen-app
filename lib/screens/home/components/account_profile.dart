@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../account_parameters/account_parameters_screen.dart';
 import '../../admin/home/home_screen.dart';
 import '../../pro/home/home_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
@@ -40,7 +41,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _getProfilePicture(picture),
+            _getProfilePicture(context, picture),
             SizedBox(height: getProportionateScreenHeight(10)),
             (userManager.isLoggedIn()
                 ? Text(
@@ -74,7 +75,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                       _getButton(
                         title: "Paramètres du compte",
                         iconData: Icons.settings,
-                        onTap: () => print("paramètres"),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(AccountParametersScreen.routeName),
                         isDarkMode: isDarkMode,
                       ),
                       SizedBox(height: getProportionateScreenHeight(20)),
@@ -114,7 +116,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                   ? "Activer la localisation"
                   : "Désactiver la localisation",
               iconData:
-                  isDarkMode ? Icons.place_rounded : Icons.location_off_rounded,
+                  isDarkMode ? Icons.location_off_rounded : Icons.place_rounded,
               onTap: isDarkMode
                   ? _activateLocation
                   : () => _showDeactivateLocationDialog(context),
@@ -205,21 +207,17 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     );
   }
 
-  Widget _getProfilePicture(ImageProvider<Object> picture) {
-    return InkWell(
-      onDoubleTap: () => _showProfilePicture(picture: picture),
-      onLongPress: _changeProfilePicture,
-      onTap: () => print("press"),
+  Widget _getProfilePicture(
+      BuildContext context, ImageProvider<Object> picture) {
+    return GestureDetector(
+      onLongPress: () => _changeProfilePicture(context),
       child: Avatar(size: getProportionateScreenWidth(175), picture: picture),
     );
   }
 
-  void _showProfilePicture({ImageProvider<Object> picture}) {
-    print("show dialog");
-  }
-
-  void _changeProfilePicture() {
+  void _changeProfilePicture(BuildContext context) {
     print("change picture");
+    // TODO: ouvrir une boite de dialog pour changer ici
   }
 
   Widget _getButton(

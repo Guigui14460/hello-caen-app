@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'sign_up_form.dart';
 import '../../../components/already_have_account_text.dart';
 import '../../../components/social_card.dart';
 import '../../../helper/keyboard.dart';
-import '../../../helper/social_authentication.dart';
 import '../../../services/size_config.dart';
+import '../../../services/user_manager.dart';
 
 class SignUpBody extends StatelessWidget {
   const SignUpBody({Key key}) : super(key: key);
@@ -45,7 +46,8 @@ class SignUpBody extends StatelessWidget {
                     press: () async {
                       KeyboardUtil.hideKeyboard(context);
                       try {
-                        await SocialAuthentication.signInWithGoogle();
+                        await Provider.of<UserManager>(context, listen: false)
+                            .signInWithGoogle();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 "Vous êtes désormais inscrit avec votre compte Google")));
@@ -68,7 +70,8 @@ class SignUpBody extends StatelessWidget {
                     press: () async {
                       KeyboardUtil.hideKeyboard(context);
                       try {
-                        await SocialAuthentication.signInWithFacebook();
+                        await Provider.of<UserManager>(context, listen: false)
+                            .signInWithFacebook();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 "Vous êtes désormais inscrit avec votre compte Facebook")));

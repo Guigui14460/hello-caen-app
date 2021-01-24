@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../helper/keyboard.dart';
-import '../../../services/firebase_settings.dart';
 import '../../../services/size_config.dart';
+import '../../../services/user_manager.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -62,12 +63,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 _formKey.currentState.save();
                 KeyboardUtil.hideKeyboard(context);
                 try {
-                  await FirebaseSettings.instance
-                      .getAuth()
-                      .createUserWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
+                  await Provider.of<UserManager>(context, listen: false)
+                      .registerWithEmailAndPassword(email, password);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Vous êtes désormais inscrit")));
                   Navigator.pop(context);

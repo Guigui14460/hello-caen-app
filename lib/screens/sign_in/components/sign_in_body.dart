@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'sign_in_form.dart';
 import '../../../components/no_account_text.dart';
 import '../../../components/social_card.dart';
 import '../../../helper/keyboard.dart';
-import '../../../helper/social_authentication.dart';
 import '../../../services/size_config.dart';
+import '../../../services/user_manager.dart';
 
 /// Class to create all widgets of the [SignInScreen].
 class SignInBody extends StatelessWidget {
@@ -44,7 +45,8 @@ class SignInBody extends StatelessWidget {
                     press: () async {
                       KeyboardUtil.hideKeyboard(context);
                       try {
-                        await SocialAuthentication.signInWithGoogle();
+                        await Provider.of<UserManager>(context, listen: false)
+                            .signInWithGoogle();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 "Vous êtes désormais connecté avec votre compte Google")));
@@ -67,7 +69,8 @@ class SignInBody extends StatelessWidget {
                     press: () async {
                       KeyboardUtil.hideKeyboard(context);
                       try {
-                        await SocialAuthentication.signInWithFacebook();
+                        await Provider.of<UserManager>(context, listen: false)
+                            .signInWithFacebook();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 "Vous êtes désormais connecté avec votre compte Facebook")));

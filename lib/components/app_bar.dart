@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hello_caen/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../services/theme_manager.dart';

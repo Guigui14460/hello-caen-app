@@ -48,10 +48,10 @@ class _HomeBodyState extends State<HomeBody> {
         body: _children[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.transparent,
-          selectedItemColor: isDarkMode ? ternaryColor : primaryColor,
+          selectedItemColor: isDarkMode ? ternaryColor : secondaryColor,
           unselectedItemColor: isDarkMode ? Colors.white : Colors.black,
           selectedIconTheme:
-              IconThemeData(color: isDarkMode ? ternaryColor : primaryColor),
+              IconThemeData(color: isDarkMode ? ternaryColor : secondaryColor),
           unselectedIconTheme:
               IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
           showSelectedLabels: true,

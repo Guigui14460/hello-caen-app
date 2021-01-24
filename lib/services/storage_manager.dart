@@ -24,21 +24,20 @@ class StorageManager {
   /// Reads a [key] from the local storage of the app.
   static Future<dynamic> readData(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    dynamic obj = prefs.get(key);
-    return obj;
+    return prefs.get(key);
   }
 
   /// Deletes a [key] and associated value from the local
   /// storage of the app.
   static Future<bool> deleteData(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.remove(key);
+    return await prefs.remove(key);
   }
 
   /// Deletes the local storage of the app.
   static Future<bool> deleteStorage() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.clear();
+    return await prefs.clear();
   }
 
   /// Verifies if the [key] exists in the local storage.

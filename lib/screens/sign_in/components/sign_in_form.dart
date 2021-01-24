@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import '../../forgot_password/forgot_password_screen.dart';
 import '../../../constants.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../helper/keyboard.dart';
-import '../../../services/firebase_settings.dart';
 import '../../../services/size_config.dart';
+import '../../../services/user_manager.dart';
 
 class SignInForm extends StatefulWidget {
   @override
@@ -68,12 +69,8 @@ class _SignInFormState extends State<SignInForm> {
                 _formKey.currentState.save();
                 KeyboardUtil.hideKeyboard(context);
                 try {
-                  await FirebaseSettings.instance
-                      .getAuth()
-                      .signInWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
+                  await Provider.of<UserManager>(context, listen: false)
+                      .signInWithEmailAndPassword(email, password);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Vous êtes connecté")));
                   Navigator.pop(context);
@@ -84,6 +81,7 @@ class _SignInFormState extends State<SignInForm> {
                     addError(error: kWrongPassword);
                   }
                 } catch (e) {
+                  print(e);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Erreur lors de la connection")));
                 }

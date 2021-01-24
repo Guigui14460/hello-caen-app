@@ -9,7 +9,7 @@ import '../../utils.dart';
 /// user collection.
 class UserModel extends FirebaseFirestoreDB<User> {
   /// Default constructor.
-  UserModel() : super("users");
+  UserModel() : super("accounts");
 
   @override
   User getTElement(DocumentSnapshot value) {

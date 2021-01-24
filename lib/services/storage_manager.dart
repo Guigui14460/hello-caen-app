@@ -4,18 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class StorageManager {
   /// Saves or modifies a [value] to a [key] in the local storage
   /// of the app.
-  static void saveData(String key, dynamic value) async {
+  static Future<void> saveData(String key, dynamic value) async {
     final prefs = await SharedPreferences.getInstance();
     if (value is int) {
-      prefs.setInt(key, value);
+      await prefs.setInt(key, value);
     } else if (value is double) {
-      prefs.setDouble(key, value);
+      await prefs.setDouble(key, value);
     } else if (value is String) {
-      prefs.setString(key, value);
+      await prefs.setString(key, value);
     } else if (value is List<String>) {
-      prefs.setStringList(key, value);
+      await prefs.setStringList(key, value);
     } else if (value is bool) {
-      prefs.setBool(key, value);
+      await prefs.setBool(key, value);
     } else {
       print("Invalid Type");
     }

@@ -78,7 +78,7 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.local_offer_outlined),
-              label: 'Réductions',
+              label: 'Bons plans',
               activeIcon: Icon(Icons.local_offer),
             ),
             BottomNavigationBarItem(

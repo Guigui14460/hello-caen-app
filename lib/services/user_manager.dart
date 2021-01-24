@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hello_caen/services/storage_manager.dart';
 
 import '../model/database/user_model.dart';
-import '../model/user_account.dart' as myuser;
+import '../model/user_account.dart' as account;
 import '../services/firebase_settings.dart';
 
 /// Manages the current user of the application.
@@ -13,23 +14,33 @@ class UserManager with ChangeNotifier {
   /// Key used in the local storage.
   static String storageKey = "user_id";
 
-  static UserManager instance = UserManager();
-
   /// Current logged in user.
-  myuser.User _currentLoggedInUser;
+  account.User _currentLoggedInUser;
 
   /// Gets the current logged in user.
-  myuser.User getLoggedInUser() => instance._currentLoggedInUser;
+  account.User getLoggedInUser() => _currentLoggedInUser;
 
-  Future<void> init() async {
-    if (instance == null) {
-      instance = UserManager();
-      var userLoggedIn = FirebaseSettings.instance.getAuth().currentUser;
-      if (userLoggedIn != null) {
-        instance._currentLoggedInUser =
-            await UserModel().getById(userLoggedIn.uid);
+  UserManager() {
+    StorageManager.exists(storageKey).then((exists) {
+      if (exists) {
+        StorageManager.readData(storageKey).then((uid) {
+          print("read from shared : " + uid);
+          UserModel().getById(uid).then((value) {
+            print(value);
+            _currentLoggedInUser = value;
+          });
+        });
+      } else {
+        _currentLoggedInUser = account.User.getAnonymousUser();
       }
-    }
+    });
+  }
+
+  Future<void> signIn(String uid) async {
+    print("sign in : " + uid);
+    await StorageManager.saveData(storageKey, uid);
+    await StorageManager.readData(storageKey)
+        .then((value) => print("saved in shared : " + value));
   }
 
   Future<UserCredential> signInWithEmailAndPassword(
@@ -41,8 +52,10 @@ class UserManager with ChangeNotifier {
             );
     if (results.user != null) {
       await UserModel().getById(results.user.uid).then((value) {
-        instance._currentLoggedInUser = value;
+        _currentLoggedInUser = value;
       });
+      await signIn(results.user.uid);
+
       notifyListeners();
     }
     return results;
@@ -57,9 +70,10 @@ class UserManager with ChangeNotifier {
           password: password,
         );
     if (results.user != null) {
-      await UserModel()
-          .getById(results.user.uid)
-          .then((value) => instance._currentLoggedInUser = value);
+      await UserModel().getById(results.user.uid).then((value) {
+        _currentLoggedInUser = value;
+      });
+      await signIn(results.user.uid);
       notifyListeners();
     }
     return results;
@@ -80,8 +94,11 @@ class UserManager with ChangeNotifier {
         .getAuth()
         .signInWithCredential(credential);
     if (results.user != null) {
-      instance._currentLoggedInUser =
-          await UserModel().getById(results.user.uid);
+      await UserModel().getById(results.user.uid).then((value) {
+        _currentLoggedInUser = value;
+      });
+      await signIn(results.user.uid);
+
       notifyListeners();
     }
     return results;
@@ -96,8 +113,10 @@ class UserManager with ChangeNotifier {
         .getAuth()
         .signInWithCredential(credential);
     if (results.user != null) {
-      instance._currentLoggedInUser =
-          await UserModel().getById(results.user.uid);
+      await UserModel().getById(results.user.uid).then((value) {
+        _currentLoggedInUser = value;
+      });
+      await signIn(results.user.uid);
       notifyListeners();
     }
     return results;
@@ -106,22 +125,24 @@ class UserManager with ChangeNotifier {
   /// Verifies if a user is connected and is not an
   /// anonymous user.
   bool isLoggedIn() {
-    if (instance._currentLoggedInUser == null) {
+    if (_currentLoggedInUser == null) {
       return false;
     }
-    return !instance._currentLoggedInUser.isAnonymous();
+    return !_currentLoggedInUser.isAnonymous();
   }
 
   /// Log out the current logged in user.
   Future<void> logoutUser() async {
     await FirebaseSettings.instance.getAuth().signOut();
-    instance._currentLoggedInUser = myuser.User.getAnonymousUser();
+    await StorageManager.deleteData(storageKey);
+    _currentLoggedInUser = account.User.getAnonymousUser();
     notifyListeners();
   }
 
   Future<void> deleteUser() async {
+    await StorageManager.deleteData(storageKey);
     await FirebaseSettings.instance.getAuth().currentUser.delete();
-    instance._currentLoggedInUser = myuser.User.getAnonymousUser();
+    _currentLoggedInUser = account.User.getAnonymousUser();
     notifyListeners();
   }
 }

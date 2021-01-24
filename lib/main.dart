@@ -60,13 +60,11 @@ Future<void> main() async {
   // local notification initialization
   NotificationService.init();
 
-  await UserManager.instance.init();
-
   // app and managers
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<ThemeManager>.value(value: ThemeManager()),
-      ChangeNotifierProvider<UserManager>.value(value: UserManager.instance),
+      ChangeNotifierProvider<UserManager>.value(value: UserManager()),
     ],
     child: HelloCaenApplication(),
   ));

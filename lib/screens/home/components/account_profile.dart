@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../admin/home/home_screen.dart';
+import '../../pro/home/home_screen.dart';
+import '../../sign_in/sign_in_screen.dart';
 import '../../../components/avatar.dart';
 import '../../../components/custom_dialog.dart';
-import '../../../screens/sign_in/sign_in_screen.dart';
 import '../../../services/size_config.dart';
 import '../../../services/storage_manager.dart';
 import '../../../services/theme_manager.dart';
@@ -53,15 +55,60 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                   )),
             SizedBox(height: getProportionateScreenHeight(10)),
             (!userManager.isLoggedIn()
-                ? _getButton(
-                    title: "Se connecter",
-                    iconData: Icons.login,
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(SignInScreen.routeName),
-                    isDarkMode: isDarkMode,
+                ? Column(
+                    children: [
+                      _getButton(
+                        title: "Se connecter",
+                        iconData: Icons.login,
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(SignInScreen.routeName),
+                        isDarkMode: isDarkMode,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20)),
+                    ],
                   )
                 : SizedBox()),
-            SizedBox(height: getProportionateScreenHeight(20)),
+            (userManager.isLoggedIn()
+                ? Column(
+                    children: [
+                      _getButton(
+                        title: "Paramètres du compte",
+                        iconData: Icons.settings,
+                        onTap: () => print("paramètres"),
+                        isDarkMode: isDarkMode,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20)),
+                    ],
+                  )
+                : SizedBox()),
+            (userManager.isLoggedIn()
+                ? (userManager.getLoggedInUser().proAccount
+                    ? Column(
+                        children: [
+                          _getButton(
+                              title: "Gestion de vos commerces",
+                              iconData: Icons.view_list,
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(ProHomeScreen.routeName),
+                              isDarkMode: isDarkMode),
+                          SizedBox(height: getProportionateScreenHeight(20)),
+                        ],
+                      )
+                    : (userManager.getLoggedInUser().adminAccount
+                        ? Column(
+                            children: [
+                              _getButton(
+                                  title: "Administration",
+                                  iconData: Icons.view_list,
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed(AdminHomeScreen.routeName),
+                                  isDarkMode: isDarkMode),
+                              SizedBox(
+                                  height: getProportionateScreenHeight(20)),
+                            ],
+                          )
+                        : SizedBox()))
+                : SizedBox()),
             _getButton(
               title: isDarkMode
                   ? "Activer la localisation"
@@ -151,6 +198,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
               isDarkMode: isDarkMode,
               showRightArrow: false,
             ),
+            SizedBox(height: getProportionateScreenHeight(20)),
           ],
         ),
       ),

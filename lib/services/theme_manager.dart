@@ -121,7 +121,7 @@ class ThemeManager with ChangeNotifier {
       brightness: darkMode ? Brightness.dark : Brightness.light,
       iconTheme: iconTheme,
       actionsIconTheme: iconTheme,
-      backwardsCompatibility: true,
+      //backwardsCompatibility: true,
     );
   }
 }

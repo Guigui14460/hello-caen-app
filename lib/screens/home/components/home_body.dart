@@ -8,6 +8,8 @@ import '../../../components/app_bar.dart';
 import '../../../services/size_config.dart';
 import '../../../services/theme_manager.dart';
 
+import '../../location/location_screen.dart';
+
 /// Class to build all widgets of the [HomeScreen].
 class HomeBody extends StatefulWidget {
   HomeBody({Key key}) : super(key: key);
@@ -28,7 +30,8 @@ class _HomeBodyState extends State<HomeBody> {
       Container(color: Colors.amber),
       StoreListPage(),
       Container(color: Colors.blue),
-      Container(color: Colors.red),
+      LocationScreen(),
+      //Container(color: Colors.red),
       AccountProfilePage(),
     ];
   }

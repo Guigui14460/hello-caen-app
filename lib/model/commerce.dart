@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:hello_caen/model/database/commerce_type_model.dart';
 
 import 'comment.dart';
 import 'commerce_type.dart';
@@ -33,6 +34,7 @@ class Commerce {
   String timetables;
 
   /// Type of commerce.
+  String typeId;
   CommerceType type;
 
   /// All comments related to this commerce.
@@ -49,7 +51,7 @@ class Commerce {
       @required this.name,
       @required this.location,
       @required this.timetables,
-      @required this.type,
+      @required this.typeId,
       @required this.commentIds,
       @required this.dateAdded,
       @required this.dateModified,
@@ -63,6 +65,9 @@ class Commerce {
           .getMultipleByIds(this.commentIds)
           .then((value) => this.comments = value),
       UserModel().getById(this.ownerId).then((value) => this.owner = value),
+      CommerceTypeModel()
+          .getById(this.typeId)
+          .then((value) => this.type = value),
     ]);
   }
 

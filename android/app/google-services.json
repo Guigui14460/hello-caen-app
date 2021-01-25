@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "426795396848-a79o42n4rrqtstkj9pv8k97qkm90401g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helloCaen.helloCaenApp",
+            "certificate_hash": "8716d18c31e594a514c4c7bfbc1b06f9a955201c"
+          }
+        },
+        {
           "client_id": "426795396848-brri6i3r71932hdc3ej8tri4ue4lg5it.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.helloCaen.helloCaenApp",
             "certificate_hash": "1f2df26fbb055d3d6b2264241e59bd7422cae56e"
+          }
+        },
+        {
+          "client_id": "426795396848-kbksfeeo8acitaboie8bq4v864eptdje.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helloCaen.helloCaenApp",
+            "certificate_hash": "cd4bace3b55058211f1846fe190f8329c326981d"
           }
         },
         {

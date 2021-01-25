@@ -34,7 +34,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
         fontWeight: FontWeight.bold, fontSize: getProportionateScreenWidth(24));
 
     ImageProvider<Object> picture = userManager.isLoggedIn() &&
-            userManager.getLoggedInUser().profilePicture != null
+            userManager.getLoggedInUser().profilePicture != null &&
+            userManager.getLoggedInUser().profilePicture != ""
         ? NetworkImage(userManager.getLoggedInUser().profilePicture)
         : AssetImage("assets/images/no-picture.png");
 

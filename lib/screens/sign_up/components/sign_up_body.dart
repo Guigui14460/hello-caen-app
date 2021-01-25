@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_caen/model/database/user_model.dart';
 import 'package:provider/provider.dart';
 
 import 'sign_up_form.dart';
+import '../../account_parameters/account_parameters_screen.dart';
 import '../../../components/already_have_account_text.dart';
 import '../../../components/social_card.dart';
 import '../../../helper/keyboard.dart';
-import '../../../model/user_account.dart' as account;
 import '../../../services/size_config.dart';
 import '../../../services/user_manager.dart';
 
@@ -53,7 +52,8 @@ class SignUpBody extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 "Vous êtes désormais inscrit avec votre compte Google")));
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, AccountParametersScreen.routeName);
                       } on FirebaseAuthException catch (e) {
                         if (e.code ==
                             'account-exists-with-different-credential') {
@@ -77,7 +77,8 @@ class SignUpBody extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 "Vous êtes désormais inscrit avec votre compte Facebook")));
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, AccountParametersScreen.routeName);
                       } on FirebaseAuthException catch (e) {
                         if (e.code ==
                             'account-exists-with-different-credential') {

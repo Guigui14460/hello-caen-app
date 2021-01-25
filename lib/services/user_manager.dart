@@ -113,7 +113,6 @@ class UserManager with ChangeNotifier {
   }
 
   Future<UserCredential> signInWithFacebook() async {
-    // get user data https://pub.dev/packages/flutter_facebook_auth#android
     final AccessToken result = await FacebookAuth.instance.login();
     final FacebookAuthCredential credential =
         FacebookAuthProvider.credential(result.token);

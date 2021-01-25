@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/size_config.dart';
+import '../screens/sign_in/sign_in_screen.dart';
 
 class AlreadyHaveAnAccountText extends StatelessWidget {
   const AlreadyHaveAnAccountText({
@@ -17,7 +18,8 @@ class AlreadyHaveAnAccountText extends StatelessWidget {
           style: TextStyle(fontSize: getProportionateScreenWidth(16)),
         ),
         GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () =>
+              Navigator.pushReplacementNamed(context, SignInScreen.routeName),
           child: Text(
             "Se connecter",
             style: TextStyle(

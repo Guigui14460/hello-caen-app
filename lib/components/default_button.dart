@@ -52,12 +52,13 @@ class DefaultButton extends StatelessWidget {
         onPressed: press,
         onLongPress: longPress,
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(ternaryColor),
-            shape: MaterialStateProperty.all<OutlinedBorder>(
-                RoundedRectangleBorder(
-                    side: BorderSide(style: BorderStyle.none),
-                    borderRadius: BorderRadius.circular(8))),
-            animationDuration: animationDuration),
+          backgroundColor: MaterialStateProperty.all<Color>(ternaryColor),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+              RoundedRectangleBorder(
+                  side: BorderSide(style: BorderStyle.none),
+                  borderRadius: BorderRadius.circular(8))),
+          animationDuration: animationDuration,
+        ),
         child: Text(
           text,
           overflow: TextOverflow.clip,

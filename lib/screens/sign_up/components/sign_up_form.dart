@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
+import '../../account_parameters/account_parameters_screen.dart';
 import '../../../constants.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
@@ -67,7 +68,8 @@ class _SignUpFormState extends State<SignUpForm> {
                       .registerWithEmailAndPassword(email, password);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Vous êtes désormais inscrit")));
-                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(
+                      context, AccountParametersScreen.routeName);
                 } on FirebaseAuthException catch (e) {
                   print(e.code);
                   if (e.code == 'weak-password') {

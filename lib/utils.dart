@@ -4,6 +4,9 @@ import 'package:timeago/timeago.dart' as timeago;
 
 /// Converts [DateTime] object to a [String] object.
 String convertDatetimeToString(DateTime datetime, {bool full = false}) {
+  if (datetime == null) {
+    return "";
+  }
   if (!full) {
     return DateFormat("dd-MM-yyyy").format(datetime);
   }
@@ -12,6 +15,9 @@ String convertDatetimeToString(DateTime datetime, {bool full = false}) {
 
 /// Converts [String] object to a [DateTime] object.
 DateTime convertStringToDatetime(String datetime, {bool full = false}) {
+  if (datetime == "") {
+    return null;
+  }
   if (!full) {
     return DateFormat("dd-MM-yyyy").parse(datetime);
   }

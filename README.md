@@ -12,19 +12,9 @@
 - See test with this link https://pub.dev/packages/flutter_facebook_auth#android
 
 
-Keystore :
-- Keystore password : 6#-Sc3a3*2uMq_%D\}Cb8vJMvq3^U#<S:[~nKgS
-- Key password : 7o;RZ46`xg[{jJ4*.zA6z=@F%V]-4LJ&PbqYS)
-- => commande pour générer les empreintes : `keytool -list -v -keystore .\keystore\hellocaen-key.jks -alias hellocaen`
-  
 Keystore (alias key) :
-- Keystore password : CWf1QyR7zBtJmWjJAUyjia7RIVXgmck8kyCnQfBf
-- Key password znIjfl8zza687Gn1iTg1MFFVa6GBm2BViOpCQAXt
 - command to run to generate SHA1 and SHA256 : `keytool -list -v -keystore .\keystore\key.jks -alias key`
-
-Epreintes test ordi Guigui :
-- SHA1 : 1f:2d:f2:6f:bb:05:5d:3d:6b:22:64:24:1e:59:bd:74:22:ca:e5:6e
-- SHA256 : 3b:20:9e:b7:15:88:0a:bf:3d:8f:b5:a2:a8:a0:ef:d0:a0:aa:9c:ae:a0:d4:95:bf:49:15:07:b9:85:19:06:67
+- put password from `android/key.properties` file
 
 ## Flutter
 

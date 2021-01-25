@@ -44,11 +44,15 @@ class UserManager with ChangeNotifier {
 
   Future<UserCredential> signInWithEmailAndPassword(
       String email, String password) async {
-    UserCredential results =
-        await FirebaseSettings.instance.getAuth().signInWithEmailAndPassword(
-              email: email,
-              password: password,
-            );
+    UserCredential results = await FirebaseSettings.instance
+        .getAuth()
+        .signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        )
+        .catchError((error) {
+      print(error);
+    });
     if (results.user != null) {
       await UserModel().getById(results.user.uid).then((value) {
         _currentLoggedInUser = value;

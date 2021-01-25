@@ -15,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "426795396848-obadlvstf6mngt2v2l8bifm41prtvv0l.apps.googleusercontent.com",
+          "client_id": "426795396848-brri6i3r71932hdc3ej8tri4ue4lg5it.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helloCaen.helloCaenApp",
+            "certificate_hash": "1f2df26fbb055d3d6b2264241e59bd7422cae56e"
+          }
+        },
+        {
+          "client_id": "426795396848-m0e8pidqpsvo4si1a0j8p9h1u78tuadm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.helloCaen.helloCaenApp",

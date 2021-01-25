@@ -8,7 +8,18 @@ import '../../utils.dart';
 /// reduction code collection.
 class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
   /// Default constructor.
-  ReductionCodeModel() : super("reduction-codes");
+  ReductionCodeModel()
+      : super("reduction-codes", [
+          "commerce",
+          "beginDate",
+          "endDate",
+          "notifyAllUser",
+          "maxAvailableCodes",
+          "usedCodes",
+          "conditions",
+          "usePercentage",
+          "reductionAmount",
+        ]);
 
   @override
   ReductionCode getTElement(DocumentSnapshot value) {

@@ -7,7 +7,7 @@ import '../commerce_type.dart';
 /// commerce type collection.
 class CommerceTypeModel extends FirebaseFirestoreDB<CommerceType> {
   /// Default constructor.
-  CommerceTypeModel() : super("commerce-types");
+  CommerceTypeModel() : super("commerce-types", ["name"]);
 
   @override
   CommerceType getTElement(DocumentSnapshot value) {

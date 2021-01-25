@@ -8,7 +8,18 @@ import '../../utils.dart';
 /// commerce collection.
 class CommerceModel extends FirebaseFirestoreDB<Commerce> {
   /// Constructor.
-  CommerceModel() : super("commerces");
+  CommerceModel()
+      : super("commerces", [
+          "name",
+          "location",
+          "dateAdded",
+          "dateModified",
+          "timetables",
+          "type",
+          "comments",
+          "imageLink",
+          "owner",
+        ]);
 
   @override
   Map<String, dynamic> getElementData(Commerce object) {

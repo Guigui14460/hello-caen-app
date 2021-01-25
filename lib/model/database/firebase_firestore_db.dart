@@ -2,25 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'db_model.dart';
+import 'firestore_db_linked_request.dart';
 import '../../services/firebase_settings.dart';
 
 /// Abstract class which allows to communicate with the firestore
 /// cloud provided by Firebase.
 /// [T] represents the real object class associated to the
 /// model of the collection.
-abstract class FirebaseFirestoreDB<T> with DBModel<T> {
+abstract class FirebaseFirestoreDB<T>
+    with DBModel<T>, FirestoreDBLinkedRequest<T> {
   /// Name of the database collection.
-  String collectionName;
+  final String collectionName;
 
   /// Reference of the database collection.
   CollectionReference reference;
 
+  final List<String> fields;
+  Query currentQuery;
+
   /// Constructor of the database.
   /// [collectionName] is the name of the collection.
-  FirebaseFirestoreDB(String collectionName) {
-    this.collectionName = collectionName;
+  FirebaseFirestoreDB(this.collectionName, this.fields) {
     this.reference =
         FirebaseSettings.instance.getFirestore().collection(collectionName);
+    this.currentQuery = this.reference;
   }
 
   Future<List<T>> where(dynamic field,
@@ -49,8 +54,8 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
             isNull: isNull,
             whereIn: whereIn,
             whereNotIn: whereNotIn)
-        .snapshots()
-        .listen((data) {
+        .get()
+        .then((data) {
       data.docs.forEach((element) {
         list.add(getTElement(element));
       });
@@ -149,4 +154,74 @@ abstract class FirebaseFirestoreDB<T> with DBModel<T> {
   /// Used in [create] and [update] methods.
   @protected
   Map<String, dynamic> getElementData(T object);
+
+  @override
+  FirestoreDBLinkedRequest whereLinked(dynamic field,
+      {dynamic isEqualTo,
+      dynamic isNotEqualTo,
+      dynamic isLessThan,
+      dynamic isLessThanOrEqualTo,
+      dynamic isGreaterThan,
+      dynamic isGreaterThanOrEqualTo,
+      dynamic arrayContains,
+      List<dynamic> arrayContainsAny,
+      List<dynamic> whereIn,
+      List<dynamic> whereNotIn,
+      bool isNull}) {
+    this.currentQuery = this.currentQuery.where(field,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull);
+    return this;
+  }
+
+  @override
+  FirestoreDBLinkedRequest limitLinked(int limit) {
+    this.currentQuery = this.currentQuery.limit(limit);
+    return this;
+  }
+
+  @override
+  FirestoreDBLinkedRequest limitToLastLinked(int limit) {
+    this.currentQuery = this.currentQuery.limitToLast(limit);
+    return this;
+  }
+
+  @override
+  FirestoreDBLinkedRequest orderByLinked(dynamic field,
+      {bool descending = false}) {
+    if (this.fields.contains(field)) {
+      this.currentQuery =
+          this.currentQuery.orderBy(field, descending: descending);
+    }
+    return this;
+  }
+
+  @override
+  Future<List<T>> executeCurrentLinkedQueryRequest() async {
+    List<T> list = [];
+    await this
+        .currentQuery
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) {
+                list.add(getTElement(element));
+              })
+            })
+        .catchError((error) => print(error));
+    return list;
+  }
+
+  @override
+  void cancalCurrentLinkedQueryRequest() {
+    this.currentQuery = this.reference;
+  }
 }

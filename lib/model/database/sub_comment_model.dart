@@ -8,7 +8,13 @@ import '../../utils.dart';
 /// sub-comment collection.
 class SubCommentModel extends FirebaseFirestoreDB<SubComment> {
   /// Constructor.
-  SubCommentModel() : super("subcomments");
+  SubCommentModel()
+      : super("subcomments", [
+          "text",
+          "author",
+          "dateAdded",
+          "dateModified",
+        ]);
 
   @override
   Map<String, dynamic> getElementData(SubComment object) {

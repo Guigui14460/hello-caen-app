@@ -8,7 +8,15 @@ import '../../utils.dart';
 /// comment collection.
 class CommentModel extends FirebaseFirestoreDB<Comment> {
   /// Constructor.
-  CommentModel() : super("comments");
+  CommentModel()
+      : super("comments", [
+          "text",
+          "author",
+          "dateAdded",
+          "dateModified",
+          "subcomments",
+          "rating",
+        ]);
 
   @override
   Map<String, dynamic> getElementData(Comment object) {

@@ -352,8 +352,23 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
             img: picture,
             text: "Confirmer",
             onPressed: () async {
-              await context.read<UserManager>().deleteUser();
+              User user = context.read<UserManager>().getLoggedInUser();
               Navigator.pop(context);
+              try {
+                await context.read<UserManager>().deleteUser();
+              } catch (e) {
+                Navigator.pushNamed(context, SignInScreen.routeName);
+                if (context
+                    .read<UserManager>()
+                    .getLoggedInUser()
+                    .equals(user)) {
+                  await context.read<UserManager>().deleteUser();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Veuillez vous connecter avec le compte avec lequel vous avez commencé la suppression.")));
+                }
+              }
             },
           );
         });

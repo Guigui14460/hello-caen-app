@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/model/database/user_model.dart';
+import 'package:hello_caen/model/user_account.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../account_parameters/account_parameters_screen.dart';
@@ -7,6 +10,7 @@ import '../../pro/home/home_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 import '../../../components/avatar.dart';
 import '../../../components/custom_dialog.dart';
+import '../../../services/firebase_settings.dart';
 import '../../../services/size_config.dart';
 import '../../../services/storage_manager.dart';
 import '../../../services/theme_manager.dart';
@@ -20,16 +24,19 @@ class AccountProfilePage extends StatefulWidget {
 }
 
 class _AccountProfilePageState extends State<AccountProfilePage> {
+  ImageProvider<Object> picture;
+
   @override
   Widget build(BuildContext context) {
     ThemeManager themeManager = Provider.of<ThemeManager>(context);
-    UserManager userManager = context.watch<UserManager>();
+    UserManager userManager = Provider.of<UserManager>(context);
     bool isDarkMode = themeManager.isDarkMode();
 
     TextStyle style = TextStyle(
         fontWeight: FontWeight.bold, fontSize: getProportionateScreenWidth(24));
 
-    ImageProvider<Object> picture = userManager.isLoggedIn()
+    picture = userManager.isLoggedIn() &&
+            userManager.getLoggedInUser().profilePicture != null
         ? NetworkImage(userManager.getLoggedInUser().profilePicture)
         : AssetImage("assets/images/no-picture.png");
 
@@ -215,9 +222,44 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     );
   }
 
-  void _changeProfilePicture(BuildContext context) {
-    print("change picture");
-    // TODO: ouvrir une boite de dialog pour changer ici
+  void _changeProfilePicture(BuildContext context) async {
+    UserManager userManager = Provider.of<UserManager>(context, listen: false);
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          User user = userManager.getLoggedInUser();
+          return CustomDialogBox(
+            title: "Modifier votre image de profil",
+            description:
+                "Choisissez une nouvelle image de profil en deux clics !",
+            text: "Choisir",
+            onPressed: () async {
+              PickedFile image =
+                  await ImagePicker().getImage(source: ImageSource.gallery);
+              await FirebaseSettings.instance
+                  .uploadFile(
+                      image, context, "profiles-pictures", "${user.id}.jpg")
+                  .then((value) {
+                FirebaseSettings.instance
+                    .downloadLink(FirebaseSettings.instance
+                        .getStorage()
+                        .ref("profiles-pictures/${user.id}.jpg"))
+                    .then((value) {
+                  user.profilePicture = value;
+                  UserModel().update(user.id, user).catchError((error) {
+                    print(error);
+                  });
+                  userManager.updateLoggedInUser(user);
+                }).catchError((error) {
+                  print(error);
+                });
+              }).catchError((error) {
+                print(error);
+              });
+              Navigator.pop(context);
+            },
+          );
+        });
   }
 
   Widget _getButton(

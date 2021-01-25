@@ -160,6 +160,7 @@ class UserManager with ChangeNotifier {
 
   Future<void> deleteUser() async {
     await StorageManager.deleteData(storageKey);
+    await UserModel().delete(_currentLoggedInUser.id);
     await FirebaseSettings.instance.getAuth().currentUser.delete();
     _currentLoggedInUser = account.User.getAnonymousUser();
     notifyListeners();

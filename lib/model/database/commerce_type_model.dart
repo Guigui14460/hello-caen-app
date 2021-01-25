@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../commerce.dart';
+import 'commerce_model.dart';
 import 'firebase_firestore_db.dart';
 import '../commerce_type.dart';
 
@@ -22,5 +24,22 @@ class CommerceTypeModel extends FirebaseFirestoreDB<CommerceType> {
     return {
       'name': object.name,
     };
+  }
+
+  @override
+  Future<bool> delete(String id) async {
+    CommerceModel model = CommerceModel();
+    List<Commerce> commerces = await model
+        .whereLinked("type", isEqualTo: id)
+        .executeCurrentLinkedQueryRequest();
+    List<bool> results = await Future.wait(commerces.map((element) {
+      return model.delete(element.id);
+    }));
+    for (bool r in results) {
+      if (r == false) {
+        return Future.value(false);
+      }
+    }
+    return super.delete(id);
   }
 }

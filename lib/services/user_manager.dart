@@ -69,7 +69,8 @@ class UserManager with ChangeNotifier {
           password: password,
         );
     if (results.user != null) {
-      await UserModel().getById(results.user.uid).then((value) {
+      account.User user = account.User.createEmptyUser(results.user.uid);
+      await UserModel().createWithId(results.user.uid, user).then((value) {
         _currentLoggedInUser = value;
       });
       await signIn(results.user.uid);
@@ -93,6 +94,14 @@ class UserManager with ChangeNotifier {
         .getAuth()
         .signInWithCredential(credential);
     if (results.user != null) {
+      bool exists = await UserModel().exists(results.user.uid);
+      if (!exists) {
+        await UserModel().createWithId(
+            results.user.uid,
+            account.User.createEmptyUser(results.user.uid,
+                pictureUrl: results.user.photoURL,
+                displayName: results.user.displayName));
+      }
       await UserModel().getById(results.user.uid).then((value) {
         _currentLoggedInUser = value;
       });
@@ -112,6 +121,14 @@ class UserManager with ChangeNotifier {
         .getAuth()
         .signInWithCredential(credential);
     if (results.user != null) {
+      bool exists = await UserModel().exists(results.user.uid);
+      if (!exists) {
+        await UserModel().createWithId(
+            results.user.uid,
+            account.User.createEmptyUser(results.user.uid,
+                pictureUrl: results.user.photoURL,
+                displayName: results.user.displayName));
+      }
       await UserModel().getById(results.user.uid).then((value) {
         _currentLoggedInUser = value;
       });

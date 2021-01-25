@@ -11,6 +11,21 @@
 - If error with Google Auth, see this link https://github.com/flutter/flutter/issues/27599
 - See test with this link https://pub.dev/packages/flutter_facebook_auth#android
 
+
+Keystore :
+- Keystore password : 6#-Sc3a3*2uMq_%D\}Cb8vJMvq3^U#<S:[~nKgS
+- Key password : 7o;RZ46`xg[{jJ4*.zA6z=@F%V]-4LJ&PbqYS)
+- => commande pour générer les empreintes : `keytool -list -v -keystore .\keystore\hellocaen-key.jks -alias hellocaen`
+
+Empreintes prod :
+SHA1: 30:76:2F:3D:93:C2:EC:ED:A5:47:4C:74:D0:B7:3B:36:34:59:E1:98
+SHA256: 4D:25:8F:30:6C:45:22:E3:A7:59:8B:81:39:9D:1C:44:06:98:0C:1C:70:56:8C:57:28:05:08:BD:3B:D8:7F:B8
+
+
+Epreintes test ordi Guigui :
+- SHA1 : 1f:2d:f2:6f:bb:05:5d:3d:6b:22:64:24:1e:59:bd:74:22:ca:e5:6e
+- SHA256 : 3b:20:9e:b7:15:88:0a:bf:3d:8f:b5:a2:a8:a0:ef:d0:a0:aa:9c:ae:a0:d4:95:bf:49:15:07:b9:85:19:06:67
+
 ## Flutter
 
 ### Installation de Flutter

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/utils.dart';
 
 import 'commerce.dart';
 import 'compare.dart';
@@ -139,5 +140,20 @@ class User with Compare<User> {
         this.dateOfBirth == other.dateOfBirth &&
         this.profilePicture == other.profilePicture &&
         this.sex == other.sex;
+  }
+
+  static createEmptyUser(String id, {String pictureUrl, String displayName}) {
+    User user = User(
+      id: id,
+      firstName: displayName,
+      lastName: "",
+      profilePicture: pictureUrl,
+      dateOfBirth: DateTime.now(),
+      sex: Sex.Male,
+      favoriteCommerceIds: [],
+      adminAccount: false,
+      proAccount: false,
+    );
+    return user;
   }
 }

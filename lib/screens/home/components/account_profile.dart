@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/model/database/user_model.dart';
-import 'package:hello_caen/model/user_account.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +8,8 @@ import '../../pro/home/home_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 import '../../../components/avatar.dart';
 import '../../../components/custom_dialog.dart';
+import '../../../model/database/user_model.dart';
+import '../../../model/user_account.dart';
 import '../../../services/firebase_settings.dart';
 import '../../../services/size_config.dart';
 import '../../../services/storage_manager.dart';

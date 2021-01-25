@@ -24,8 +24,6 @@ class AccountProfilePage extends StatefulWidget {
 }
 
 class _AccountProfilePageState extends State<AccountProfilePage> {
-  ImageProvider<Object> picture;
-
   @override
   Widget build(BuildContext context) {
     ThemeManager themeManager = Provider.of<ThemeManager>(context);
@@ -35,7 +33,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     TextStyle style = TextStyle(
         fontWeight: FontWeight.bold, fontSize: getProportionateScreenWidth(24));
 
-    picture = userManager.isLoggedIn() &&
+    ImageProvider<Object> picture = userManager.isLoggedIn() &&
             userManager.getLoggedInUser().profilePicture != null
         ? NetworkImage(userManager.getLoggedInUser().profilePicture)
         : AssetImage("assets/images/no-picture.png");

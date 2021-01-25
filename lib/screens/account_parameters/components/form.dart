@@ -82,6 +82,12 @@ class _ParametersFormState extends State<ParametersForm> {
           buildSexDropdownButton(),
           SizedBox(height: getProportionateScreenHeight(20)),
           FormError(errors: errors),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          Text(
+            "N.B. : Pour changer d'image de profil, pressez longuement votre image de profil sur le précédent écran",
+            style: TextStyle(fontWeight: FontWeight.w400),
+          ),
+          SizedBox(height: getProportionateScreenHeight(20)),
           DefaultButton(
             text: 'Sauvegarder',
             height: getProportionateScreenHeight(50),

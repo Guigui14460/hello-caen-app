@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hello_caen/services/storage_manager.dart';
 
+import 'storage_manager.dart';
 import '../model/database/user_model.dart';
 import '../model/user_account.dart' as account;
 import '../services/firebase_settings.dart';

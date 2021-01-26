@@ -4,14 +4,13 @@ import 'package:provider/provider.dart';
 
 import '../services/theme_manager.dart';
 
-// ignore: must_be_immutable
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   static Size _size = Size(double.minPositive, 65.0);
 
-  List<Icon> actions;
-  List<VoidCallback> actionsCallback;
-  Icon leading;
-  VoidCallback leadingCallback;
+  final List<Icon> actions;
+  final List<VoidCallback> actionsCallback;
+  final Icon leading;
+  final VoidCallback leadingCallback;
 
   MyAppBar(
       {this.leading,

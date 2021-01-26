@@ -20,7 +20,7 @@ mixin DBModel<T> {
   /// parameter in the database collection.
   /// <strong>N.B.:</strong> We recommend to use
   /// random ID provided by the database.
-  Future<T> create(T object);
+  Future<String> create(T object);
 
   /// Creates a document with the data of the [object]
   /// parameter in the database collection stored with [id].

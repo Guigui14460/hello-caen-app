@@ -3,9 +3,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'sub_comment.dart';
 import 'user_account.dart';
-import '../utils.dart';
 import 'database/sub_comment_model.dart';
 import 'database/user_model.dart';
+import '../utils.dart';
 
 /// Represents a comment.
 class Comment {

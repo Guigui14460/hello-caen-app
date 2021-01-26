@@ -43,7 +43,7 @@ class Comment {
       @required this.authorId});
 
   /// Initializes all sub-comments associated to this comment.
-  void init() async {
+  Future<void> init() async {
     Future.wait([
       SubCommentModel()
           .getMultipleByIds(this.subcommentIds)

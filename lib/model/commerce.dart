@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:hello_caen/model/database/commerce_type_model.dart';
 
 import 'comment.dart';
 import 'commerce_type.dart';
 import 'user_account.dart';
 import '../utils.dart';
+import 'database/commerce_type_model.dart';
 import 'database/comment_model.dart';
 import 'database/user_model.dart';
 
@@ -38,8 +38,8 @@ class Commerce {
   CommerceType type;
 
   /// All comments related to this commerce.
-  List<Comment> comments;
-  List<String> commentIds;
+  List<Comment> comments = [];
+  List<String> commentIds = [];
 
   /// Link for the image representing the commerce.
   String imageLink;
@@ -52,14 +52,14 @@ class Commerce {
       @required this.location,
       @required this.timetables,
       @required this.typeId,
-      @required this.commentIds,
+      this.commentIds,
       @required this.dateAdded,
-      @required this.dateModified,
+      this.dateModified,
       @required this.imageLink});
 
   /// Initializes all comments associated to this commerce and
   /// the owner user.
-  void init() async {
+  Future<void> init() async {
     await Future.wait<void>([
       CommentModel()
           .getMultipleByIds(this.commentIds)

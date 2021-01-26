@@ -58,7 +58,7 @@ class User with Compare<User> {
   }
 
   /// Initializes all favorite commerces associated to this user.
-  void init() async {
+  Future<void> init() async {
     if (this.favoriteCommerceIds.length != null) {
       Future.wait([
         CommerceModel()

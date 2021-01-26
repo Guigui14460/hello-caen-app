@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'update_commerce_screen.dart';
@@ -78,17 +79,17 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                           Text(e.name),
                           Spacer(),
                           IconButton(
-                            color: Colors.blueAccent[400],
+                            color: Colors.blue[300],
                             icon: Icon(Icons.mode_edit),
                             onPressed: () => Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                     builder: (context) =>
-                                        UpdateCommerceScreen(e, false))),
+                                        UpdateCommerceScreen(commerce: e))),
                           ),
                           IconButton(
                             icon: Icon(Icons.delete),
-                            color: Colors.red,
+                            color: Colors.red[400],
                             onPressed: () => _deleteCommerce(context, e),
                           ),
                         ],
@@ -104,7 +105,12 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
     );
   }
 
-  void _addCommerce() {}
+  void _addCommerce() {
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => UpdateCommerceScreen(modify: false)));
+  }
 
   void _deleteCommerce(BuildContext context, Commerce commerce) async {
     await showDialog(

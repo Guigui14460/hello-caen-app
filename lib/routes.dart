@@ -8,6 +8,7 @@ import 'screens/forgot_password/forgot_password_screen.dart';
 import 'screens/account_parameters/account_parameters_screen.dart';
 
 import 'screens/pro/home_screen.dart';
+import 'screens/pro/preview_page.dart';
 import 'screens/pro/update_commerce_screen.dart';
 
 import 'screens/admin/home/home_screen.dart';
@@ -26,7 +27,8 @@ final Map<String, WidgetBuilder> routes = {
 
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),
-  // UpdateCommerceScreen.routeName: (context) => UpdateCommerceScreen(),
+  UpdateCommerceScreen.routeName: (context) => UpdateCommerceScreen(),
+  PreviewCommerceScreen.routeName: (context) => PreviewCommerceScreen(),
 
   // admin screens
   AdminHomeScreen.routeName: (context) => AdminHomeScreen(),

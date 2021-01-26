@@ -54,7 +54,7 @@ class ReductionCode {
 
   /// Initializes commerce associated to this
   /// code.
-  void init() async {
+  Future<void> init() async {
     await Future.wait([
       CommerceModel()
           .getById(this.commerceId)

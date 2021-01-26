@@ -46,7 +46,7 @@ class SubComment {
   }
 
   /// Initializes all favorite commerces associated to this user.
-  void init() async {
+  Future<void> init() async {
     Future.wait([
       UserModel().getById(this.authorId).then((value) => this.author = value),
     ]);

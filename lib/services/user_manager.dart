@@ -159,10 +159,15 @@ class UserManager with ChangeNotifier {
   }
 
   Future<void> deleteUser() async {
-    await StorageManager.deleteData(storageKey);
-    await UserModel().delete(_currentLoggedInUser.id);
-    await FirebaseSettings.instance.getAuth().currentUser.delete();
-    _currentLoggedInUser = account.User.getAnonymousUser();
+    User user = FirebaseSettings.instance.getAuth().currentUser;
+    await UserModel().delete(user.uid);
+    await user.delete().then((value) async {
+      await StorageManager.deleteData(storageKey);
+      _currentLoggedInUser = account.User.getAnonymousUser();
+    }).catchError((error) {
+      UserModel().createWithId(user.uid, _currentLoggedInUser);
+      throw new Exception("Need more fresh sign in");
+    });
     notifyListeners();
   }
 }

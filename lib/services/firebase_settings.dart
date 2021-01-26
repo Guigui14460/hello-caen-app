@@ -78,7 +78,7 @@ class FirebaseSettings {
       {String contentType = "image/jpeg"}) async {
     if (file == null) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("No file was selected")));
+          .showSnackBar(SnackBar(content: Text("Aucun fichier sélectionné")));
       return null;
     }
 

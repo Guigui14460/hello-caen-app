@@ -3,21 +3,62 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
+import 'storage_manager.dart';
+
 /// Class provides an access to phone location.
-class LocationService {
+class LocationService extends ChangeNotifier {
+  static final String storageKey = "location-enabled";
+
   /// Location manager.
-  static Location _location = new Location();
+  static Location _location;
 
   /// Instance of the singleton pattern design.
-  static LocationService _instance = new LocationService();
+  static LocationService instance;
 
   /// Last known location data.
-  LocationData userLocation;
+  LocationData _userLocation;
+  static bool _enabled;
+
+  static Future<void> init() async {
+    instance = new LocationService();
+    await StorageManager.exists(storageKey).then((value) async {
+      if (value) {
+        await StorageManager.readData(storageKey).then((value) {
+          _enabled = value;
+        });
+      } else {
+        StorageManager.saveData(storageKey, true).then((value) => null);
+        _enabled = true;
+      }
+    });
+    if (_enabled) {
+      _location = new Location();
+    }
+  }
+
+  bool isEnabled() {
+    return _enabled;
+  }
+
+  Future<void> enableService() async {
+    _location = new Location();
+    _enabled = true;
+    await StorageManager.saveData(storageKey, true);
+    notifyListeners();
+  }
+
+  Future<void> disableService() async {
+    _location = null;
+    _userLocation = null;
+    _enabled = false;
+    await StorageManager.saveData(storageKey, false);
+    notifyListeners();
+  }
 
   /// Sets the new location.
   /// [value] parameters must be a [LocationData] object.
   void _setLocation(value) {
-    this.userLocation = value;
+    _userLocation = value;
   }
 
   /// Refreshes the location of the user.
@@ -27,13 +68,16 @@ class LocationService {
 
   /// Gets the current user location.
   Future<LocationData> _getLocation() async {
-    var currentLocation;
-    try {
-      currentLocation = await _location.getLocation();
-    } catch (e) {
-      print(e);
+    if (_enabled) {
+      var currentLocation;
+      try {
+        currentLocation = await _location.getLocation();
+      } catch (e) {
+        print(e);
+      }
+      return currentLocation;
     }
-    return currentLocation;
+    return null;
   }
 
   /// Gets the known location data.
@@ -41,27 +85,30 @@ class LocationService {
     if (refresh) {
       await this.refresh();
     }
-    return this.userLocation;
+    return this._userLocation;
   }
 
   /// Gets a default [Text] widget to display
   /// last known location data.
   Widget getText() {
-    if (this.userLocation == null) {
+    if (this._userLocation == null) {
       return Text("No location");
     }
-    return Text(this.userLocation.latitude.toString() +
+    return Text(this._userLocation.latitude.toString() +
         " " +
-        this.userLocation.longitude.toString());
+        this._userLocation.longitude.toString());
   }
 
   /// Gets the singleton instance.
   static LocationService getInstance() {
-    return _instance;
+    return instance;
   }
 
   /// Gets the [Location] object itself.
-  static Location getLocationObject() {
-    return _location;
+  Location getLocationObject() {
+    if (_enabled) {
+      return _location;
+    }
+    return null;
   }
 }

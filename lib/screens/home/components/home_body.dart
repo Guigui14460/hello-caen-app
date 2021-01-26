@@ -4,12 +4,10 @@ import 'package:provider/provider.dart';
 
 import 'account_profile.dart';
 import 'store_list.dart';
+import '../../location/location_screen.dart';
 import '../../../constants.dart';
 import '../../../components/app_bar.dart';
-import '../../../services/size_config.dart';
 import '../../../services/theme_manager.dart';
-
-import '../../location/location_screen.dart';
 
 /// Class to build all widgets of the [HomeScreen].
 class HomeBody extends StatefulWidget {
@@ -32,8 +30,7 @@ class _HomeBodyState extends State<HomeBody> {
       StoreListPage(),
       Container(color: Colors.blue),
       LocationScreen(),
-      //Container(color: Colors.red),
-      AccountProfilePage(),
+      AccountProfilePage(widget),
     ];
   }
 
@@ -44,7 +41,6 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context); // if the user doesn't come from SplashScreen
     bool isDarkMode = Provider.of<ThemeManager>(context).isDarkMode();
     return SafeArea(
       child: Scaffold(

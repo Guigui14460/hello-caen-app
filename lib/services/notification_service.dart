@@ -1,9 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'storage_manager.dart';
+
 /// Service used to push local notification for the user.
-class NotificationService {
+class NotificationService extends ChangeNotifier {
+  static final String storageKey = "notifications-enabled";
+
   /// Singleton instance.
   static NotificationService instance;
+
+  static bool enabled;
 
   /// Notification plugin used to display notifications.
   FlutterLocalNotificationsPlugin plugin;
@@ -12,25 +19,42 @@ class NotificationService {
   Map<int, String> usedIds = {};
 
   /// Initializes the singleton instance.
-  static init() {
+  static Future<void> init() async {
     instance = new NotificationService._();
+    await StorageManager.exists(storageKey).then((value) async {
+      if (!value) {
+        await StorageManager.saveData(storageKey, true);
+        enabled = true;
+      } else {
+        StorageManager.readData(storageKey).then((value) {
+          enabled = value;
+        });
+      }
+    });
+    if (enabled) {
+      await _initPlugin();
+    }
   }
 
-  /// Private constructor.
-  NotificationService._() {
+  static Future<void> _initPlugin() async {
     AndroidInitializationSettings android =
         AndroidInitializationSettings("@mipmap/ic_launcher");
     IOSInitializationSettings iOS = IOSInitializationSettings();
     InitializationSettings initializationSettings =
         InitializationSettings(android: android, iOS: iOS);
-    this.plugin = FlutterLocalNotificationsPlugin();
-    this
-        .plugin
+    instance.plugin = FlutterLocalNotificationsPlugin();
+    await instance.plugin
         .initialize(initializationSettings); // OnSelectNotification available
   }
 
+  /// Private constructor.
+  NotificationService._();
+
   /// Pushes a single notification.
-  Future pushNotification(String title, String body) async {
+  Future<void> pushNotification(String title, String body) async {
+    if (!enabled) {
+      throw new Exception("Notifications not enabled");
+    }
     AndroidNotificationDetails android = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.max, priority: Priority.high);
@@ -42,8 +66,11 @@ class NotificationService {
   }
 
   /// Define a schedule notification for a precise date.
-  Future scheduledNotification(String androidId, int id, String title,
+  Future<void> scheduledNotification(String androidId, int id, String title,
       String body, DateTime scheduleDateTime) async {
+    if (!enabled) {
+      throw new Exception("Notifications not enabled");
+    }
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       androidId,
       'Reminder notifications',
@@ -68,8 +95,11 @@ class NotificationService {
   }
 
   /// Define a schedule notification with an interval.
-  Future scheduleNotificationPeriodically(String androidId, int id,
+  Future<void> scheduleNotificationPeriodically(String androidId, int id,
       String title, String body, RepeatInterval interval) async {
+    if (!enabled) {
+      throw new Exception("Notifications not enabled");
+    }
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       androidId,
       'Reminder notifications',
@@ -85,22 +115,48 @@ class NotificationService {
   }
 
   /// Cancel notifications. If [id] is null, all notifications are cancelled.
-  Future turnOffNotification({int id}) async {
+  Future<void> turnOffNotifications({int id}) async {
     if (id == null) {
-      this.plugin.cancelAll();
+      await this.plugin.cancelAll();
       this.usedIds.clear();
+      enabled = false;
+      await StorageManager.saveData(storageKey, false);
     } else {
       this.plugin.cancel(id);
       this.usedIds.remove(id);
     }
+    notifyListeners();
   }
 
   /// Adds an entry in [usedIds] map variable.
   /// Throws an exception if [id] is already used.
   void addToUsedId(int id, String title) {
+    if (!enabled) {
+      throw new Exception("Notifications not enabled");
+    }
     if (this.usedIds.containsKey(id)) {
       throw Exception("Notification id already used");
     }
     this.usedIds.addAll({id: title});
+    notifyListeners();
+  }
+
+  Future<void> enableService() async {
+    await StorageManager.saveData(storageKey, true);
+    enabled = true;
+    await _initPlugin();
+    notifyListeners();
+  }
+
+  Future<void> disableService() async {
+    await StorageManager.saveData(storageKey, false);
+    enabled = false;
+    this.plugin = null;
+    this.usedIds.clear();
+    notifyListeners();
+  }
+
+  bool isEnabled() {
+    return enabled;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +12,16 @@ import '../../../components/custom_dialog.dart';
 import '../../../model/database/user_model.dart';
 import '../../../model/user_account.dart';
 import '../../../services/firebase_settings.dart';
+import '../../../services/location_service.dart';
+import '../../../services/notification_service.dart';
 import '../../../services/size_config.dart';
 import '../../../services/storage_manager.dart';
 import '../../../services/theme_manager.dart';
 import '../../../services/user_manager.dart';
 
 class AccountProfilePage extends StatefulWidget {
-  AccountProfilePage({Key key}) : super(key: key);
+  final Widget associatedScreen;
+  AccountProfilePage(this.associatedScreen, {Key key}) : super(key: key);
 
   @override
   _AccountProfilePageState createState() => _AccountProfilePageState();
@@ -29,6 +33,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     ThemeManager themeManager = Provider.of<ThemeManager>(context);
     UserManager userManager = Provider.of<UserManager>(context);
     bool isDarkMode = themeManager.isDarkMode();
+    bool notificationsEnabled =
+        Provider.of<NotificationService>(context).isEnabled();
+    bool locationEnabled = Provider.of<LocationService>(context).isEnabled();
 
     TextStyle style = TextStyle(
         fontWeight: FontWeight.bold, fontSize: getProportionateScreenWidth(24));
@@ -67,8 +74,10 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                       _getButton(
                         title: "Se connecter",
                         iconData: Icons.login,
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(SignInScreen.routeName),
+                        onTap: () => Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => SignInScreen())),
                         isDarkMode: isDarkMode,
                       ),
                       SizedBox(height: getProportionateScreenHeight(20)),
@@ -82,8 +91,10 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                           _getButton(
                               title: "Gestion de vos commerces",
                               iconData: Icons.view_list,
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(ProHomeScreen.routeName),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => ProHomeScreen())),
                               isDarkMode: isDarkMode),
                           SizedBox(height: getProportionateScreenHeight(20)),
                         ],
@@ -94,8 +105,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                               _getButton(
                                   title: "Administration",
                                   iconData: Icons.view_list,
-                                  onTap: () => Navigator.of(context)
-                                      .pushNamed(AdminHomeScreen.routeName),
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              AdminHomeScreen())),
                                   isDarkMode: isDarkMode),
                               SizedBox(
                                   height: getProportionateScreenHeight(20)),
@@ -109,8 +123,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                       _getButton(
                         title: "Paramètres du compte",
                         iconData: Icons.settings,
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AccountParametersScreen.routeName),
+                        onTap: () => Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    AccountParametersScreen())),
                         isDarkMode: isDarkMode,
                       ),
                       SizedBox(height: getProportionateScreenHeight(20)),
@@ -118,31 +135,34 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                   )
                 : SizedBox()),
             _getButton(
-              title: isDarkMode
-                  ? "Activer la localisation"
-                  : "Désactiver la localisation",
-              iconData:
-                  isDarkMode ? Icons.location_off_rounded : Icons.place_rounded,
-              onTap: isDarkMode
-                  ? _activateLocation
-                  : () => _showDeactivateLocationDialog(context),
+              title: locationEnabled
+                  ? "Désactiver la localisation"
+                  : "Activer la localisation",
+              iconData: locationEnabled
+                  ? Icons.place_rounded
+                  : Icons.location_off_rounded,
+              onTap: locationEnabled
+                  ? () => _showDeactivateLocationDialog(context)
+                  : () => _activateLocation(context),
               isDarkMode: isDarkMode,
-              showRightArrow: !isDarkMode,
+              showRightArrow: locationEnabled,
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            _getButton(
-              title: isDarkMode
-                  ? "Activer les notifications"
-                  : "Désactiver les notifications",
-              iconData: isDarkMode
-                  ? Icons.notifications_off
-                  : Icons.notifications_active,
-              onTap: isDarkMode
-                  ? _activateNotifications
-                  : () => _showDeactivateNotificationsDialog(context),
-              isDarkMode: isDarkMode,
-              showRightArrow: !isDarkMode,
-            ),
+            Hero(
+                tag: "notifications",
+                child: _getButton(
+                  title: notificationsEnabled
+                      ? "Désactiver les notifications"
+                      : "Activer les notifications",
+                  iconData: notificationsEnabled
+                      ? Icons.notifications_active
+                      : Icons.notifications_off,
+                  onTap: notificationsEnabled
+                      ? () => _showDeactivateNotificationsDialog(context)
+                      : () => _activateNotifications(context),
+                  isDarkMode: isDarkMode,
+                  showRightArrow: notificationsEnabled,
+                )),
             SizedBox(height: getProportionateScreenHeight(20)),
             _getButton(
               title: "Changer de mode",
@@ -374,8 +394,10 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
         });
   }
 
-  void _activateLocation() {
-    // TODO: activate here
+  void _activateLocation(BuildContext context) async {
+    await Provider.of<LocationService>(context, listen: false).enableService();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Localisation activée")));
   }
 
   void _showDeactivateLocationDialog(BuildContext context) {
@@ -388,15 +410,21 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                 "Vous ne pourrez plus avoir les commerçants proche de vous dans l'onglet \"Localisation\". Confirmez-vous la désactivation ?",
             text: "Confirmer",
             onPressed: () async {
-              // TODO: désactiver la localisation ici
+              await Provider.of<LocationService>(context, listen: false)
+                  .disableService();
               Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Localisation désactivée")));
             },
           );
         });
   }
 
-  void _activateNotifications() {
-    // TODO: activate here
+  void _activateNotifications(BuildContext context) async {
+    await Provider.of<NotificationService>(context, listen: false)
+        .enableService();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Notifications activées")));
   }
 
   void _showDeactivateNotificationsDialog(BuildContext context) {
@@ -409,8 +437,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                 "Vous ne recevrez plus de notifications de bon plans. Confirmez-vous la désactivation ?",
             text: "Confirmer",
             onPressed: () async {
-              // TODO: désactiver les notifications ici
+              await Provider.of<NotificationService>(context, listen: false)
+                  .disableService();
               Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Notifications désactivées")));
             },
           );
         });

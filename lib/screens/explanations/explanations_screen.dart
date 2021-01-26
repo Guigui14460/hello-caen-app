@@ -12,10 +12,8 @@ class ExplanationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Container(
-      child: Scaffold(
-        body: ExplanationsBody(),
-      ),
+    return Scaffold(
+      body: ExplanationsBody(),
     );
   }
 }

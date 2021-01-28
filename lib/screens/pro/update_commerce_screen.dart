@@ -251,7 +251,7 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
           keyboardType: TextInputType.number,
           initialValue: "${_latitude == null ? 0 : _latitude}",
           inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9,.-]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9.-]')),
           ],
           onSaved: (newValue) => _latitude = double.parse(newValue),
           onChanged: (value) {
@@ -274,7 +274,7 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
           keyboardType: TextInputType.number,
           initialValue: "${_longitude == null ? 0 : _longitude}",
           inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9,.-]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9.-]')),
           ],
           onSaved: (newValue) => _longitude = double.parse(newValue),
           onChanged: (value) {

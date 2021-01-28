@@ -35,7 +35,9 @@ class UserModel extends FirebaseFirestoreDB<User> {
         lastName: value['lastName'],
         profilePicture: value['profilePicture'],
         sex: Sex.values[value['sex']],
-        favoriteCommerceIds: List<String>.from(value['favoriteCommerces']),
+        favoriteCommerceIds: value['favoriteCommerces'] == null
+            ? []
+            : List<String>.from(value['favoriteCommerces']),
         dateOfBirth: convertStringToDatetime(value['dateOfBirth']),
         adminAccount: value['admin'],
         proAccount: value['pro']);

@@ -32,10 +32,12 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
       endDate: convertStringToDatetime(value['endDate']),
       notifyAllUser: value['notifyAllUser'],
       maxAvailableCodes: value['maxAvailableCodes'],
-      userIdsWhoUsedCode: List<String>.from(value['userIdsWhoUsedCode']),
+      userIdsWhoUsedCode: value['userIdsWhoUsedCode'] == null
+          ? []
+          : List<String>.from(value['userIdsWhoUsedCode']),
       conditions: value['conditions'],
       usePercentage: value['usePercentage'],
-      reductionAmount: value['reductionAmount'],
+      reductionAmount: double.parse("${value['reductionAmount']}"),
     );
   }
 

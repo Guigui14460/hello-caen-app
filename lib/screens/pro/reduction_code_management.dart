@@ -1,13 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_caen/services/theme_manager.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/app_bar.dart';
+import 'update_reduction_code_screen.dart';
 import '../../constants.dart';
+import '../../components/app_bar.dart';
+import '../../components/custom_dialog.dart';
 import '../../model/commerce.dart';
 import '../../model/database/reduction_code_model.dart';
 import '../../model/reduction_code.dart';
 import '../../services/size_config.dart';
+import '../../services/theme_manager.dart';
 
 class ReductionManagementScreen extends StatefulWidget {
   final Commerce commerce;
@@ -36,23 +39,20 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
     });
   }
 
-  void addCode(ReductionCode code) async {
-    await ReductionCodeModel().create(code);
-    ReductionCodeModel()
-        .where("commerce", isEqualTo: widget.commerce.id)
-        .then((value) {
-      setState(() {
-        _codes = value;
-      });
+  void addCode(ReductionCode code) {
+    setState(() {
+      _codes.add(code);
     });
   }
 
-  void updateCode(ReductionCode code) async {
-    await ReductionCodeModel().update(code.id, code);
+  void updateCode(ReductionCode code) {
+    int index = _codes.indexWhere((element) => element.id == code.id);
+    setState(() {
+      _codes[index] = code;
+    });
   }
 
-  void deleteCode(ReductionCode code) async {
-    await ReductionCodeModel().delete(code.id);
+  void deleteCode(ReductionCode code) {
     _codes.remove(code);
   }
 
@@ -83,33 +83,41 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
                   children: _codes.map<Widget>((e) {
                         return Column(
                           children: [
-                            InkWell(
-                              onTap: () => {},
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: getProportionateScreenWidth(10)),
-                                child: Row(
-                                  children: [
-                                    Text(e.name +
-                                        (e.endDate != null &&
-                                                e.endDate.compareTo(now) < 0
-                                            ? " (terminé)"
-                                            : (e.beginDate.compareTo(now) > 0
-                                                ? ""
-                                                : " (commencé)"))),
-                                    Spacer(),
-                                    IconButton(
-                                      icon: Icon(Icons.edit),
-                                      color: Colors.blue[400],
-                                      onPressed: () {},
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.delete_forever),
-                                      color: Colors.red,
-                                      onPressed: () {},
-                                    ),
-                                  ],
-                                ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: getProportionateScreenWidth(10)),
+                              child: Row(
+                                children: [
+                                  Text(e.name +
+                                      (e.endDate != null &&
+                                              e.endDate
+                                                      .add(Duration(days: 1))
+                                                      .compareTo(now) <
+                                                  0
+                                          ? " (terminé)"
+                                          : (e.beginDate.compareTo(now) > 0
+                                              ? ""
+                                              : " (commencé)"))),
+                                  Spacer(),
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    color: Colors.blue[400],
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                            builder: (context) =>
+                                                UpdateReductionCodeScreen(
+                                                  widget.commerce,
+                                                  code: e,
+                                                  modifyCallback: updateCode,
+                                                ))),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete_forever),
+                                    color: Colors.red,
+                                    onPressed: () => _deleteCode(context, e),
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(height: getProportionateScreenHeight(30)),
@@ -135,5 +143,32 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
     );
   }
 
-  void _addCode() {}
+  void _addCode() {
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => UpdateReductionCodeScreen(
+                  widget.commerce,
+                  modify: false,
+                  addCallback: addCode,
+                )));
+  }
+
+  void _deleteCode(BuildContext context, ReductionCode code) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomDialogBox(
+            title: "Supprimer",
+            description:
+                "Toutes les données associées à ce code de réduction seront définitivement supprimées (nom, dates, statistiques). Êtes-vous sûr de vouloir supprimer le code \"${code.name}\" ?",
+            text: "Confirmer",
+            onPressed: () async {
+              await ReductionCodeModel().delete(code.id);
+              deleteCode(code);
+              Navigator.pop(context);
+            },
+          );
+        });
+  }
 }

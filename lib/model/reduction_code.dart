@@ -37,7 +37,7 @@ class ReductionCode {
   bool usePercentage;
 
   /// Reduction amount itself.
-  int reductionAmount;
+  double reductionAmount;
 
   /// Constructor.
   ReductionCode({
@@ -66,8 +66,8 @@ class ReductionCode {
   }
 
   /// Gets the QR Code image generated for this
-  /// code.
-  Image getQRCodeWidget() {
+  /// code with the [uid] (user id).
+  Image getQRCodeWidget(String uid) {
     return null;
   }
 }

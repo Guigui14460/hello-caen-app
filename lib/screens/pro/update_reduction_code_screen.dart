@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:hello_caen/model/database/reduction_code_model.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
-import 'preview_page.dart';
 import '../../constants.dart';
 import '../../components/app_bar.dart';
 import '../../components/default_button.dart';
@@ -15,52 +13,49 @@ import '../../components/form_error.dart';
 import '../../helper/keyboard.dart';
 import '../../model/commerce.dart';
 import '../../model/commerce_type.dart';
+import '../../model/reduction_code.dart';
 import '../../model/database/commerce_model.dart';
-import '../../model/database/commerce_type_model.dart';
-import '../../services/firebase_settings.dart';
 import '../../services/size_config.dart';
 import '../../services/user_manager.dart';
 
-class UpdateCommerceScreen extends StatefulWidget {
-  static String routeName = "/pro/commerce/update";
+class UpdateReductionCodeScreen extends StatefulWidget {
+  static String routeName = "/pro/reduction-codes/update";
 
-  UpdateCommerceScreen(
-      {this.commerce,
-      this.modify = true,
-      this.addCallback,
-      this.modifyCallback}) {
+  UpdateReductionCodeScreen(this.commerce,
+      {this.code, this.modify = true, this.addCallback, this.modifyCallback}) {
+    assert(this.commerce != null);
     assert((modify &&
-            commerce != null &&
+            code != null &&
             addCallback == null &&
             modifyCallback != null) ||
         (!modify &&
-            commerce == null &&
+            code == null &&
             addCallback != null &&
             modifyCallback == null));
   }
 
-  final Commerce commerce;
+  final ReductionCode code;
   final bool modify;
-  final void Function(Commerce) addCallback;
-  final void Function(Commerce) modifyCallback;
+  final Commerce commerce;
+  final void Function(ReductionCode) addCallback;
+  final void Function(ReductionCode) modifyCallback;
 
   @override
-  _UpdateCommerceScreenState createState() => _UpdateCommerceScreenState();
+  _UpdateReductionCodeScreenState createState() =>
+      _UpdateReductionCodeScreenState();
 }
 
-class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
-  Commerce futureCommerce;
-  List<CommerceType> _typesAvailable = [];
-
+class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
   final _formKey = GlobalKey<FormState>();
   String _name;
-  String _description;
-  double _latitude;
-  double _longitude;
-  String _timetables;
-  CommerceType _type;
-  String _imageLink;
-  PickedFile _image;
+  String _conditions;
+  DateTime _beginDate;
+  DateTime _endDate;
+  int _maxAvailableCode;
+  bool _usePercentage;
+  int _reductionAmount;
+
+  List<ReductionCode> _otherCommerceCode = [];
 
   final List<String> errors = [];
 
@@ -68,30 +63,21 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
   void initState() {
     super.initState();
     if (widget.modify) {
-      List<String> locationSplited = widget.commerce.location.split(",");
       setState(() {
-        _name = widget.commerce.name;
-        try {
-          _latitude = double.parse(locationSplited[0]);
-          _longitude = double.parse(locationSplited[1]);
-        } catch (e) {
-          _latitude = null;
-          _longitude = null;
-        }
-        _timetables = widget.commerce.timetables;
-        _description = widget.commerce.description;
-        _imageLink = widget.commerce.imageLink;
+        _name = widget.code.name;
+        _conditions = widget.code.conditions;
+        _beginDate = widget.code.beginDate;
+        _endDate = widget.code.endDate;
+        _maxAvailableCode = widget.code.maxAvailableCodes;
+        _usePercentage = widget.code.usePercentage;
+        _reductionAmount = widget.code.reductionAmount;
       });
     }
-    CommerceTypeModel().getAll().then((value) {
+    ReductionCodeModel().where("commerce", isEqualTo: widget.commerce.id).then((value) {
       setState(() {
-        _typesAvailable = value;
-        if (widget.modify) {
-          _type = _typesAvailable
-              .firstWhere((element) => element.id == widget.commerce.typeId);
-        }
+        _otherCommerceCode = value;
       });
-    });
+    })
   }
 
   void addError({String error}) {
@@ -113,30 +99,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: MyAppBar(
-          actions: [Icon(Icons.visibility)],
-          actionsCallback: [
-            () {
-              futureCommerce = Commerce(
-                  ownerId:
-                      Provider.of<UserManager>(context).getLoggedInUser().id,
-                  name: _name,
-                  description: _description,
-                  location: "$_latitude,$_longitude",
-                  timetables: _timetables,
-                  typeId: _type.id,
-                  dateAdded: (widget.modify
-                      ? widget.commerce.dateAdded
-                      : DateTime.now()),
-                  dateModified: DateTime.now(),
-                  imageLink: _imageLink);
-              futureCommerce.type = _type;
-              return Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (context) =>
-                          PreviewCommerceScreen(commerce: futureCommerce)));
-            }
-          ],
         ),
         body: SizedBox(
           width: double.infinity,
@@ -149,8 +111,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                 children: [
                   Text(
                     widget.modify
-                        ? "Mise à jour du commerce \"${widget.commerce.name}\""
-                        : "Ajouter un nouveau commerce",
+                        ? "Mise à jour du code de réduction \"${widget.code.name}\""
+                        : "Ajouter un nouveau code de réduction",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -167,8 +129,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                         buildCommerceTypeDropdownButton(),
                         SizedBox(height: getProportionateScreenHeight(20)),
                         buildDescriptionFormField(),
-                        SizedBox(height: getProportionateScreenHeight(20)),
-                        buildImageLinkPreview(),
                         SizedBox(height: getProportionateScreenHeight(20)),
                         buildLocationSelection(),
                         SizedBox(height: getProportionateScreenHeight(20)),
@@ -296,52 +256,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
     );
   }
 
-  Widget buildImageLinkPreview() {
-    Widget getImage() {
-      if (_imageLink != null) {
-        return Image.network(
-          _imageLink,
-          width: double.infinity,
-        );
-      }
-      if (_image != null) {
-        return Image.file(
-          File(_image.path),
-          width: double.infinity,
-        );
-      }
-      return Center(
-        child: Text("Sélectionner une image"),
-      );
-    }
-
-    return SizedBox(
-      width: double.infinity,
-      child: GestureDetector(
-        onTap: _changePicture,
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              border: Border.all(
-                  width: 1, color: Colors.grey[400], style: BorderStyle.solid)),
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(
-            child: getImage(),
-            width: double.infinity,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<void> _changePicture() async {
-    PickedFile image =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-    });
-  }
-
   Widget buildCommerceTypeDropdownButton() {
     return new DropdownButtonFormField<CommerceType>(
       isExpanded: true,
@@ -388,47 +302,10 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
   }
 
   void _update(BuildContext context) async {
-    if (_image != null || (_imageLink != null && _imageLink != "")) {
-      removeError(error: kCommerceImageLinkNullError);
-    } else {
-      addError(error: kCommerceImageLinkNullError);
-    }
     if (_formKey.currentState.validate() && errors.isEmpty) {
       _formKey.currentState.save();
       KeyboardUtil.hideKeyboard(context);
       try {
-        if (_image != null) {
-          FirebaseSettings.instance
-              .uploadFile(_image, context, "enterprise-pictures",
-                  "${widget.commerce.id}.jpg")
-              .asStream()
-              .listen((event) {
-            if (event.snapshot.totalBytes - event.snapshot.bytesTransferred !=
-                0) {
-              event.then((task) async {
-                String link = await task.ref.getDownloadURL();
-                futureCommerce = Commerce(
-                  id: widget.commerce.id,
-                  ownerId: widget.commerce.ownerId,
-                  name: _name,
-                  description: _description,
-                  location: "$_latitude,$_longitude",
-                  timetables: _timetables,
-                  typeId: _type.id,
-                  commentIds: widget.commerce.commentIds,
-                  dateAdded: widget.commerce.dateAdded,
-                  dateModified: DateTime.now(),
-                  imageLink: link,
-                );
-                CommerceModel()
-                    .update(widget.commerce.id, futureCommerce)
-                    .catchError((error) {
-                  print(error);
-                });
-              });
-            }
-          });
-        } else {
           futureCommerce = Commerce(
             id: widget.commerce.id,
             ownerId: widget.commerce.ownerId,
@@ -455,30 +332,15 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Erreur lors de la mise à jour des données")));
-      }
     }
   }
 
   void _create(BuildContext context) async {
     UserManager userManager = Provider.of<UserManager>(context, listen: false);
-    if (_image != null || (_imageLink != null && _imageLink != "")) {
-      removeError(error: kCommerceImageLinkNullError);
-    } else {
-      addError(error: kCommerceImageLinkNullError);
-    }
     if (_formKey.currentState.validate() && errors.isEmpty) {
       _formKey.currentState.save();
       KeyboardUtil.hideKeyboard(context);
       try {
-        String id = Uuid().v4();
-        FirebaseSettings.instance
-            .uploadFile(_image, context, "enterprise-pictures", "$id.jpg")
-            .asStream()
-            .listen((event) {
-          if (event.snapshot.totalBytes - event.snapshot.bytesTransferred !=
-              0) {
-            event.then((task) async {
-              String link = await task.ref.getDownloadURL();
               futureCommerce = Commerce(
                 id: id,
                 ownerId: userManager.getLoggedInUser().id,
@@ -497,11 +359,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                 print(error);
               });
               widget.addCallback(futureCommerce);
-            });
-          }
-        });
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Commerce ajouté")));
+            .showSnackBar(SnackBar(content: Text("Code de réduction ajouté")));
         Navigator.pop(context);
       } catch (e) {
         print(e);

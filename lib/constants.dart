@@ -32,6 +32,7 @@ const String kAlreadyUsedEmail = "Adresse email déjà utilisée";
 // const int minimumPasswordLength = 10;
 const int minimumPasswordLength = 1; // TODO: à échanger
 
+// Form error commerces
 const String kCommerceNameNullError = "Le nom ne doit pas être vide";
 const String kCommerceTypeNullError = "Veuillez sélectionner un type";
 const String kCommerceImageLinkNullError = "Veuillez sélectionner une image";
@@ -39,3 +40,23 @@ const String kCommerceLatitudeNullError = "Veuillez ajouter la latitude";
 const String kCommerceLongitudeNullError = "Veuillez ajouter la longitude";
 const String kCommerceTimetablesNullError =
     "Veuillez ajouter vos horaires\nd'ouvertures/fermetures";
+
+// Form error reduction codes
+const String kCodeNameNullError =
+    "Veuillez saisir un nom pour votre code de réduction";
+const String kCodeNameAlreadyInUseError =
+    "Ce nom est déjà utilisé. Veuillez en saisir un autre ou supprimer celui portant ce nom";
+const String kCodeConditionNullError =
+    "Veuillez entrer les conditions pour pouvoir utiliser ce code";
+const String kCodeBeginDateNullError =
+    "Veuillez entrer une date de démarrage de la campagne";
+const String kCodeBeginDateInvalidError =
+    "Veuillez entrer une date de démarrage valide";
+const String kCodeEndDateInvalidError =
+    "Veuillez entrer une date de fin valide";
+const String kCodeMaxAvailableNullError =
+    "Veuillez saisir le nombre maximum de codes disponible";
+const String kCodeReductionAmountNullError =
+    "Veuillez saisir le montant de la réduction";
+const String kCodeReductionAmountNegativError =
+    "Veuillez saisir un montant positif";

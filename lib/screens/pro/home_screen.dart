@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'preview_page.dart';
+import 'reduction_code_management.dart';
 import 'update_commerce_screen.dart';
+import '../../constants.dart';
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../model/commerce.dart';
 import '../../model/database/commerce_model.dart';
 import '../../services/firebase_settings.dart';
 import '../../services/size_config.dart';
+import '../../services/theme_manager.dart';
 
 class ProHomeScreen extends StatefulWidget {
   static String routeName = "/pro/home";
@@ -64,11 +69,12 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
         ),
         body: SizedBox(
           width: double.infinity,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
                 horizontal: getProportionateScreenWidth(20),
-                vertical: getProportionateScreenHeight(10)),
-            child: SingleChildScrollView(
+                vertical: getProportionateScreenHeight(10),
+              ),
               child: Column(
                 children: [
                   Text(
@@ -80,34 +86,89 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                   ),
                   SizedBox(height: getProportionateScreenHeight(30)),
                   Column(
-                    children: commerces.map((e) {
-                      return Row(
-                        children: [
-                          Text(e.name),
-                          Spacer(),
-                          IconButton(
-                            color: Colors.blue[300],
-                            icon: Icon(Icons.mode_edit),
-                            onPressed: () => Navigator.push(
+                    children: commerces.map<Widget>((e) {
+                          return GestureDetector(
+                            onTap: () => Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => UpdateCommerceScreen(
-                                        commerce: e,
-                                        modifyCallback: updateCommerce))),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            color: Colors.red[400],
-                            onPressed: () => _deleteCommerce(context, e),
-                          ),
-                        ],
-                      );
-                    }).toList(),
+                                    builder: (context) =>
+                                        PreviewCommerceScreen(commerce: e))),
+                            child: Column(
+                              children: [
+                                Image.network(
+                                  e.imageLink,
+                                  width: double.infinity,
+                                ),
+                                SizedBox(
+                                    height: getProportionateScreenHeight(5)),
+                                Text(
+                                  e.name,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          getProportionateScreenWidth(20)),
+                                ),
+                                SizedBox(
+                                    height: getProportionateScreenHeight(5)),
+                                Row(
+                                  children: [
+                                    TextButton(
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    ReductionManagementScreen(
+                                                        commerce: e))),
+                                        child: Text("Bons plans associés",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color:
+                                                    Provider.of<ThemeManager>(
+                                                                context)
+                                                            .isDarkMode()
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                fontWeight: FontWeight.w600))),
+                                    Spacer(),
+                                    IconButton(
+                                      color: Colors.blue[300],
+                                      icon: Icon(Icons.mode_edit),
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  UpdateCommerceScreen(
+                                                      commerce: e,
+                                                      modifyCallback:
+                                                          updateCommerce))),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete),
+                                      color: Colors.red[400],
+                                      onPressed: () =>
+                                          _deleteCommerce(context, e),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList() +
+                        [SizedBox(height: getProportionateScreenHeight(80))],
                   ),
                 ],
               ),
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print("QR code scanner");
+          },
+          child: Icon(Icons.qr_code_scanner),
+          backgroundColor: Provider.of<ThemeManager>(context).isDarkMode()
+              ? ternaryColor
+              : primaryColor,
         ),
       ),
     );

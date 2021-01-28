@@ -10,6 +10,7 @@ import 'screens/account_parameters/account_parameters_screen.dart';
 import 'screens/pro/home_screen.dart';
 import 'screens/pro/preview_page.dart';
 import 'screens/pro/update_commerce_screen.dart';
+import 'screens/pro/update_reduction_code_screen.dart';
 
 import 'screens/admin/home/home_screen.dart';
 
@@ -28,6 +29,7 @@ final Map<String, WidgetBuilder> routes = {
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),
   UpdateCommerceScreen.routeName: (context) => UpdateCommerceScreen(),
+  UpdateReductionCodeScreen.routeName: (context) => UpdateReductionCodeScreen(),
   PreviewCommerceScreen.routeName: (context) => PreviewCommerceScreen(),
 
   // admin screens

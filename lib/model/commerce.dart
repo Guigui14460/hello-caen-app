@@ -75,6 +75,22 @@ class Commerce {
     ]);
   }
 
+  void addComment(Comment comment) {
+    this.commentIds.add(comment.id);
+    this.comments.add(comment);
+  }
+
+  void updateComment(Comment comment) {
+    int index = this.commentIds.indexWhere((element) => element == comment.id);
+    this.commentIds[index] = comment.id;
+    this.comments[index] = comment;
+  }
+
+  void removeComment(Comment comment) {
+    this.commentIds.remove(comment.id);
+    this.comments.remove(comment);
+  }
+
   /// Gets the mean of all ratings.
   double _getRating() {
     double rating = 0;

@@ -41,7 +41,7 @@ abstract class FirebaseFirestoreDB<T>
       List<dynamic> whereNotIn,
       bool isNull}) async {
     List<T> list = [];
-    reference
+    await reference
         .where(field,
             isEqualTo: isEqualTo,
             isNotEqualTo: isNotEqualTo,

@@ -52,7 +52,7 @@ class _DatePickerState extends State<DatePicker> {
         context: context,
         initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
+        lastDate: DateTime(2100),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(

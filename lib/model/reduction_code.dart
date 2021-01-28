@@ -8,6 +8,8 @@ class ReductionCode {
   // ID of the object in database.
   String id;
 
+  final String name;
+
   /// Commerce associated.
   final String commerceId;
   Commerce commerce;
@@ -26,7 +28,7 @@ class ReductionCode {
   int maxAvailableCodes;
 
   /// Number of used codes.
-  int usedCodes;
+  List<String> userIdsWhoUsedCode = [];
 
   /// Access conditions.
   String conditions;
@@ -42,11 +44,12 @@ class ReductionCode {
     this.id,
     this.notifyAllUser,
     this.commerce,
+    @required this.name,
     @required this.commerceId,
     @required this.beginDate,
     @required this.endDate,
     @required this.maxAvailableCodes,
-    @required this.usedCodes,
+    this.userIdsWhoUsedCode,
     @required this.conditions,
     @required this.usePercentage,
     @required this.reductionAmount,

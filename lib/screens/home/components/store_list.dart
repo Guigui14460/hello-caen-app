@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/components/caller_row.dart';
 
 import '../../../components/category_menu.dart';
 import "../../../model/database/commerce_model.dart";
@@ -13,7 +14,7 @@ class StoreListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> widgets = [];
     return SafeArea(
-        child: CategoryMenu(text: [
+        child: Column(children:[CategoryMenu(text: [
       "B1",
       "B2",
       "B3",
@@ -23,7 +24,12 @@ class StoreListPage extends StatelessWidget {
       () => dosmth("click 2"),
       () => dosmth("3"),
       () => dosmth("3")
-    ]));
+    ]),
+          CallerRow(),
+          CallerRow()]
+
+      )
+    );
 
 
     return SafeArea(

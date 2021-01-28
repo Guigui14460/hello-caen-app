@@ -31,3 +31,11 @@ const String kWeakPassword = "Mot de passe trop faible";
 const String kAlreadyUsedEmail = "Adresse email déjà utilisée";
 // const int minimumPasswordLength = 10;
 const int minimumPasswordLength = 1; // TODO: à échanger
+
+const String kCommerceNameNullError = "Le nom ne doit pas être vide";
+const String kCommerceTypeNullError = "Veuillez sélectionner un type";
+const String kCommerceImageLinkNullError = "Veuillez sélectionner une image";
+const String kCommerceLatitudeNullError = "Veuillez ajouter la latitude";
+const String kCommerceLongitudeNullError = "Veuillez ajouter la longitude";
+const String kCommerceTimetablesNullError =
+    "Veuillez ajouter vos horaires\nd'ouvertures/fermetures";

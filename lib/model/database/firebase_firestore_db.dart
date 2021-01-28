@@ -111,11 +111,10 @@ abstract class FirebaseFirestoreDB<T>
   T getTElement(DocumentSnapshot value);
 
   @override
-  Future<T> create(T object) async {
-    T results = object;
-    await reference.add(getElementData(object)).catchError((error) {
-      results = null;
-      print(error);
+  Future<String> create(T object) async {
+    String results;
+    await reference.add(getElementData(object)).then((value) {
+      results = value.id;
     });
     return results;
   }

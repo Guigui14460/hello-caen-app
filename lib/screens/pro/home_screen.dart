@@ -41,6 +41,13 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
     });
   }
 
+  void updateCommerce(Commerce commerce) {
+    int where = commerces.indexWhere((element) => element.id == commerce.id);
+    setState(() {
+      commerces[where] = commerce;
+    });
+  }
+
   void removeCommerce(Commerce commerce) {
     setState(() {
       commerces.remove(commerce);
@@ -84,8 +91,9 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                             onPressed: () => Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) =>
-                                        UpdateCommerceScreen(commerce: e))),
+                                    builder: (context) => UpdateCommerceScreen(
+                                        commerce: e,
+                                        modifyCallback: updateCommerce))),
                           ),
                           IconButton(
                             icon: Icon(Icons.delete),
@@ -109,7 +117,10 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
     Navigator.push(
         context,
         CupertinoPageRoute(
-            builder: (context) => UpdateCommerceScreen(modify: false)));
+            builder: (context) => UpdateCommerceScreen(
+                  modify: false,
+                  addCallback: addCommerce,
+                )));
   }
 
   void _deleteCommerce(BuildContext context, Commerce commerce) async {
@@ -123,6 +134,10 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
             text: "Confirmer",
             onPressed: () async {
               await CommerceModel().delete(commerce.id);
+              await FirebaseSettings.instance
+                  .getStorage()
+                  .refFromURL(commerce.imageLink)
+                  .delete();
               removeCommerce(commerce);
               Navigator.pop(context);
             },

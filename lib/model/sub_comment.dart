@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'user_account.dart';
-import '../utils.dart';
 import 'database/user_model.dart';
+import '../utils.dart';
 
 class SubComment {
   // ID of the object in database.

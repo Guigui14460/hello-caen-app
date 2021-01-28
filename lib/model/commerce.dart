@@ -4,10 +4,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'comment.dart';
 import 'commerce_type.dart';
 import 'user_account.dart';
-import '../utils.dart';
 import 'database/commerce_type_model.dart';
 import 'database/comment_model.dart';
 import 'database/user_model.dart';
+import '../utils.dart';
 
 /// Represents a commerce.
 class Commerce {
@@ -16,6 +16,9 @@ class Commerce {
 
   /// Name of the commerce.
   String name;
+
+  /// Description of the commerce.
+  String description;
 
   /// Location
   String location;
@@ -49,6 +52,7 @@ class Commerce {
       {this.id,
       @required this.ownerId,
       @required this.name,
+      @required this.description,
       @required this.location,
       @required this.timetables,
       @required this.typeId,

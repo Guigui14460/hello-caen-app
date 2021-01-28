@@ -14,6 +14,7 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
   CommerceModel()
       : super("commerces", [
           "name",
+          "description",
           "location",
           "dateAdded",
           "dateModified",
@@ -28,6 +29,7 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
   Map<String, dynamic> getElementData(Commerce object) {
     return {
       "name": object.name,
+      "description": object.description,
       "location": object.location,
       "dateAdded": convertDatetimeToString(object.dateAdded),
       "dateModified": convertDatetimeToString(object.dateModified),
@@ -44,6 +46,7 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
     return new Commerce(
       id: value.id,
       name: value['name'],
+      description: value['description'],
       location: value['location'],
       dateAdded: convertStringToDatetime(value['dateAdded']),
       dateModified: convertStringToDatetime(value['dateModified']),
@@ -60,7 +63,7 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
     Commerce commerce = await this.getById(id);
     CommentModel model = CommentModel();
     ReductionCodeModel model2 = ReductionCodeModel();
-    List<ReductionCode> codes = await model
+    List<ReductionCode> codes = await model2
         .whereLinked("commerce", isEqualTo: id)
         .executeCurrentLinkedQueryRequest();
     List<bool> results = await Future.wait(commerce.commentIds.map((element) {

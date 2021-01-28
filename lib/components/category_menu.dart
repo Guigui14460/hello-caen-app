@@ -18,10 +18,11 @@ class _CategoryMenuState extends State<CategoryMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      width: 500,
-      child: ListView.builder(
+    return Container(
+      width: 700,
+      height: 50,
+
+      child:ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: widget.text.length,
           itemBuilder: (context,index){
@@ -33,9 +34,8 @@ class _CategoryMenuState extends State<CategoryMenu> {
                   child:Container(width: 100,height: 50,child: Center(child:Text(widget.text[index])))
                 )
             );
-        }
-      ),
-    );
-
+          }
+        ),
+      );
   }
 }

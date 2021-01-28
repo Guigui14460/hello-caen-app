@@ -8,7 +8,16 @@ class StoreListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = [];
-    return SafeArea(child: CategoryMenu(text: ["B1","B2","B3","B4"],onPressed :[ dosmth("click 1"),dosmth("click 2"),dosmth("3"),dosmth("3") ]));
+    return SafeArea(child:
+        SingleChildScrollView(child:
+          Column(children : [
+          SingleChildScrollView(child:CategoryMenu(text: ["B1","B2","B3","B4"],onPressed :[ dosmth("click 1"),dosmth("click 2"),dosmth("3"),dosmth("4") ])),
+
+
+              ]
+            )
+          ,)
+        );
 
     return SafeArea(child: FutureBuilder(
         future :  CommerceModel().getAll(),

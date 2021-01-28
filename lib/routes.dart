@@ -29,7 +29,7 @@ final Map<String, WidgetBuilder> routes = {
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),
   UpdateCommerceScreen.routeName: (context) => UpdateCommerceScreen(),
-  UpdateReductionCodeScreen.routeName: (context) => UpdateReductionCodeScreen(),
+  // UpdateReductionCodeScreen.routeName: (context) => UpdateReductionCodeScreen(),
   PreviewCommerceScreen.routeName: (context) => PreviewCommerceScreen(),
 
   // admin screens

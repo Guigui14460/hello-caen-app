@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'read_qr_code.dart';
 import 'update_reduction_code_screen.dart';
+import '../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../constants.dart';
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
@@ -13,6 +15,7 @@ import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
 
 class ReductionManagementScreen extends StatefulWidget {
+  static final String routeName = "/pro/reduction-codes";
   final Commerce commerce;
 
   ReductionManagementScreen({Key key, this.commerce}) {
@@ -86,38 +89,46 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
                             Padding(
                               padding: EdgeInsets.only(
                                   left: getProportionateScreenWidth(10)),
-                              child: Row(
-                                children: [
-                                  Text(e.name +
-                                      (e.endDate != null &&
-                                              e.endDate
-                                                      .add(Duration(days: 1))
-                                                      .compareTo(now) <
-                                                  0
-                                          ? " (terminé)"
-                                          : (e.beginDate.compareTo(now) > 0
-                                              ? ""
-                                              : " (commencé)"))),
-                                  Spacer(),
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    color: Colors.blue[400],
-                                    onPressed: () => Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                            builder: (context) =>
-                                                UpdateReductionCodeScreen(
-                                                  widget.commerce,
-                                                  code: e,
-                                                  modifyCallback: updateCode,
-                                                ))),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete_forever),
-                                    color: Colors.red,
-                                    onPressed: () => _deleteCode(context, e),
-                                  ),
-                                ],
+                              child: InkWell(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            ReductionCodeDetailScreen(
+                                                code: e))),
+                                child: Row(
+                                  children: [
+                                    Text(e.name +
+                                        (e.endDate != null &&
+                                                e.endDate
+                                                        .add(Duration(days: 1))
+                                                        .compareTo(now) <
+                                                    0
+                                            ? " (terminé)"
+                                            : (e.beginDate.compareTo(now) > 0
+                                                ? ""
+                                                : " (commencé)"))),
+                                    Spacer(),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      color: Colors.blue[400],
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  UpdateReductionCodeScreen(
+                                                    commerce: widget.commerce,
+                                                    code: e,
+                                                    modifyCallback: updateCode,
+                                                  ))),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete_forever),
+                                      color: Colors.red,
+                                      onPressed: () => _deleteCode(context, e),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(height: getProportionateScreenHeight(30)),
@@ -131,9 +142,7 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print("QR code scanner");
-          },
+          onPressed: readQrCodeAndApplyReductionCode,
           child: Icon(Icons.qr_code_scanner),
           backgroundColor: Provider.of<ThemeManager>(context).isDarkMode()
               ? ternaryColor
@@ -148,7 +157,7 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
         context,
         CupertinoPageRoute(
             builder: (context) => UpdateReductionCodeScreen(
-                  widget.commerce,
+                  commerce: widget.commerce,
                   modify: false,
                   addCallback: addCode,
                 )));

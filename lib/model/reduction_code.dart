@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'commerce.dart';
 import 'database/commerce_model.dart';
+import '../components/qr_code_generator.dart';
 
 /// Represents a reduction code.
 class ReductionCode {
@@ -67,7 +68,7 @@ class ReductionCode {
 
   /// Gets the QR Code image generated for this
   /// code with the [uid] (user id).
-  Image getQRCodeWidget(String uid) {
-    return null;
+  Widget getQRCodeWidget(String uid) {
+    return QRCodeGenerator(data: "${this.id},$uid");
   }
 }

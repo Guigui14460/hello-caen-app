@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'preview_page.dart';
+import 'read_qr_code.dart';
 import 'reduction_code_management.dart';
 import 'update_commerce_screen.dart';
 import '../../constants.dart';
@@ -162,9 +163,7 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print("QR code scanner");
-          },
+          onPressed: readQrCodeAndApplyReductionCode,
           child: Icon(Icons.qr_code_scanner),
           backgroundColor: Provider.of<ThemeManager>(context).isDarkMode()
               ? ternaryColor

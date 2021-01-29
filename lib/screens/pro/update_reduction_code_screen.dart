@@ -18,8 +18,12 @@ import '../../services/size_config.dart';
 class UpdateReductionCodeScreen extends StatefulWidget {
   static String routeName = "/pro/reduction-codes/update";
 
-  UpdateReductionCodeScreen(this.commerce,
-      {this.code, this.modify = true, this.addCallback, this.modifyCallback}) {
+  UpdateReductionCodeScreen(
+      {@required this.commerce,
+      this.code,
+      this.modify = true,
+      this.addCallback,
+      this.modifyCallback}) {
     assert(this.commerce != null);
     assert((modify &&
             code != null &&

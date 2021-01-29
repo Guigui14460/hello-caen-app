@@ -6,6 +6,8 @@ import 'screens/sign_in/sign_in_screen.dart';
 import 'screens/sign_up/sign_up_screen.dart';
 import 'screens/forgot_password/forgot_password_screen.dart';
 import 'screens/account_parameters/account_parameters_screen.dart';
+import 'screens/reduction_code_detail/reduction_code_detail_screen.dart';
+import 'screens/reduction_code_detail/reduction_code_detail_qr_code_screen.dart';
 
 import 'screens/pro/home_screen.dart';
 import 'screens/pro/preview_page.dart';
@@ -25,12 +27,16 @@ final Map<String, WidgetBuilder> routes = {
   SignUpScreen.routeName: (context) => SignUpScreen(),
   ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
   AccountParametersScreen.routeName: (context) => AccountParametersScreen(),
+  ReductionCodeDetailScreen.routeName: (context) => ReductionCodeDetailScreen(),
+  QRCodeReductionCodeDetailScreen.routeName: (context) =>
+      QRCodeReductionCodeDetailScreen(),
 
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),
   UpdateCommerceScreen.routeName: (context) => UpdateCommerceScreen(),
-  // UpdateReductionCodeScreen.routeName: (context) => UpdateReductionCodeScreen(),
+  UpdateReductionCodeScreen.routeName: (context) => UpdateReductionCodeScreen(),
   PreviewCommerceScreen.routeName: (context) => PreviewCommerceScreen(),
+  UpdateReductionCodeScreen.routeName: (context) => UpdateReductionCodeScreen(),
 
   // admin screens
   AdminHomeScreen.routeName: (context) => AdminHomeScreen(),

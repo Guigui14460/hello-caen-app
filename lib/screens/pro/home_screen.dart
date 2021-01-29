@@ -163,7 +163,7 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: readQrCodeAndApplyReductionCode,
+          onPressed: () => _readQrCode(context),
           child: Icon(Icons.qr_code_scanner),
           backgroundColor: Provider.of<ThemeManager>(context).isDarkMode()
               ? ternaryColor
@@ -171,6 +171,28 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
         ),
       ),
     );
+  }
+
+  void _readQrCode(BuildContext context) async {
+    QRCodeResult result = await readQrCodeAndApplyReductionCode();
+    switch (result) {
+      case QRCodeResult.OK:
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Code utilisé")));
+        break;
+      case QRCodeResult.ALREADY_USED:
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Code déjà utilisé")));
+        break;
+      case QRCodeResult.NO_SCAN:
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Aucun QR code lu")));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Erreur lors de la lecture du QR code")));
+        break;
+    }
   }
 
   void _addCommerce() {

@@ -5,16 +5,22 @@ import '../../model/database/reduction_code_model.dart';
 enum QRCodeResult {
   OK,
   ALREADY_USED,
+  NO_SCAN,
 }
 
 Future<String> readQrCode() async {
-  String result = await BarcodeScanner.scan();
+  String result = await BarcodeScanner.scan().catchError((error) {
+    return null;
+  });
   return result;
 }
 
 Future<QRCodeResult> readQrCodeAndApplyReductionCode() async {
   String result = await readQrCode();
-  List<String> splitedString = result.split("|");
+  if (result == null) {
+    return QRCodeResult.NO_SCAN;
+  }
+  List<String> splitedString = result.split(",");
   ReductionCodeModel model = ReductionCodeModel();
   return await model.getById(splitedString[0]).then((code) {
     if (code.userIdsWhoUsedCode.contains(splitedString[1])) {

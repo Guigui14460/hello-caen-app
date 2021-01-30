@@ -64,8 +64,8 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: MyAppBar(
-          actions: [Icon(Icons.add), Icon(Icons.info_outline)],
-          actionsCallback: [_addCommerce, () => _infoDialog(context)],
+          actions: [Icon(Icons.add)],
+          actionsCallback: [_addCommerce],
         ),
         body: SizedBox(
           width: double.infinity,
@@ -101,7 +101,7 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                                   width: double.infinity,
                                 ),
                                 SizedBox(
-                                    height: getProportionateScreenHeight(5)),
+                                    height: getProportionateScreenHeight(10)),
                                 Text(
                                   e.name,
                                   style: TextStyle(
@@ -221,22 +221,6 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                   .refFromURL(commerce.imageLink)
                   .delete();
               removeCommerce(commerce);
-              Navigator.pop(context);
-            },
-          );
-        });
-  }
-
-  _infoDialog(BuildContext context) async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomDialogBox(
-            title: "Information",
-            description:
-                "Seul vous et les administrateurs ont accès à ces informations.",
-            text: "OK",
-            onPressed: () {
               Navigator.pop(context);
             },
           );

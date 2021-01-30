@@ -8,7 +8,7 @@ import 'screens/forgot_password/forgot_password_screen.dart';
 import 'screens/account_parameters/account_parameters_screen.dart';
 
 import 'screens/pro/home_screen.dart';
-import 'screens/pro/preview_page.dart';
+import 'screens/pro/preview_commerce.dart';
 import 'screens/pro/update_commerce_screen.dart';
 
 import 'screens/admin/home/home_screen.dart';

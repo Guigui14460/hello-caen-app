@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import 'preview_page.dart';
+import 'preview_commerce.dart';
 import '../../constants.dart';
 import '../../components/app_bar.dart';
 import '../../components/default_button.dart';
@@ -116,20 +116,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
           actions: [Icon(Icons.visibility)],
           actionsCallback: [
             () {
-              futureCommerce = Commerce(
-                  ownerId:
-                      Provider.of<UserManager>(context).getLoggedInUser().id,
-                  name: _name,
-                  description: _description,
-                  location: "$_latitude,$_longitude",
-                  timetables: _timetables,
-                  typeId: _type.id,
-                  dateAdded: (widget.modify
-                      ? widget.commerce.dateAdded
-                      : DateTime.now()),
-                  dateModified: DateTime.now(),
-                  imageLink: _imageLink);
-              futureCommerce.type = _type;
               return Navigator.push(
                   context,
                   CupertinoPageRoute(

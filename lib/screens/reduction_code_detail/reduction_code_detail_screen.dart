@@ -8,11 +8,13 @@ import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../components/default_button.dart';
 import '../../model/reduction_code.dart';
+import '../../model/reduction_code_used.dart';
+import '../../model/database/reduction_code_used_model.dart';
 import '../../screens/sign_in/sign_in_screen.dart';
 import '../../services/size_config.dart';
 import '../../services/user_manager.dart';
 
-class ReductionCodeDetailScreen extends StatelessWidget {
+class ReductionCodeDetailScreen extends StatefulWidget {
   static final String routeName = "/reduction-codes/detail";
   final ReductionCode code;
 
@@ -20,10 +22,29 @@ class ReductionCodeDetailScreen extends StatelessWidget {
       : super(key: key);
 
   @override
+  _ReductionCodeDetailScreenState createState() =>
+      _ReductionCodeDetailScreenState();
+}
+
+class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
+  List<ReductionCodeUsed> _used = [];
+
+  @override
+  void initState() {
+    ReductionCodeUsedModel()
+        .where("reductionCodeId", isEqualTo: widget.code.id)
+        .then((value) {
+      setState(() {
+        _used = value;
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     UserManager userManager = Provider.of<UserManager>(context);
-    int codeAvailableLeft =
-        code.maxAvailableCodes - code.userIdsWhoUsedCode.length;
+    int codeAvailableLeft = widget.code.maxAvailableCodes - _used.length;
     return SafeArea(
         child: Scaffold(
       appBar: MyAppBar(
@@ -41,7 +62,7 @@ class ReductionCodeDetailScreen extends StatelessWidget {
               children: [
                 SizedBox(height: getProportionateScreenHeight(28)),
                 Text(
-                  code.name,
+                  widget.code.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -62,7 +83,7 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              _displayDate(code.beginDate),
+                              _displayDate(widget.code.beginDate),
                               style: TextStyle(
                                   fontSize: getProportionateScreenWidth(18.5)),
                             ),
@@ -78,7 +99,7 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              _displayDate(code.endDate),
+                              _displayDate(widget.code.endDate),
                               style: TextStyle(
                                   fontSize: getProportionateScreenWidth(18.5)),
                             ),
@@ -96,8 +117,8 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "${code.reductionAmount} " +
-                              (code.usePercentage ? "%" : "€"),
+                          "${widget.code.reductionAmount} " +
+                              (widget.code.usePercentage ? "%" : "€"),
                           style: TextStyle(
                               fontSize: getProportionateScreenWidth(18.5)),
                         ),
@@ -111,7 +132,7 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      code.conditions,
+                      widget.code.conditions,
                       style:
                           TextStyle(fontSize: getProportionateScreenWidth(14)),
                     ),
@@ -119,10 +140,10 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                     Text(
                       (codeAvailableLeft == 0
                           ? "Plus de code disponible"
-                          : "Il ${codeAvailableLeft <= (code.maxAvailableCodes * 0.2).ceil() ? "ne reste que" : "reste"} $codeAvailableLeft codes disponibles !"),
+                          : "Il ${codeAvailableLeft <= (widget.code.maxAvailableCodes * 0.2).ceil() ? "ne reste que" : "reste"} $codeAvailableLeft codes disponibles !"),
                       style: TextStyle(
                         color: codeAvailableLeft <=
-                                (code.maxAvailableCodes * 0.2).ceil()
+                                (widget.code.maxAvailableCodes * 0.2).ceil()
                             ? Colors.red
                             : Colors.green,
                         fontWeight: FontWeight.bold,
@@ -141,16 +162,18 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                             CupertinoPageRoute(
                                 builder: (context) =>
                                     QRCodeReductionCodeDetailScreen(
-                                        code: code))),
+                                        code: widget.code))),
                         longPress: () {})
-                    : DefaultButton(
-                        text: "Connectez-vous pour\naccéder au QR code",
-                        height: getProportionateScreenHeight(50),
-                        press: () => Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => SignInScreen())),
-                        longPress: () {})),
+                    : (codeAvailableLeft == 0
+                        ? SizedBox()
+                        : DefaultButton(
+                            text: "Connectez-vous pour\n accéder au QR code",
+                            height: getProportionateScreenHeight(70),
+                            press: () => Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => SignInScreen())),
+                            longPress: () {}))),
               ],
             ),
           ),

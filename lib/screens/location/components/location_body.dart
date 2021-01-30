@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/model/database/commerce_model.dart';
 
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,20 +8,19 @@ class LocationBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(title: Text('Home')),
-      //drawer: buildDrawer(context, route),
       body: Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              padding: EdgeInsets.only(top: 1, bottom: 1),
             ),
             Flexible(
               child: FlutterMap(
                 options: MapOptions(
                   center: LatLng(49.1705, -0.3650),
                   zoom: 12.0,
+                  boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(0)),
                 ),
                 layers: [
                   TileLayerOptions(
@@ -30,7 +30,7 @@ class LocationBody extends StatelessWidget {
                     // For example purposes. It is recommended to use
                     // TileProvider with a caching and retry strategy, like
                     // NetworkTileProvider or CachedNetworkTileProvider
-                    tileProvider: NonCachingNetworkTileProvider(),
+                    //tileProvider: NonCachingNetworkTileProvider(),
                   ),
                   //MarkerLayerOptions(markers: markers)
                   new MarkerLayerOptions(

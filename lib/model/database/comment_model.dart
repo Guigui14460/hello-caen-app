@@ -39,7 +39,9 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
       authorId: value['author'],
       dateAdded: convertStringToDatetime(value['dateAdded']),
       dateModified: convertStringToDatetime(value['dateModified']),
-      subcommentIds: List<String>.from(value['subcomments']),
+      subcommentIds: value['subcomments'] == null
+          ? []
+          : List<String>.from(value['subcomments']),
       rating: value['rating'],
     );
   }

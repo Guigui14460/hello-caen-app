@@ -50,7 +50,8 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
       'notifyAllUser': object.notifyAllUser,
       'name': object.name,
       'maxAvailableCodes': object.maxAvailableCodes,
-      'userIdsWhoUsedCode': object.userIdsWhoUsedCode,
+      'userIdsWhoUsedCode':
+          object.userIdsWhoUsedCode == null ? [] : object.userIdsWhoUsedCode,
       'conditions': object.conditions,
       'usePercentage': object.usePercentage,
       'reductionAmount': object.reductionAmount,

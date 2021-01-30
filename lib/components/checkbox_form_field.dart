@@ -12,9 +12,11 @@ class CheckboxFormField extends FormField<bool> {
             initialValue: initialValue,
             builder: (FormFieldState<bool> state) {
               return CheckboxListTile(
+                dense: state.hasError,
                 title: title,
-                value: initialValue,
-                onChanged: (bool value) {},
+                value: state.value,
+                onChanged: state.didChange,
+                activeColor: Colors.blueAccent,
               );
             });
 }

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'preview_page.dart';
 import 'read_qr_code.dart';
 import 'reduction_code_management.dart';
 import 'update_commerce_screen.dart';
@@ -92,8 +91,9 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                             onTap: () => Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) =>
-                                        PreviewCommerceScreen(commerce: e))),
+                                    builder: (context) => UpdateCommerceScreen(
+                                        commerce: e,
+                                        modifyCallback: updateCommerce))),
                             child: Column(
                               children: [
                                 Image.network(

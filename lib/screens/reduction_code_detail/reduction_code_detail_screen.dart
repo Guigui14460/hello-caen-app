@@ -117,9 +117,12 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                     ),
                     SizedBox(height: getProportionateScreenHeight(130)),
                     Text(
-                      "Il ${codeAvailableLeft < code.maxAvailableCodes * 0.2 ? "ne reste que" : "reste"} $codeAvailableLeft codes disponibles !",
+                      (codeAvailableLeft == 0
+                          ? "Plus de code disponible"
+                          : "Il ${codeAvailableLeft <= (code.maxAvailableCodes * 0.2).ceil() ? "ne reste que" : "reste"} $codeAvailableLeft codes disponibles !"),
                       style: TextStyle(
-                        color: codeAvailableLeft < code.maxAvailableCodes * 0.2
+                        color: codeAvailableLeft <=
+                                (code.maxAvailableCodes * 0.2).ceil()
                             ? Colors.red
                             : Colors.green,
                         fontWeight: FontWeight.bold,
@@ -129,7 +132,7 @@ class ReductionCodeDetailScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
-                (userManager.isLoggedIn()
+                (userManager.isLoggedIn() && codeAvailableLeft != 0
                     ? DefaultButton(
                         text: "Voir le QR code",
                         height: getProportionateScreenHeight(50),

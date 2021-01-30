@@ -84,6 +84,7 @@ class ProReductionCodeStatisticsScreenState
             .where("reductionCodeId", isEqualTo: code.id)
             .then((value) {
           setState(() {
+            value.sort((use1, use2) => use1.whenUsed.compareTo(use2.whenUsed));
             _currentCodeDisplayed = code;
             _used = value;
           });

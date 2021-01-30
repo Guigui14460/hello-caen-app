@@ -49,8 +49,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(20),
-            vertical: getProportionateScreenHeight(10)),
+          horizontal: getProportionateScreenWidth(20),
+          vertical: getProportionateScreenHeight(10),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

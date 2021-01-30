@@ -71,7 +71,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   Navigator.pushReplacementNamed(
                       context, AccountParametersScreen.routeName);
                 } on FirebaseAuthException catch (e) {
-                  print(e.code);
                   if (e.code == 'weak-password') {
                     addError(error: kWeakPassword);
                   } else if (e.code == "email-already-in-use") {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'preview_page.dart';
+import 'read_qr_code.dart';
 import 'reduction_code_management.dart';
 import 'update_commerce_screen.dart';
 import '../../constants.dart';
@@ -91,8 +91,9 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
                             onTap: () => Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) =>
-                                        PreviewCommerceScreen(commerce: e))),
+                                    builder: (context) => UpdateCommerceScreen(
+                                        commerce: e,
+                                        modifyCallback: updateCommerce))),
                             child: Column(
                               children: [
                                 Image.network(
@@ -162,9 +163,7 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print("QR code scanner");
-          },
+          onPressed: () => _readQrCode(context),
           child: Icon(Icons.qr_code_scanner),
           backgroundColor: Provider.of<ThemeManager>(context).isDarkMode()
               ? ternaryColor
@@ -172,6 +171,28 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
         ),
       ),
     );
+  }
+
+  void _readQrCode(BuildContext context) async {
+    QRCodeResult result = await readQrCodeAndApplyReductionCode();
+    switch (result) {
+      case QRCodeResult.OK:
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Code utilisé")));
+        break;
+      case QRCodeResult.ALREADY_USED:
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Code déjà utilisé")));
+        break;
+      case QRCodeResult.NO_SCAN:
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Aucun QR code lu")));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Erreur lors de la lecture du QR code")));
+        break;
+    }
   }
 
   void _addCommerce() {

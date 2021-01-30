@@ -1,28 +1,29 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hello_caen/model/database/reduction_code_model.dart';
-import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../components/app_bar.dart';
+import '../../components/checkbox_form_field.dart';
+import '../../components/custom_dialog.dart';
+import '../../components/date_picker.dart';
 import '../../components/default_button.dart';
 import '../../components/form_error.dart';
 import '../../helper/keyboard.dart';
 import '../../model/commerce.dart';
-import '../../model/commerce_type.dart';
 import '../../model/reduction_code.dart';
-import '../../model/database/commerce_model.dart';
+import '../../model/database/reduction_code_model.dart';
 import '../../services/size_config.dart';
-import '../../services/user_manager.dart';
 
 class UpdateReductionCodeScreen extends StatefulWidget {
   static String routeName = "/pro/reduction-codes/update";
 
-  UpdateReductionCodeScreen(this.commerce,
-      {this.code, this.modify = true, this.addCallback, this.modifyCallback}) {
+  UpdateReductionCodeScreen(
+      {@required this.commerce,
+      this.code,
+      this.modify = true,
+      this.addCallback,
+      this.modifyCallback}) {
     assert(this.commerce != null);
     assert((modify &&
             code != null &&
@@ -53,7 +54,7 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
   DateTime _endDate;
   int _maxAvailableCode;
   bool _usePercentage;
-  int _reductionAmount;
+  double _reductionAmount;
 
   List<ReductionCode> _otherCommerceCode = [];
 
@@ -71,6 +72,15 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
         _maxAvailableCode = widget.code.maxAvailableCodes;
         _usePercentage = widget.code.usePercentage;
         _reductionAmount = widget.code.reductionAmount;
+      });
+    } else {
+      setState(() {
+        _conditions = "";
+        _beginDate = DateTime.now();
+        _endDate = DateTime.now().add(Duration(days: 30));
+        _maxAvailableCode = 0;
+        _usePercentage = false;
+        _reductionAmount = 0.0;
       });
     }
     ReductionCodeModel()
@@ -100,7 +110,10 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: MyAppBar(),
+        appBar: MyAppBar(
+          actions: [Icon(Icons.info_outline)],
+          actionsCallback: [() => _infoDialog(context)],
+        ),
         body: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
@@ -120,34 +133,60 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
                         fontSize: getProportionateScreenWidth(30)),
                   ),
                   SizedBox(height: getProportionateScreenHeight(20)),
-                  // Form(
-                  //   key: _formKey,
-                  //   child: Column(
-                  //     children: [
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       buildNameFormField(),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       buildCommerceTypeDropdownButton(),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       buildDescriptionFormField(),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       buildLocationSelection(),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       buildTimetablesFormField(),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       FormError(errors: errors),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //       DefaultButton(
-                  //           height: getProportionateScreenHeight(50),
-                  //           text: widget.modify ? "Mettre à jour" : "Ajouter",
-                  //           press: widget.modify
-                  //               ? () => _update(context)
-                  //               : () => _create(context),
-                  //           longPress: () {}),
-                  //       SizedBox(height: getProportionateScreenHeight(20)),
-                  //     ],
-                  //   ),
-                  // ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        buildNameFormField(),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        buildConditionsFormField(),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        buildUsePercentageFormField(),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        buildMaxAvailableCodeFormField(),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        buildReductionAmountFormField(),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        DatePicker(
+                          beginDate: DateTime.now(),
+                          label: "Date de commencement",
+                          placeholder:
+                              "Sélectionnez la date où la réduction sera valide",
+                          initialValue: _beginDate,
+                          onChanged: (value) {
+                            setState(() {
+                              _beginDate = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        DatePicker(
+                          beginDate: DateTime.now(),
+                          label: "Date de fin (jour inclue dans la validité)",
+                          placeholder:
+                              "Sélectionnez la date où la réduction cessera d'être valide",
+                          initialValue: _endDate,
+                          onChanged: (value) {
+                            setState(() {
+                              _endDate = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        FormError(errors: errors),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        DefaultButton(
+                            height: getProportionateScreenHeight(50),
+                            text: widget.modify ? "Mettre à jour" : "Ajouter",
+                            press: widget.modify
+                                ? () => _update(context)
+                                : () => _create(context),
+                            longPress: () {}),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -157,217 +196,239 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
     );
   }
 
-  // Widget buildDescriptionFormField() {
-  //   return TextFormField(
-  //     keyboardType: TextInputType.multiline,
-  //     initialValue: _description,
-  //     maxLines: 15,
-  //     maxLength: 2000,
-  //     onSaved: (newValue) => _description = newValue,
-  //     onChanged: (value) {},
-  //     validator: (value) {
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //         labelText: "Description", hintText: "Entrez une description"),
-  //   );
-  // }
+  Widget buildConditionsFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.multiline,
+      initialValue: _conditions,
+      maxLines: 7,
+      maxLength: 500,
+      onSaved: (newValue) => _conditions = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kCodeConditionNullError);
+        }
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kCodeConditionNullError);
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          labelText: "Conditions",
+          hintText: "Entrez vos conditions pour bénéficier de votre réduction"),
+    );
+  }
 
-  // Widget buildTimetablesFormField() {
-  //   return Column(
-  //     children: [
-  //       TextFormField(
-  //         keyboardType: TextInputType.multiline,
-  //         initialValue: _timetables,
-  //         maxLines: 7,
-  //         maxLength: 200,
-  //         onSaved: (newValue) => _timetables = newValue,
-  //         onChanged: (value) {
-  //           if (value.isNotEmpty) {
-  //             removeError(error: kCommerceTimetablesNullError);
-  //           }
-  //         },
-  //         validator: (value) {
-  //           if (value.isEmpty) {
-  //             addError(error: kCommerceTimetablesNullError);
-  //           }
-  //           return null;
-  //         },
-  //         decoration: InputDecoration(
-  //             labelText: "Horaires", hintText: "Entrez des horaires"),
-  //       ),
-  //       SizedBox(height: getProportionateScreenHeight(3)),
-  //       Text(
-  //         "N.B.: Nous vous conseillons d'écrire les horaires sous la forme à chaque ligne : \"JOUR HH:MM - HH:MM\".",
-  //         style: TextStyle(fontWeight: FontWeight.w600),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget buildUsePercentageFormField() {
+    return CheckboxFormField(
+      title: Text("Utiliser un pourcentage"),
+      initialValue: _usePercentage,
+      onSaved: (newValue) => _usePercentage = newValue,
+      validator: (value) => null,
+    );
+  }
 
-  // Widget buildLocationSelection() {
-  //   return Column(
-  //     children: [
-  //       TextFormField(
-  //         keyboardType: TextInputType.number,
-  //         initialValue: "${_latitude == null ? 0 : _latitude}",
-  //         inputFormatters: <TextInputFormatter>[
-  //           FilteringTextInputFormatter.allow(RegExp(r'[0-9,.-]')),
-  //         ],
-  //         onSaved: (newValue) => _latitude = double.parse(newValue),
-  //         onChanged: (value) {
-  //           if (value.isNotEmpty) {
-  //             removeError(error: kCommerceLatitudeNullError);
-  //           }
-  //         },
-  //         validator: (value) {
-  //           if (value.isEmpty) {
-  //             addError(error: kCommerceLatitudeNullError);
-  //           }
-  //           return null;
-  //         },
-  //         decoration: InputDecoration(
-  //             labelText: "Latitude",
-  //             hintText: "Entrez la latitude de votre commerce"),
-  //       ),
-  //       SizedBox(height: getProportionateScreenHeight(20)),
-  //       TextFormField(
-  //         keyboardType: TextInputType.number,
-  //         initialValue: "${_longitude == null ? 0 : _longitude}",
-  //         inputFormatters: <TextInputFormatter>[
-  //           FilteringTextInputFormatter.allow(RegExp(r'[0-9,.-]')),
-  //         ],
-  //         onSaved: (newValue) => _longitude = double.parse(newValue),
-  //         onChanged: (value) {
-  //           if (value.isNotEmpty) {
-  //             removeError(error: kCommerceLongitudeNullError);
-  //           }
-  //         },
-  //         validator: (value) {
-  //           if (value.isEmpty) {
-  //             addError(error: kCommerceLongitudeNullError);
-  //           }
-  //           return null;
-  //         },
-  //         decoration: InputDecoration(
-  //             labelText: "Longitude",
-  //             hintText: "Entrez la longitude de votre commerce"),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget buildMaxAvailableCodeFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      initialValue: "$_maxAvailableCode",
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+      ],
+      onSaved: (newValue) => _maxAvailableCode = int.parse(newValue),
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kCodeMaxAvailableNullError);
+        }
+        if (int.tryParse(value) != null) {
+          removeError(error: kCodeMaxAvailableInvalidError);
+          if (int.tryParse(value) >= 0) {
+            removeError(error: kCodeMaxAvailableNegativError);
+          }
+        }
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kCodeMaxAvailableNullError);
+        }
+        if (int.tryParse(value) == null) {
+          addError(error: kCodeMaxAvailableInvalidError);
+        } else if (int.tryParse(value) < 0) {
+          addError(error: kCodeMaxAvailableNegativError);
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          labelText: "Nombre de codes disponibles",
+          hintText: "Entrez le nombre de codes disponibles"),
+    );
+  }
 
-  // Widget buildCommerceTypeDropdownButton() {
-  //   return new DropdownButtonFormField<CommerceType>(
-  //     isExpanded: true,
-  //     value: _type,
-  //     hint: _type != null ? Text(_type.name) : Text("Sélectionnez un type"),
-  //     items: _typesAvailable.map((CommerceType value) {
-  //       return new DropdownMenuItem(
-  //         value: value,
-  //         child: Text(value.name),
-  //       );
-  //     }).toList(),
-  //     onChanged: (value) {
-  //       removeError(error: kCommerceTypeNullError);
-  //     },
-  //     onSaved: (newValue) => _type = newValue,
-  //     validator: (value) {
-  //       if (value == null) {
-  //         addError(error: kCommerceTypeNullError);
-  //       }
-  //       return null;
-  //     },
-  //   );
-  // }
+  Widget buildReductionAmountFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      initialValue: "$_reductionAmount",
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+      ],
+      onSaved: (newValue) => _reductionAmount = double.parse(newValue),
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kCodeReductionAmountNullError);
+        }
+        if (double.tryParse(value) != null) {
+          removeError(error: kCodeReductionAmountInvalidError);
+          if (double.tryParse(value) >= 0) {
+            removeError(error: kCodeReductionAmountNegativError);
+          }
+        }
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kCodeReductionAmountNullError);
+        }
+        if (double.tryParse(value) == null) {
+          addError(error: kCodeReductionAmountInvalidError);
+        } else if (double.tryParse(value) < 0) {
+          addError(error: kCodeReductionAmountNegativError);
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          labelText: "Montant", hintText: "Entrez le montant de la réduction"),
+    );
+  }
 
-  // TextFormField buildNameFormField() {
-  //   return TextFormField(
-  //     keyboardType: TextInputType.text,
-  //     initialValue: _name,
-  //     onSaved: (newValue) => _name = newValue,
-  //     onChanged: (value) {
-  //       if (value.isNotEmpty) {
-  //         removeError(error: kCommerceNameNullError);
-  //       }
-  //     },
-  //     validator: (value) {
-  //       if (value.isEmpty) {
-  //         addError(error: kCommerceNameNullError);
-  //       }
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //         labelText: "Nom", hintText: "Entrez le nom de votre commerce"),
-  //   );
-  // }
+  TextFormField buildNameFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      initialValue: _name,
+      onSaved: (newValue) => _name = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kCodeNameNullError);
+        }
+        bool ok = true;
+        for (ReductionCode code in _otherCommerceCode) {
+          if (code.name == value) {
+            if (widget.modify && widget.code.id != code.id) {
+              ok = false;
+            } else if (!widget.modify) {
+              ok = false;
+            }
+            if (!ok) {
+              break;
+            }
+          }
+        }
+        if (ok) {
+          removeError(error: kCodeNameAlreadyInUseError);
+        }
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kCodeNameNullError);
+        }
+        for (ReductionCode code in _otherCommerceCode) {
+          if (code.name == value) {
+            if (widget.modify && widget.code.id != code.id) {
+              addError(error: kCodeNameAlreadyInUseError);
+            } else if (!widget.modify) {
+              addError(error: kCodeNameAlreadyInUseError);
+            }
+            break;
+          }
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          labelText: "Nom", hintText: "Entrez le nom de votre code"),
+    );
+  }
 
-  // void _update(BuildContext context) async {
-  //   if (_formKey.currentState.validate() && errors.isEmpty) {
-  //     _formKey.currentState.save();
-  //     KeyboardUtil.hideKeyboard(context);
-  //     try {
-  //         futureCommerce = Commerce(
-  //           id: widget.commerce.id,
-  //           ownerId: widget.commerce.ownerId,
-  //           name: _name,
-  //           description: _description,
-  //           location: "$_latitude,$_longitude",
-  //           timetables: _timetables,
-  //           typeId: _type.id,
-  //           commentIds: widget.commerce.commentIds,
-  //           dateAdded: widget.commerce.dateAdded,
-  //           dateModified: DateTime.now(),
-  //           imageLink: widget.commerce.imageLink,
-  //         );
-  //         await CommerceModel()
-  //             .update(widget.commerce.id, futureCommerce)
-  //             .catchError((error) {
-  //           print(error);
-  //         });
-  //       }
-  //       widget.modifyCallback(futureCommerce);
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(SnackBar(content: Text("Données mises à jour")));
-  //       Navigator.pop(context);
-  //     } catch (e) {
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //           content: Text("Erreur lors de la mise à jour des données")));
-  //   }
-  // }
+  void _update(BuildContext context) async {
+    if (_formKey.currentState.validate() && errors.isEmpty) {
+      _formKey.currentState.save();
+      KeyboardUtil.hideKeyboard(context);
+      try {
+        ReductionCode code = ReductionCode(
+          id: widget.code.id,
+          name: _name,
+          conditions: _conditions,
+          beginDate: _beginDate,
+          endDate: _endDate,
+          maxAvailableCodes: _maxAvailableCode,
+          usePercentage: _usePercentage,
+          reductionAmount: _reductionAmount,
+          notifyAllUser: widget.code.notifyAllUser,
+          commerceId: widget.commerce.id,
+        );
+        await ReductionCodeModel().update(code.id, code).catchError((error) {
+          print(error);
+        });
+        widget.modifyCallback(code);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Données mises à jour")));
+        Navigator.pop(context);
+      } catch (e) {
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Erreur lors de la mise à jour des données")));
+      }
+    }
+  }
 
-  // void _create(BuildContext context) async {
-  //   UserManager userManager = Provider.of<UserManager>(context, listen: false);
-  //   if (_formKey.currentState.validate() && errors.isEmpty) {
-  //     _formKey.currentState.save();
-  //     KeyboardUtil.hideKeyboard(context);
-  //     try {
-  //             futureCommerce = Commerce(
-  //               id: id,
-  //               ownerId: userManager.getLoggedInUser().id,
-  //               name: _name,
-  //               description: _description,
-  //               location: "$_latitude,$_longitude",
-  //               timetables: _timetables,
-  //               typeId: _type.id,
-  //               commentIds: [],
-  //               dateAdded: DateTime.now(),
-  //               imageLink: link,
-  //             );
-  //             CommerceModel()
-  //                 .createWithId(id, futureCommerce)
-  //                 .catchError((error) {
-  //               print(error);
-  //             });
-  //             widget.addCallback(futureCommerce);
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(SnackBar(content: Text("Code de réduction ajouté")));
-  //       Navigator.pop(context);
-  //     } catch (e) {
-  //       print(e);
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text("Erreur lors de la création")));
-  //     }
-  //   }
-  // }
+  void _create(BuildContext context) async {
+    if (_formKey.currentState.validate() && errors.isEmpty) {
+      _formKey.currentState.save();
+      KeyboardUtil.hideKeyboard(context);
+      try {
+        ReductionCode code = ReductionCode(
+          name: _name,
+          conditions: _conditions,
+          beginDate: _beginDate,
+          endDate: _endDate,
+          maxAvailableCodes: _maxAvailableCode,
+          usePercentage: _usePercentage,
+          reductionAmount: _reductionAmount,
+          notifyAllUser: false,
+          commerceId: widget.commerce.id,
+        );
+        ReductionCodeModel().create(code).catchError((error) {
+          print(error);
+        });
+        await ReductionCodeModel()
+            .whereLinked("commerce", isEqualTo: widget.commerce.id)
+            .whereLinked("name", isEqualTo: _name)
+            .executeCurrentLinkedQueryRequest()
+            .then((value) {
+          widget.addCallback(value[0]);
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Code de réduction ajouté")));
+        Navigator.pop(context);
+      } catch (e) {
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Erreur lors de la création")));
+      }
+    }
+  }
+
+  _infoDialog(BuildContext context) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomDialogBox(
+            title: "Information",
+            description:
+                "Seul vous et les administrateurs pouvent modifier ces informations.",
+            text: "OK",
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          );
+        });
+  }
 }

@@ -32,10 +32,12 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
       endDate: convertStringToDatetime(value['endDate']),
       notifyAllUser: value['notifyAllUser'],
       maxAvailableCodes: value['maxAvailableCodes'],
-      userIdsWhoUsedCode: List<String>.from(value['userIdsWhoUsedCode']),
+      userIdsWhoUsedCode: value['userIdsWhoUsedCode'] == null
+          ? []
+          : List<String>.from(value['userIdsWhoUsedCode']),
       conditions: value['conditions'],
       usePercentage: value['usePercentage'],
-      reductionAmount: value['reductionAmount'],
+      reductionAmount: double.parse("${value['reductionAmount']}"),
     );
   }
 
@@ -48,7 +50,8 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
       'notifyAllUser': object.notifyAllUser,
       'name': object.name,
       'maxAvailableCodes': object.maxAvailableCodes,
-      'userIdsWhoUsedCode': object.userIdsWhoUsedCode,
+      'userIdsWhoUsedCode':
+          object.userIdsWhoUsedCode == null ? [] : object.userIdsWhoUsedCode,
       'conditions': object.conditions,
       'usePercentage': object.usePercentage,
       'reductionAmount': object.reductionAmount,

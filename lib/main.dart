@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 // import 'package:carp_background_location/carp_background_location.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'routes.dart';
 import 'settings.dart';
@@ -57,6 +58,9 @@ Future<void> main() async {
   // timeago initialization
   timeago.setLocaleMessages('fr_short', timeago.FrShortMessages());
   timeago.setDefaultLocale("fr_short");
+
+  // date format initialization
+  await initializeDateFormatting('fr_FR', null);
 
   // local notification initialization
   await NotificationService.init();

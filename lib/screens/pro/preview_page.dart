@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/app_bar.dart';
-import '../../model/commerce.dart';
+import '../../model/commerce_type.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
 
 class PreviewCommerceScreen extends StatelessWidget {
   static final String routeName = "/pro/commerce/preview";
-  const PreviewCommerceScreen({this.commerce, Key key}) : super(key: key);
-  final Commerce commerce;
+
+  final String description, name, timetables, imageLink;
+  final double latitude, longitude;
+  final CommerceType type;
+  final PickedFile image;
+  const PreviewCommerceScreen(
+      {this.name,
+      this.description,
+      this.latitude,
+      this.longitude,
+      this.imageLink,
+      this.image,
+      this.type,
+      this.timetables,
+      Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

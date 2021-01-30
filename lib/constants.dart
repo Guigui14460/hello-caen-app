@@ -56,7 +56,12 @@ const String kCodeEndDateInvalidError =
     "Veuillez entrer une date de fin valide";
 const String kCodeMaxAvailableNullError =
     "Veuillez saisir le nombre maximum de codes disponible";
+const String kCodeMaxAvailableInvalidError =
+    "Le champ ne doit contenir que des chiffres";
+const String kCodeMaxAvailableNegativError = "Le nombre ne peut pas être nul";
 const String kCodeReductionAmountNullError =
     "Veuillez saisir le montant de la réduction";
+const String kCodeReductionAmountInvalidError =
+    "Le champ ne doit contenir que des chiffres";
 const String kCodeReductionAmountNegativError =
     "Veuillez saisir un montant positif";

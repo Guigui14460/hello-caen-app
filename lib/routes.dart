@@ -33,8 +33,8 @@ final Map<String, WidgetBuilder> routes = {
   //     QRCodeReductionCodeDetailScreen(),
 
   // Generated commerce from Database Model
-  GeneratedStoreScreen.routeName:(context) => GeneratedStoreScreen(),
-  //Direct redirect to the StoreScreen , J'ai un peu fuck up la hierarchie apparament
+  //GeneratedStoreScreen.routeName:(context) => GeneratedStoreScreen(),
+
   StoresScreen.routeName:(context) => StoresScreen(),
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),

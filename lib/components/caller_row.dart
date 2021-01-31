@@ -29,7 +29,7 @@ class _CallerRowState extends State<CallerRow> {
                         GestureDetector(onTap: () {Navigator.popAndPushNamed(context,GeneratedStoreScreen.routeName);} ,
                             child:Column(
                                 children: [Container(
-                                //margin:EdgeInsets.all(5.0),
+                                //margin:EdgeInsets.all(5.0),g
                                 width: 250,
                                 height: 100,
                                 decoration: BoxDecoration(

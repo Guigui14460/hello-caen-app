@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'components/location_body.dart';
-import 'components/location_store_list.dart';
+
 
 /// Screen displayed by default for all users.
 class LocationScreen extends StatelessWidget {
@@ -10,6 +10,6 @@ class LocationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LocationStoreList();
+    return SafeArea(child: Text("oof"));// LocationStoreList();
   }
 }

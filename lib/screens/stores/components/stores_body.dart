@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/screens/stores/components/store_list.dart';
 
 class StoresBody extends StatefulWidget {
   StoresBody({Key key}) : super(key: key);
@@ -8,6 +9,6 @@ class StoresBody extends StatefulWidget {
 
 class _StoresBodyState extends State<StoresBody> {
   Widget build(BuildContext context) {
-    return null;
+    return StoreListPage();
   }
 }

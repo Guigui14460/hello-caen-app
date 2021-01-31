@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hello_caen/components/caller_row.dart';
 
 import '../../../components/category_menu.dart';
-import "../../../model/database/commerce_model.dart";
+import '../../../model/database/commerce_model.dart';
 
 class StoreListPage extends StatelessWidget {
+
+
   const StoreListPage({Key key}) : super(key: key);
   static dosmth(param) {
     print(param);
@@ -15,10 +17,10 @@ class StoreListPage extends StatelessWidget {
     List<Widget> widgets = [];
     return SafeArea(
         child: Column(children:[CategoryMenu(text: [
-      "B1",
-      "B2",
-      "B3",
-      "B4"
+      "Restos",
+      "Hotel",
+      "Fashion",
+      "Activités"
     ], onPressed: [
       () => dosmth("click 1"),
       () => dosmth("click 2"),

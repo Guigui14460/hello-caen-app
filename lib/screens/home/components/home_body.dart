@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'account_profile.dart';
 import 'reduction_code_list.dart';
-import 'store_list.dart';
+import '../../stores/components/store_list.dart';
 import '../../location/location_screen.dart';
 
 import '../../../constants.dart';

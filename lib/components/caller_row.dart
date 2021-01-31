@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_caen/model/database/commerce_model.dart';
+import 'package:hello_caen/screens/generated_screens/generated_store_screen.dart';
 
 class CallerRow extends StatefulWidget {
 
@@ -25,7 +26,7 @@ class _CallerRowState extends State<CallerRow> {
                   List<Widget> widgets = [];
                   for(var data in snapshot.data){
                     widgets.add(
-                        GestureDetector(onTap: () {print(data.name);} ,
+                        GestureDetector(onTap: () {Navigator.popAndPushNamed(context,GeneratedStoreScreen.routeName);} ,
                             child:Column(
                                 children: [Container(
                                 //margin:EdgeInsets.all(5.0),

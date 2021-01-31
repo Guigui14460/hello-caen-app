@@ -28,9 +28,6 @@ class ReductionCode {
   /// Max number of available codes.
   int maxAvailableCodes;
 
-  /// Number of used codes.
-  List<String> userIdsWhoUsedCode = [];
-
   /// Access conditions.
   String conditions;
 
@@ -50,7 +47,6 @@ class ReductionCode {
     @required this.beginDate,
     @required this.endDate,
     @required this.maxAvailableCodes,
-    this.userIdsWhoUsedCode,
     @required this.conditions,
     @required this.usePercentage,
     @required this.reductionAmount,

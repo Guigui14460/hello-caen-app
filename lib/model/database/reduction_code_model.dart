@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'firebase_firestore_db.dart';
+import 'reduction_code_used_model.dart';
+import '../reduction_code_used.dart';
 import '../reduction_code.dart';
 import '../../utils.dart';
 
@@ -16,7 +18,6 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
           "endDate",
           "notifyAllUser",
           "maxAvailableCodes",
-          "userIdsWhoUsedCode",
           "conditions",
           "usePercentage",
           "reductionAmount",
@@ -32,9 +33,6 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
       endDate: convertStringToDatetime(value['endDate']),
       notifyAllUser: value['notifyAllUser'],
       maxAvailableCodes: value['maxAvailableCodes'],
-      userIdsWhoUsedCode: value['userIdsWhoUsedCode'] == null
-          ? []
-          : List<String>.from(value['userIdsWhoUsedCode']),
       conditions: value['conditions'],
       usePercentage: value['usePercentage'],
       reductionAmount: double.parse("${value['reductionAmount']}"),
@@ -50,11 +48,23 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
       'notifyAllUser': object.notifyAllUser,
       'name': object.name,
       'maxAvailableCodes': object.maxAvailableCodes,
-      'userIdsWhoUsedCode':
-          object.userIdsWhoUsedCode == null ? [] : object.userIdsWhoUsedCode,
       'conditions': object.conditions,
       'usePercentage': object.usePercentage,
       'reductionAmount': object.reductionAmount,
     };
+  }
+
+  @override
+  Future<bool> delete(String id) async {
+    ReductionCodeUsedModel model = ReductionCodeUsedModel();
+    List<ReductionCodeUsed> used =
+        await model.where("reductionCodeId", isEqualTo: id);
+    List<bool> results = await Future.wait(used.map((e) => model.delete(e.id)));
+    for (bool r in results) {
+      if (r == false) {
+        return Future.value(false);
+      }
+    }
+    return super.delete(id);
   }
 }

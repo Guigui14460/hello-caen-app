@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'read_qr_code.dart';
+import 'reduction_code_statistics_screen.dart';
 import 'update_reduction_code_screen.dart';
 import '../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../constants.dart';
@@ -64,8 +65,17 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
     DateTime now = DateTime.now();
     return SafeArea(
       child: Scaffold(
-        appBar:
-            MyAppBar(actions: [Icon(Icons.add)], actionsCallback: [_addCode]),
+        appBar: MyAppBar(actions: [
+          Icon(Icons.add),
+          Icon(Icons.analytics_outlined)
+        ], actionsCallback: [
+          _addCode,
+          () => Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) =>
+                      ProReductionCodeStatisticsScreen(codes: _codes)))
+        ]),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(

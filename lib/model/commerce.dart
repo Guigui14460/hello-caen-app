@@ -92,7 +92,7 @@ class Commerce {
   }
 
   /// Gets the mean of all ratings.
-  double _getRating() {
+  double getRating() {
     double rating = 0;
     for (int i = 0; i < this.comments.length; i++) {
       rating += this.comments[i].rating;
@@ -104,7 +104,7 @@ class Commerce {
   /// Gets the rating bar widget.
   Widget getRatingBar() {
     return RatingBarIndicator(
-      rating: this._getRating(),
+      rating: this.getRating(),
       direction: Axis.horizontal,
       itemCount: 5,
       itemPadding: EdgeInsets.symmetric(horizontal: 4.0),

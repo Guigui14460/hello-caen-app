@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../services/size_config.dart';
+import '../services/theme_manager.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function(String) onChanged;
@@ -13,6 +15,9 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color = Provider.of<ThemeManager>(context).isDarkMode()
+        ? Colors.white
+        : Colors.black;
     return Container(
       decoration: BoxDecoration(
         color: Color(0xFF777777).withOpacity(0.6),
@@ -20,12 +25,12 @@ class SearchBar extends StatelessWidget {
       ),
       child: TextField(
         onChanged: onChanged,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: color),
         decoration: InputDecoration(
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           hintText: placeholder,
-          prefixIcon: Icon(Icons.search, color: Colors.white),
+          prefixIcon: Icon(Icons.search, color: color),
           contentPadding: EdgeInsets.symmetric(
             horizontal: getProportionateScreenWidth(20),
             vertical: getProportionateScreenWidth(13),

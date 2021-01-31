@@ -6,12 +6,13 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../settings.dart';
-import '../../../utils.dart';
+import '../../generated_screens/generated_store_screen.dart';
 import '../../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 import '../../sign_up/sign_up_screen.dart';
 import '../../../constants.dart';
+import '../../../settings.dart';
+import '../../../utils.dart';
 import '../../../components/search_bar.dart';
 import '../../../components/store_card.dart';
 import '../../../model/commerce.dart';
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     //(4 <= now && now <= 18 ? "Bonjour" : "Bonsoir") +
-                        " Ah cool, \n te revoilà, enfin",
+                    " Ah cool, \n te revoilà, enfin",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -163,11 +164,11 @@ class _HomePageState extends State<HomePage> {
                           height: 150,
                           showComments: false,
                           smallTitle: "Commerce sponsorisé",
-                          onTap: () {},
-                          // onTap: () => Navigator.push(
-                          //       context,
-                          //       CupertinoPageRoute(
-                          //           builder: (context) => CommerceDetailScreen(commerce: _sponsoredStore))),
+                          onTap: () => Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => GeneratedStoreScreen(
+                                      data: _sponsoredStore))),
                         )
                       : Text(
                           "Aucun commerce sponsorisé disponible pour le moment")),
@@ -201,8 +202,6 @@ class _HomePageState extends State<HomePage> {
   Widget buildLocationStoreWidget(BuildContext context) {
     LocationService locationService = Provider.of<LocationService>(context);
     locationService.addOnChangedFunction((LocationData location) async {
-      // if (location.latitude != _locationData.latitude ||
-      //     location.longitude != _locationData.longitude) {
       List<LatLng> latlngs =
           searchBorderBox(location.latitude, location.longitude);
       await CommerceModel()
@@ -227,7 +226,6 @@ class _HomePageState extends State<HomePage> {
           });
         }
       });
-      // }
     });
     if (_locationData == null) {
       return Text("Aucune données de localisation trouvées");
@@ -245,11 +243,11 @@ class _HomePageState extends State<HomePage> {
                     commerce: _storesGetByLocation[index],
                     width: double.infinity,
                     height: 100,
-                    onTap: () {},
-                    // onTap: () => Navigator.push(
-                    //       context,
-                    //       CupertinoPageRoute(
-                    //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
+                    onTap: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => GeneratedStoreScreen(
+                                data: _storesGetByLocation[index]))),
                   ),
                 ),
               )),
@@ -280,11 +278,11 @@ class _HomePageState extends State<HomePage> {
                     commerce: favoriteStores[index],
                     width: double.infinity,
                     height: 100,
-                    onTap: () {},
-                    // onTap: () => Navigator.push(
-                    //       context,
-                    //       CupertinoPageRoute(
-                    //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
+                    onTap: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => GeneratedStoreScreen(
+                                data: favoriteStores[index]))),
                   ),
                 ),
               )),

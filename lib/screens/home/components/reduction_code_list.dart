@@ -36,7 +36,11 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
   @override
   void initState() {
     CommerceTypeModel().getAll().then((value) {
-      _types = value;
+      if (this.mounted) {
+        setState(() {
+          _types = value;
+        });
+      }
     });
     super.initState();
   }

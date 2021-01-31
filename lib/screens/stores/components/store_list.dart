@@ -1,68 +1,165 @@
+import 'package:diacritic/diacritic.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_caen/components/caller_row.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../generated_screens/generated_store_screen.dart';
+import '../../../constants.dart';
 import '../../../components/category_menu.dart';
+import '../../../components/store_card.dart';
+import '../../../model/commerce.dart';
+import '../../../model/commerce_type.dart';
 import '../../../model/database/commerce_model.dart';
+import '../../../model/database/commerce_type_model.dart';
+import '../../../services/size_config.dart';
+import '../../../services/theme_manager.dart';
 
-class StoreListPage extends StatelessWidget {
-
-
+class StoreListPage extends StatefulWidget {
   const StoreListPage({Key key}) : super(key: key);
-  static dosmth(param) {
-    print(param);
+
+  @override
+  _StoreListPageState createState() => _StoreListPageState();
+}
+
+class _StoreListPageState extends State<StoreListPage> {
+  List<CommerceType> _types = [];
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
+  String _currentSearch = "";
+  List<Commerce> _stores = [];
+  List<Commerce> _currentDisplayedStores = [];
+  List<Commerce> _searchResults = [];
+  CommerceType _currentType;
+
+  @override
+  void initState() {
+    CommerceTypeModel().getAll().then((value) {
+      if (this.mounted) {
+        setState(() {
+          _types = value;
+          _currentType = null;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  void _search(String value) {
+    if (this.mounted) {
+      setState(() {
+        _currentSearch = value;
+        _searchResults = _currentDisplayedStores;
+        if (value != "") {
+          setState(() {
+            _searchResults = _currentDisplayedStores
+                .where((element) => removeDiacritics(element.name.toLowerCase())
+                    .contains(removeDiacritics(value.toLowerCase())))
+                .toList();
+          });
+        }
+      });
+    }
+  }
+
+  void _filterByType(CommerceType type) {
+    if (this.mounted) {
+      setState(() {
+        _currentType = type;
+        if (type != null) {
+          _currentDisplayedStores =
+              _stores.where((element) => element.typeId == type.id).toList();
+        } else {
+          _currentDisplayedStores = _stores;
+        }
+      });
+    }
+    this._search(this._currentSearch);
+  }
+
+  void _onRefresh() async {
+    await CommerceModel().getAll().then((value) {
+      if (this.mounted) {
+        setState(() {
+          _stores = value;
+        });
+      }
+    });
+    this._filterByType(_currentType);
+    this._search(this._currentSearch);
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    _refreshController.loadComplete();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = [];
-    return SafeArea(
-        child: Column(children:[CategoryMenu(text: [
-      "Restos",
-      "Hotel",
-      "Fashion",
-      "Activités"
-    ], onPressed: [
-      () => dosmth("click 1"),
-      () => dosmth("click 2"),
-      () => dosmth("3"),
-      () => dosmth("3")
-    ]),
-          CallerRow(),
-          CallerRow()]
-
-      )
+    Provider.of<ThemeManager>(context);
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      enablePullDown: true,
+      header: MaterialClassicHeader(
+        height: 20,
+        color: primaryColor,
+      ),
+      footer: ClassicFooter(),
+      child: Padding(
+        padding:
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child: Column(
+          children: [
+            SizedBox(height: getProportionateScreenHeight(10)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Commerces",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: getProportionateScreenWidth(30)),
+                ),
+              ],
+            ),
+            SizedBox(height: getProportionateScreenHeight(20)),
+            CategoryMenu(
+              text: ["Tout"] + _types.map((e) => e.name).toList(),
+              onPressed: [() => _filterByType(null)] +
+                  _types.map((e) => (() => _filterByType(e))).toList(),
+            ),
+            SizedBox(height: getProportionateScreenHeight(20)),
+            buildCommerceView(),
+          ],
+        ),
+      ),
     );
+  }
 
-
-    return SafeArea(
-        child: FutureBuilder(
-            future: CommerceModel().getAll(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  print(
-                      "--------------------------------------------------------------");
-                  print(snapshot.data);
-                  print(
-                      "--------------------------------------------------------------");
-                  for (var data in snapshot.data) {
-                    widgets.add(Text(data.name));
-                  }
-                  return ListView.builder(
-                      itemCount: widgets.length,
-                      itemBuilder: (context, index) {
-                        return widgets[index];
-                      });
-                }
-
-                if (snapshot.hasError) {
-                  return Text("Snapshot Has error");
-                } else {
-                  return Text("No Commerce Found");
-                }
-              } else {
-                return CircularProgressIndicator();
-              }
-            }));
+  Widget buildCommerceView() {
+    return SingleChildScrollView(
+      child: Column(
+        children: List.generate(
+          _searchResults.length,
+          (index) {
+            return StoreCard(
+              commerce: _searchResults[index],
+              width: double.infinity,
+              height: 105,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            GeneratedStoreScreen(data: _searchResults[index])));
+              },
+            );
+          },
+        ),
+      ),
+    );
   }
 }

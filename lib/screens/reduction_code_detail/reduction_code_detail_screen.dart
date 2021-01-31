@@ -4,12 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'reduction_code_detail_qr_code_screen.dart';
+import '../generated_screens/generated_store_screen.dart';
 import '../sign_in/sign_in_screen.dart';
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../components/default_button.dart';
+import '../../model/commerce.dart';
 import '../../model/reduction_code.dart';
 import '../../model/reduction_code_used.dart';
+import '../../model/database/commerce_model.dart';
 import '../../model/database/reduction_code_used_model.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
@@ -29,6 +32,7 @@ class ReductionCodeDetailScreen extends StatefulWidget {
 
 class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
   List<ReductionCodeUsed> _used = [];
+  Commerce _commerce;
 
   @override
   void initState() {
@@ -37,6 +41,11 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
         .then((value) {
       setState(() {
         _used = value;
+      });
+    });
+    CommerceModel().getById(widget.code.commerceId).then((value) {
+      setState(() {
+        _commerce = value;
       });
     });
     super.initState();
@@ -143,12 +152,11 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                         title: "Voir le commerce",
                         iconData: Icons.store_rounded,
                         isDarkMode: isDarkMode,
-                        onTap: () {}),
-                    // Navigator.push(
-                    //         context,
-                    //         CupertinoPageRoute(
-                    //             builder: (context) =>
-                    //                 CommerceDetailScreen()))),
+                        onTap: () => Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    GeneratedStoreScreen(data: _commerce)))),
                     SizedBox(height: getProportionateScreenHeight(20)),
                     Text(
                       (codeAvailableLeft == 0

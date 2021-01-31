@@ -45,8 +45,8 @@ class StoreCard extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Color(0xFF343434).withOpacity(0.4),
-                          Color(0xFF343434).withOpacity(0.15),
+                          Color(0xFF343434).withOpacity(0.7),
+                          Color(0xFF343434).withOpacity(0.55),
                         ]),
                   ),
                   child: Padding(

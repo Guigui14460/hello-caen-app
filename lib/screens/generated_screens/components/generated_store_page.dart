@@ -87,8 +87,10 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                     Container(
                       width: getProportionateScreenWidth(150),
                       height: getProportionateScreenHeight(200),
-                      color: Colors.amber,
-                      child: Text(widget.data.timetables),
+                      color: Colors.redAccent,
+                      child: Container(
+                          margin: EdgeInsets.only(top: 65,left:55),
+                          child:Text(widget.data.timetables,style: TextStyle(fontSize:20,fontWeight: FontWeight.bold ),)),
                     )
                   ],
                 ),

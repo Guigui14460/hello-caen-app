@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:flutter_map_marker_popup/src/marker_popup.dart';
-import 'package:flutter_map_marker_popup/src/popup_marker_layer_options.dart';
+import 'package:hello_caen/flutter_map_marker_popup/src/popup_marker_layer_options.dart';
+
+import 'marker_popup.dart';
+
 
 class PopupMarkerLayer extends StatelessWidget {
   /// For normal layer behaviour

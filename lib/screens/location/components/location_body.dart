@@ -40,7 +40,7 @@ class LocationBody extends StatelessWidget {
                         height: 40.0,
                         point: new LatLng(49.1705, -0.3650),
                         builder: (ctx) => new Container(
-                          child: new FlutterLogo(),
+                          child: Icon(Icons.place),
                         ),
                       ),
                     ],

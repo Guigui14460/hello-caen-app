@@ -33,6 +33,22 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
             appBar: MyAppBar(),
             body: Column(
               children: [
+                Container(
+                  width: getProportionateScreenWidth(1000),
+                  height: getProportionateScreenHeight(130),
+                  margin: EdgeInsets.only(top:10,left: 20),
+                  child: Column(
+                      children : [
+                        Container(child:Row(
+                        //mainAxisAlignment: MainAxisAlignment.center,
+                        children:[Text(widget.data.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40))])),
+                        Container(margin: EdgeInsets.only(top:10,left: 20),
+                            child:Row(
+
+                          //mainAxisAlignment: MainAxisAlignment.center,
+                            children:[Text("4 étoiles ",style: TextStyle(fontWeight: FontWeight.bold))])),]
+                  ),
+                ),
                 Container(width: getProportionateScreenWidth(330),height: getProportionateScreenHeight(200),decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
@@ -40,14 +56,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(15))),),
-                Container(
-                  width: getProportionateScreenWidth(1000),
-                  height: getProportionateScreenHeight(50),
-                  margin: EdgeInsets.only(top:10),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[Text(widget.data.name)]),
-                ),
+
                 Container(
                     width: getProportionateScreenWidth(1000),
                     height: getProportionateScreenHeight(200),

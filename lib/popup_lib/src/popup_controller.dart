@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_map/plugin_api.dart';
-import 'package:flutter_map_marker_popup/src/popup_event.dart';
+import 'package:hello_caen/popup_lib/src/popup_event.dart';
 
 class PopupController {
   StreamController<PopupEvent> streamController;

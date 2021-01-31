@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:flutter_map_marker_popup/src/popup_marker_layer.dart';
-import 'package:flutter_map_marker_popup/src/popup_marker_layer_options.dart';
+
+import 'package:hello_caen/popup_lib/src/popup_marker_layer.dart';
+import 'package:hello_caen/popup_lib/src/popup_marker_layer_options.dart';
 
 class PopupMarkerPlugin extends MapPlugin {
   @override

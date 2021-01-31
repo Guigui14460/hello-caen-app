@@ -122,8 +122,8 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    (4 <= now && now <= 18 ? "Bonjour" : "Bonsoir") +
-                        " cher\nHello Caennais",
+                    //(4 <= now && now <= 18 ? "Bonjour" : "Bonsoir") +
+                        " Ah cool, \n te revoilà, enfin",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,

@@ -264,25 +264,35 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
                 onTap: () => Navigator.push(context,
                     CupertinoPageRoute(builder: (context) => SignInScreen())),
                 child: Text(
                   "Connectez-vous",
-                  style: TextStyle(color: primaryColor),
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: getProportionateScreenWidth(20)),
                 )),
-            Text(" ou "),
+            Text(
+              " ou ",
+              style: TextStyle(fontSize: getProportionateScreenWidth(20)),
+            ),
             GestureDetector(
                 onTap: () => Navigator.push(context,
                     CupertinoPageRoute(builder: (context) => SignUpScreen())),
                 child: Text(
                   "incrivez-vous",
-                  style: TextStyle(color: primaryColor),
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: getProportionateScreenWidth(20)),
                 )),
           ],
         ),
-        Text("pour accéder à des propositions de contenus personnalisées"),
+        Text("pour accéder à des propositions de contenus personnalisées",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: getProportionateScreenWidth(20))),
       ],
     );
   }

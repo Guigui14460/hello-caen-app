@@ -68,12 +68,11 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
   void initState() {
     super.initState();
     if (widget.modify) {
-      List<String> locationSplited = widget.commerce.location.split(",");
       setState(() {
         _name = widget.commerce.name;
         try {
-          _latitude = double.parse(locationSplited[0]);
-          _longitude = double.parse(locationSplited[1]);
+          _latitude = widget.commerce.latitude;
+          _longitude = widget.commerce.longitude;
         } catch (e) {
           _latitude = null;
           _longitude = null;
@@ -406,7 +405,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                   ownerId: widget.commerce.ownerId,
                   name: _name,
                   description: _description,
-                  location: "$_latitude,$_longitude",
+                  latitude: _latitude,
+                  longitude: _longitude,
                   timetables: _timetables,
                   typeId: _type.id,
                   commentIds: widget.commerce.commentIds,
@@ -428,7 +428,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
             ownerId: widget.commerce.ownerId,
             name: _name,
             description: _description,
-            location: "$_latitude,$_longitude",
+            latitude: _latitude,
+            longitude: _longitude,
             timetables: _timetables,
             typeId: _type.id,
             commentIds: widget.commerce.commentIds,
@@ -478,7 +479,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                 ownerId: userManager.getLoggedInUser().id,
                 name: _name,
                 description: _description,
-                location: "$_latitude,$_longitude",
+                latitude: _latitude,
+                longitude: _longitude,
                 timetables: _timetables,
                 typeId: _type.id,
                 commentIds: [],

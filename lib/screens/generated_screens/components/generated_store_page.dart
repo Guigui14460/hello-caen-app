@@ -88,6 +88,9 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
 
                     children: [
                       Text("Commentaires",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),
+
+                      if (widget.data.comments.length == 0 ) Text("Aucun commentaire pour le moment, soyez le premier  !")
+                      else
                       ListView.builder(
                          scrollDirection: Axis.horizontal,
                          itemCount: widget.data.comments.length,
@@ -99,8 +102,6 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                               child:Text(widget.data.comments[index].text));
                           })
                     ],
-                    
-                    
                   ),
                 )
               ],

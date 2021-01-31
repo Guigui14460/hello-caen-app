@@ -10,3 +10,5 @@ final String iosAppId = "1:426795396848:ios:ed952eba7ce202e8ef1c35";
 final String androidAppId = "1:426795396848:android:33fe6a9ef33b0befef1c35";
 final String iosApiKey = "AIzaSyBpwFrvuElPFYnXtac4Q-ZqDfma8PrZFGQ";
 final String androidApiKey = "AIzaSyBjDbtTJ_GYm0mnv5xNrmhUBpgXiKGSEvs";
+
+final double intervalLocationChanges = 30000; // 30 sec

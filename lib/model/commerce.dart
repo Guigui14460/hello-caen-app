@@ -20,8 +20,8 @@ class Commerce {
   /// Description of the commerce.
   String description;
 
-  /// Location
-  String location;
+  double latitude;
+  double longitude;
 
   /// Owner of the commerce.
   String ownerId;
@@ -53,7 +53,8 @@ class Commerce {
       @required this.ownerId,
       @required this.name,
       @required this.description,
-      @required this.location,
+      @required this.latitude,
+      @required this.longitude,
       @required this.timetables,
       @required this.typeId,
       this.commentIds,

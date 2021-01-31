@@ -18,6 +18,7 @@ class LocationService extends ChangeNotifier {
   /// Last known location data.
   LocationData _userLocation;
   static bool _enabled;
+  List<Function(LocationData)> _onChangedFunctions = [];
 
   static Future<void> init() async {
     instance = new LocationService();
@@ -30,10 +31,10 @@ class LocationService extends ChangeNotifier {
         StorageManager.saveData(storageKey, true).then((value) => null);
         _enabled = true;
       }
+      if (_enabled) {
+        await instance.enableService();
+      }
     });
-    if (_enabled) {
-      _location = new Location();
-    }
   }
 
   bool isEnabled() {
@@ -42,12 +43,33 @@ class LocationService extends ChangeNotifier {
 
   Future<void> enableService() async {
     _location = new Location();
-    _enabled = true;
-    await StorageManager.saveData(storageKey, true);
-    notifyListeners();
+    await _location.requestPermission().then((value) async {
+      switch (value) {
+        case PermissionStatus.granted:
+          _enabled = true;
+          await StorageManager.saveData(storageKey, true);
+          if (!await _location.isBackgroundModeEnabled()) {
+            _location.enableBackgroundMode(enable: true);
+            _location.changeSettings(interval: 20000);
+            _location.onLocationChanged.listen((event) {
+              for (Function fn in this._onChangedFunctions) {
+                fn(event);
+              }
+            });
+          }
+          notifyListeners();
+          break;
+        default:
+          throw new Exception(
+              "Veuillez autoriser la géolocalisation pour continuer");
+          break;
+      }
+    });
+    await this.refresh();
   }
 
   Future<void> disableService() async {
+    _location.enableBackgroundMode(enable: false);
     _location = null;
     _userLocation = null;
     _enabled = false;
@@ -57,7 +79,7 @@ class LocationService extends ChangeNotifier {
 
   /// Sets the new location.
   /// [value] parameters must be a [LocationData] object.
-  void _setLocation(value) {
+  void _setLocation(LocationData value) {
     _userLocation = value;
   }
 
@@ -78,6 +100,10 @@ class LocationService extends ChangeNotifier {
       return currentLocation;
     }
     return null;
+  }
+
+  LocationData getLocationDataWithoutFuture() {
+    return this._userLocation;
   }
 
   /// Gets the known location data.
@@ -110,5 +136,13 @@ class LocationService extends ChangeNotifier {
       return _location;
     }
     return null;
+  }
+
+  void addOnChangedFunction(Function(LocationData) fn) {
+    this._onChangedFunctions.add(fn);
+  }
+
+  void removeOnChangedFunction(Function(LocationData) fn) {
+    this._onChangedFunctions.remove(fn);
   }
 }

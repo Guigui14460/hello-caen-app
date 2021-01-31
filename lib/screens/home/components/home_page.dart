@@ -1,6 +1,8 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_caen/services/location_service.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -33,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   String _currentSearch = "";
   List<Commerce> _favoriteStores = [];
   List<Commerce> _searchResults = [];
+  LocationData _locationData;
+  List<Commerce> _storesGetByLocation = [];
 
   @override
   void initState() {
@@ -43,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     if (this.mounted) {
       setState(() {
         _currentSearch = value;
-        _searchResults = List<Commerce>.from(_favoriteStores);
+        _searchResults = _favoriteStores;
         if (value != "") {
           _searchResults = _searchResults
               .where((element) => removeDiacritics(element.name.toLowerCase())
@@ -98,6 +102,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Provider.of<ThemeManager>(context);
     UserManager userManager = Provider.of<UserManager>(context);
+    LocationService locationService = LocationService.getInstance();
     int now = DateTime.now().hour;
     return SmartRefresher(
       controller: _refreshController,
@@ -111,16 +116,22 @@ class _HomePageState extends State<HomePage> {
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(15)),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                (4 <= now && now <= 18 ? "Bonjour" : "Bonsoir") +
-                    " cher\nHello Caennais",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: getProportionateScreenWidth(30),
-                  color: ternaryColor,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    (4 <= now && now <= 18 ? "Bonjour" : "Bonsoir") +
+                        " cher\nHello Caennais",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: getProportionateScreenWidth(30),
+                      color: ternaryColor,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: getProportionateScreenHeight(30)),
               Column(
@@ -157,10 +168,62 @@ class _HomePageState extends State<HomePage> {
               (userManager.isLoggedIn()
                   ? buildFavoriteStoresWidget(_searchResults)
                   : buildSignInSignUpWidget(context)),
+              SizedBox(height: getProportionateScreenHeight(20)),
+              Text(
+                "Commerces près de vous",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateScreenHeight(20),
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(5)),
+              (locationService.isEnabled()
+                  ? buildLocationStoreWidget(context)
+                  : Text(
+                      "Par accéder à ce contenu, activez la localisation dans les paramètres")),
+              SizedBox(height: getProportionateScreenHeight(20)),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildLocationStoreWidget(BuildContext context) {
+    LocationService locationService = Provider.of<LocationService>(context);
+    locationService.addOnChangedFunction((LocationData location) {
+      print("${location.latitude},${location.longitude}");
+      if (this.mounted) {
+        setState(() {
+          _locationData = location;
+        });
+      }
+    });
+    if (_locationData == null) {
+      return Text("Aucune données de localisation trouvées");
+    }
+    print("${_locationData.latitude},${_locationData.longitude}");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: getProportionateScreenHeight(10)),
+        Column(
+          children: [],
+          // List.generate(
+          //   favoriteStores.length,
+          //   (index) => StoreCard(
+          //     commerce: favoriteStores[index],
+          //     width: double.infinity,
+          //     height: 100,
+          //     onTap: () {},
+          //     // onTap: () => Navigator.push(
+          //     //       context,
+          //     //       CupertinoPageRoute(
+          //     //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
+          //   ),
+          // ),
+        ),
+      ],
     );
   }
 
@@ -193,37 +256,36 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        SizedBox(height: getProportionateScreenHeight(20)),
       ],
     );
   }
-}
 
-Widget buildSignInSignUpWidget(BuildContext context) {
-  return Column(
-    children: [
-      Row(
-        children: [
-          GestureDetector(
-              onTap: () => Navigator.push(context,
-                  CupertinoPageRoute(builder: (context) => SignInScreen())),
-              child: Text(
-                "Connectez-vous",
-                style: TextStyle(color: primaryColor),
-              )),
-          Text(" ou "),
-          GestureDetector(
-              onTap: () => Navigator.push(context,
-                  CupertinoPageRoute(builder: (context) => SignUpScreen())),
-              child: Text(
-                "incrivez-vous",
-                style: TextStyle(color: primaryColor),
-              )),
-        ],
-      ),
-      Text("pour accéder à des propositions de contenus personnalisées"),
-    ],
-  );
+  Widget buildSignInSignUpWidget(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            GestureDetector(
+                onTap: () => Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => SignInScreen())),
+                child: Text(
+                  "Connectez-vous",
+                  style: TextStyle(color: primaryColor),
+                )),
+            Text(" ou "),
+            GestureDetector(
+                onTap: () => Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => SignUpScreen())),
+                child: Text(
+                  "incrivez-vous",
+                  style: TextStyle(color: primaryColor),
+                )),
+          ],
+        ),
+        Text("pour accéder à des propositions de contenus personnalisées"),
+      ],
+    );
+  }
 }
 
 class SponsoredReductionCodeBanner extends StatelessWidget {

@@ -32,7 +32,7 @@ class QRCodeReductionCodeDetailScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(height: getProportionateScreenHeight(28)),
+              SizedBox(height: getProportionateScreenHeight(30)),
               Text(
                 code.name,
                 textAlign: TextAlign.center,
@@ -40,7 +40,7 @@ class QRCodeReductionCodeDetailScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: getProportionateScreenWidth(40)),
               ),
-              SizedBox(height: getProportionateScreenHeight(50)),
+              SizedBox(height: getProportionateScreenHeight(30)),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: code.getQRCodeWidget(user.id),

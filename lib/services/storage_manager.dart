@@ -17,7 +17,7 @@ class StorageManager {
     } else if (value is bool) {
       await prefs.setBool(key, value);
     } else {
-      print("Invalid Type");
+      await prefs.setString(key, value.toString());
     }
   }
 

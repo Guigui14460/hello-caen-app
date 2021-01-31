@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'account_profile.dart';
+import 'home_page.dart';
 import 'reduction_code_list.dart';
 import '../../stores/components/store_list.dart';
 import '../../location/location_screen.dart';
-
 import '../../../constants.dart';
 import '../../../components/app_bar.dart';
 import '../../../services/theme_manager.dart';
@@ -27,7 +27,7 @@ class _HomeBodyState extends State<HomeBody> {
   void initState() {
     super.initState();
     _children = [
-      Container(color: Colors.amber),
+      HomePage(),
       StoreListPage(),
       ReductionCodeListPage(),
       LocationScreen(),

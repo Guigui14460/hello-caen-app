@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/app_bar.dart';
+import '../../../model/comment.dart';
 import '../../../model/commerce.dart';
+import '../../../model/database/comment_model.dart';
 import '../../../services/size_config.dart';
 
 class GeneratedStorePage extends StatefulWidget {
@@ -15,6 +17,12 @@ class GeneratedStorePage extends StatefulWidget {
 class _GeneratedStorePageState extends State<GeneratedStorePage> {
   Widget build(BuildContext context) {
     print(widget.data);
+    List<Comment> comments = [];
+    CommentModel().getMultipleByIds(widget.data.commentIds).then((value) {
+      setState(() {
+        comments = value;
+      });
+    });
     return SafeArea(
       child: Scaffold(
         appBar: MyAppBar(),
@@ -97,18 +105,18 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
-                    if (widget.data.comments.length == 0)
+                    if (widget.data.commentIds.length == 0)
                       Text(
                           "Aucun commentaire pour le moment, soyez le premier  !")
                     else
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.data.comments.length,
+                        itemCount: widget.data.commentIds.length,
                         itemBuilder: (context, index) {
                           return Container(
                             width: getProportionateScreenWidth(1000),
                             height: getProportionateScreenHeight(100),
-                            child: Text(widget.data.comments[index].text),
+                            child: Text(comments[index].text),
                           );
                         },
                       )

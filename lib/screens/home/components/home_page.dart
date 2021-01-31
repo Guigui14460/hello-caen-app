@@ -84,7 +84,6 @@ class _HomePageState extends State<HomePage> {
           _sponsoredStore = value[0];
         });
       }
-      await value[0].init();
     });
     if (userManager.isLoggedIn()) {
       await CommerceModel()
@@ -94,9 +93,6 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _favoriteStores = value;
           });
-        }
-        for (Commerce store in value) {
-          await store.init();
         }
       });
     }

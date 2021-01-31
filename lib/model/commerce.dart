@@ -5,7 +5,6 @@ import 'comment.dart';
 import 'commerce_type.dart';
 import 'user_account.dart';
 import 'database/commerce_type_model.dart';
-import 'database/comment_model.dart';
 import 'database/user_model.dart';
 import '../utils.dart';
 
@@ -41,7 +40,6 @@ class Commerce {
   CommerceType type;
 
   /// All comments related to this commerce.
-  List<Comment> comments = [];
   List<String> commentIds = [];
 
   /// Link for the image representing the commerce.
@@ -66,9 +64,6 @@ class Commerce {
   /// the owner user.
   Future<void> init() async {
     await Future.wait<void>([
-      CommentModel()
-          .getMultipleByIds(this.commentIds)
-          .then((value) => this.comments = value),
       UserModel().getById(this.ownerId).then((value) => this.owner = value),
       CommerceTypeModel()
           .getById(this.typeId)
@@ -78,34 +73,34 @@ class Commerce {
 
   void addComment(Comment comment) {
     this.commentIds.add(comment.id);
-    this.comments.add(comment);
   }
 
   void updateComment(Comment comment) {
     int index = this.commentIds.indexWhere((element) => element == comment.id);
     this.commentIds[index] = comment.id;
-    this.comments[index] = comment;
   }
 
   void removeComment(Comment comment) {
     this.commentIds.remove(comment.id);
-    this.comments.remove(comment);
   }
 
   /// Gets the mean of all ratings.
-  double getRating() {
-    double rating = 0;
-    for (int i = 0; i < this.comments.length; i++) {
-      rating += this.comments[i].rating;
+  double getRating(List<Comment> comments) {
+    if (comments.length == 0) {
+      return double.nan;
     }
-    rating /= this.comments.length;
+    double rating = 0;
+    for (int i = 0; i < comments.length; i++) {
+      rating += comments[i].rating;
+    }
+    rating /= comments.length;
     return rating;
   }
 
   /// Gets the rating bar widget.
-  Widget getRatingBar() {
+  Widget getRatingBar(List<Comment> comments) {
     return RatingBarIndicator(
-      rating: this.getRating(),
+      rating: this.getRating(comments),
       direction: Axis.horizontal,
       itemCount: 5,
       itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -133,11 +128,11 @@ class Commerce {
 
   /// Gets all comments related to commerce in a
   /// widget.
-  Widget getCommentsWidget(context) {
+  Widget getCommentsWidget(BuildContext context, List<Comment> comments) {
     return ListView.builder(
-      itemCount: this.comments.length,
+      itemCount: comments.length,
       itemBuilder: (context, index) {
-        return this.comments[index].build(context);
+        return comments[index].build(context);
       },
     ).build(context);
   }

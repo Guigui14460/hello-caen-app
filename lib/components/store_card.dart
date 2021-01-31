@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../model/comment.dart';
 import '../model/commerce.dart';
+import '../model/database/comment_model.dart';
 import '../services/size_config.dart';
 
 class StoreCard extends StatelessWidget {
@@ -21,6 +23,10 @@ class StoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Comment> comments = [];
+    CommentModel().getMultipleByIds(commerce.commentIds).then((value) {
+      comments = value;
+    });
     return Padding(
       padding: EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
       child: GestureDetector(
@@ -78,9 +84,9 @@ class StoreCard extends StatelessWidget {
                             Icon(Icons.star,
                                 color: Colors.yellow[600], size: 19),
                             Text(
-                              (this.commerce.getRating().isNaN
+                              (this.commerce.getRating(comments).isNaN
                                   ? "Aucune note"
-                                  : "${this.commerce.getRating()}/5"),
+                                  : "${this.commerce.getRating(comments)}/5"),
                               style: TextStyle(color: Colors.white),
                             ),
                             Spacer(),

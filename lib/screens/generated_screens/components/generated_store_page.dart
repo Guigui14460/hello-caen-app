@@ -31,7 +31,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
     return SafeArea(
         child:Scaffold(
             appBar: MyAppBar(),
-            body: Column(
+            body: SingleChildScrollView(child:Column(
               children: [
                 Container(
                   width: getProportionateScreenWidth(1000),
@@ -79,11 +79,34 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
 
                     ],)
                   ),
+                Container(
+                  width: getProportionateScreenWidth(1000),
+                  height: getProportionateScreenHeight(130),
+                  margin: EdgeInsets.only(top:10),
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
 
-
+                    children: [
+                      Text("Commentaires",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),
+                      ListView.builder(
+                         scrollDirection: Axis.horizontal,
+                         itemCount: widget.data.comments.length,
+                        itemBuilder:(context, index)
+                        {
+                          return Container(
+                              width: getProportionateScreenWidth(1000),
+                              height: getProportionateScreenHeight(100),
+                              child:Text(widget.data.comments[index].text));
+                          })
+                    ],
+                    
+                    
+                  ),
+                )
               ],
             )
         )
-      );
+      )
+    );
   }
 }

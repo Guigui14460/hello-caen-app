@@ -22,7 +22,6 @@ class _CategoryMenuState extends State<CategoryMenu> {
           itemCount: widget.text.length,
           itemBuilder: (context, index) {
             return Container(
-
                 margin: const EdgeInsets.only(left: 5, right: 5),
                 child: OutlineButton(
                     onPressed: widget.onPressed[index],
@@ -34,6 +33,5 @@ class _CategoryMenuState extends State<CategoryMenu> {
                         child: Center(child: Text(widget.text[index])))));
           }),
     );
-
   }
 }

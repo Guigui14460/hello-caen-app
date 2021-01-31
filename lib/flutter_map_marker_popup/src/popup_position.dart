@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:hello_caen/popup_lib/src/popup_container.dart';
-import 'package:hello_caen/popup_lib/src/popup_snap.dart';
+import 'package:hello_caen/flutter_map_marker_popup/src/popup_container.dart';
+import 'package:hello_caen/flutter_map_marker_popup/src/popup_snap.dart';
 
 class PopupPosition {
   static PopupContainer container(

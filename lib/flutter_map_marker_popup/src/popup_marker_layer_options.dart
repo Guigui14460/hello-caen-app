@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:hello_caen/popup_lib/src/popup_builder.dart';
-import 'package:hello_caen/popup_lib/src/popup_controller.dart';
-import 'package:hello_caen/popup_lib/src/popup_snap.dart';
+import 'package:hello_caen/flutter_map_marker_popup/src/popup_builder.dart';
+import 'package:hello_caen/flutter_map_marker_popup/src/popup_controller.dart';
+import 'package:hello_caen/flutter_map_marker_popup/src/popup_snap.dart';
+
 
 class PopupMarkerLayerOptions extends LayerOptions {
   final List<Marker> markers;

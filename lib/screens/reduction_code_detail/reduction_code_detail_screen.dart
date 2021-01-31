@@ -12,6 +12,7 @@ import '../../model/reduction_code_used.dart';
 import '../../model/database/reduction_code_used_model.dart';
 import '../../screens/sign_in/sign_in_screen.dart';
 import '../../services/size_config.dart';
+import '../../services/theme_manager.dart';
 import '../../services/user_manager.dart';
 
 class ReductionCodeDetailScreen extends StatefulWidget {
@@ -44,6 +45,7 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     UserManager userManager = Provider.of<UserManager>(context);
+    bool isDarkMode = Provider.of<ThemeManager>(context).isDarkMode();
     int codeAvailableLeft = widget.code.maxAvailableCodes - _used.length;
     return SafeArea(
         child: Scaffold(
@@ -60,7 +62,7 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
             width: double.infinity,
             child: Column(
               children: [
-                SizedBox(height: getProportionateScreenHeight(28)),
+                SizedBox(height: getProportionateScreenHeight(30)),
                 Text(
                   widget.code.name,
                   textAlign: TextAlign.center,
@@ -68,7 +70,7 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: getProportionateScreenWidth(40)),
                 ),
-                SizedBox(height: getProportionateScreenHeight(40)),
+                SizedBox(height: getProportionateScreenHeight(30)),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -107,7 +109,7 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: getProportionateScreenHeight(40)),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     Row(
                       children: [
                         Text(
@@ -124,7 +126,7 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: getProportionateScreenHeight(40)),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     Text(
                       "Conditions :",
                       style: TextStyle(
@@ -136,7 +138,18 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                       style:
                           TextStyle(fontSize: getProportionateScreenWidth(14)),
                     ),
-                    SizedBox(height: getProportionateScreenHeight(130)),
+                    SizedBox(height: getProportionateScreenHeight(20)),
+                    _getCommerceButton(
+                        title: "Voir le commerce",
+                        iconData: Icons.store_rounded,
+                        isDarkMode: isDarkMode,
+                        onTap: () {}),
+                    // Navigator.push(
+                    //         context,
+                    //         CupertinoPageRoute(
+                    //             builder: (context) =>
+                    //                 CommerceDetailScreen()))),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     Text(
                       (codeAvailableLeft == 0
                           ? "Plus de code disponible"
@@ -200,5 +213,84 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
             },
           );
         });
+  }
+
+  Widget _getCommerceButton(
+      {String title,
+      IconData iconData,
+      VoidCallback onTap,
+      Color lightModeBackgroundcolor = const Color(0xffe3e3e3),
+      Color darkModeBackgroundcolor = const Color(0xff515151),
+      Color lightModeForegroundcolor = Colors.black,
+      Color darkModeForegroundcolor = Colors.white,
+      bool isDarkMode = false,
+      bool showRightArrow = true}) {
+    return InkWell(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          color:
+              isDarkMode ? darkModeBackgroundcolor : lightModeBackgroundcolor,
+        ),
+        width: double.infinity,
+        height: getProportionateScreenHeight(50),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: (showRightArrow
+              ? Row(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          iconData,
+                          color: isDarkMode
+                              ? darkModeForegroundcolor
+                              : lightModeForegroundcolor,
+                        ),
+                        SizedBox(width: getProportionateScreenWidth(10)),
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: getProportionateScreenHeight(17),
+                            color: isDarkMode
+                                ? darkModeForegroundcolor
+                                : lightModeForegroundcolor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      color: isDarkMode
+                          ? darkModeForegroundcolor
+                          : lightModeForegroundcolor,
+                    ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Icon(
+                      iconData,
+                      color: isDarkMode
+                          ? darkModeForegroundcolor
+                          : lightModeForegroundcolor,
+                    ),
+                    SizedBox(width: getProportionateScreenWidth(10)),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: getProportionateScreenHeight(17),
+                        color: isDarkMode
+                            ? darkModeForegroundcolor
+                            : lightModeForegroundcolor,
+                      ),
+                    ),
+                  ],
+                )),
+        ),
+      ),
+      onTap: onTap,
+    );
   }
 }

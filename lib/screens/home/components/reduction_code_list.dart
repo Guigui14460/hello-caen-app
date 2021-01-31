@@ -1,9 +1,12 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../../constants.dart';
+import '../../../components/search_bar.dart';
 import '../../../model/commerce_type.dart';
 import '../../../model/reduction_code.dart';
 import '../../../model/reduction_code_used.dart';
@@ -11,7 +14,6 @@ import '../../../model/database/commerce_model.dart';
 import '../../../model/database/commerce_type_model.dart';
 import '../../../model/database/reduction_code_model.dart';
 import '../../../model/database/reduction_code_used_model.dart';
-import '../../../screens/reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../../services/size_config.dart';
 import '../../../services/theme_manager.dart';
 
@@ -28,6 +30,8 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
   Map<ReductionCode, List<ReductionCodeUsed>> _used = {};
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
+  String _currentSearch = "";
+  Map<CommerceType, List<ReductionCode>> _searchResults = {};
 
   @override
   void initState() {
@@ -35,6 +39,27 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
       _types = value;
     });
     super.initState();
+  }
+
+  void _search(String value) {
+    if (this.mounted) {
+      setState(() {
+        _currentSearch = value;
+        _searchResults = Map<CommerceType, List<ReductionCode>>.from(_codes);
+        if (value != "") {
+          for (MapEntry<CommerceType, List<ReductionCode>> entry
+              in _searchResults.entries) {
+            setState(() {
+              _searchResults[entry.key] = entry.value
+                  .where((element) =>
+                      removeDiacritics(element.name.toLowerCase())
+                          .contains(removeDiacritics(value.toLowerCase())))
+                  .toList();
+            });
+          }
+        }
+      });
+    }
   }
 
   void _onRefresh() async {
@@ -70,16 +95,11 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
         }
       });
     }
+    this._search(this._currentSearch);
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
-    if (this.mounted) {
-      setState(() {
-        _codes = {};
-        _used = {};
-      });
-    }
     _refreshController.loadComplete();
   }
 
@@ -96,47 +116,55 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
         color: primaryColor,
       ),
       footer: ClassicFooter(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: getProportionateScreenHeight(10)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Bons plans",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: getProportionateScreenWidth(30)),
-              ),
-            ],
-          ),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          (_types.length == _codes.keys.length
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                    _types.length,
-                    (int index) {
-                      return _buildCodeCategoryWidget(_types[index]);
-                    },
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Aucune données trouvées",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: getProportionateScreenWidth(18.5),
-                      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: getProportionateScreenHeight(10)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Bons plans",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: getProportionateScreenWidth(30)),
+                ),
+              ],
+            ),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(20)),
+              child: SearchBar(onChanged: _search),
+            ),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            (_types.length == _searchResults.keys.length
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(
+                      _types.length,
+                      (int index) {
+                        return _buildCodeCategoryWidget(_types[index]);
+                      },
                     ),
-                  ],
-                )),
-        ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Aucune données trouvées",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: getProportionateScreenWidth(18.5),
+                        ),
+                      ),
+                    ],
+                  )),
+          ],
+        ),
       ),
     );
   }
@@ -156,9 +184,9 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
             ),
           ),
           SizedBox(height: getProportionateScreenHeight(6)),
-          (_codes[type].length == 0
+          (_searchResults[type].length == 0
               ? Text("Aucun code de réduction disponible pour le moment")
-              : _buildCodesScrollWidget(_codes[type])),
+              : _buildCodesScrollWidget(_searchResults[type])),
           SizedBox(height: getProportionateScreenHeight(45)),
         ],
       ),
@@ -200,12 +228,13 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      primaryColor.withOpacity(0.95),
-                      primaryColor.withOpacity(0.75),
-                    ]),
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    primaryColor,
+                    primaryColor.withOpacity(0.85),
+                  ],
+                ),
               ),
               child: (codeAvailableLeft == 0
                   ? Banner(

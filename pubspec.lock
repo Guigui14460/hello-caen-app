@@ -141,6 +141,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  diacritic:
+    dependency: "direct main"
+    description:
+      name: diacritic
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   fake_async:
     dependency: transitive
     description:
@@ -849,4 +856,4 @@ packages:
     version: "4.5.1"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.24.0-6.0.pre"
+  flutter: ">=1.24.0-6.0.pre <2.0.0"

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -61,6 +62,7 @@ Future<void> main() async {
 
   // date format initialization
   await initializeDateFormatting('fr_FR', null);
+  Intl.defaultLocale = "fr_FR";
 
   // local notification initialization
   await NotificationService.init();

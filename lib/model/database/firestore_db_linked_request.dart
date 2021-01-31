@@ -1,5 +1,5 @@
 abstract class FirestoreDBLinkedRequest<T> {
-  FirestoreDBLinkedRequest whereLinked(dynamic field,
+  FirestoreDBLinkedRequest<T> whereLinked(dynamic field,
       {dynamic isEqualTo,
       dynamic isNotEqualTo,
       dynamic isLessThan,
@@ -12,11 +12,11 @@ abstract class FirestoreDBLinkedRequest<T> {
       List<dynamic> whereNotIn,
       bool isNull});
 
-  FirestoreDBLinkedRequest limitLinked(int limit);
+  FirestoreDBLinkedRequest<T> limitLinked(int limit);
 
-  FirestoreDBLinkedRequest limitToLastLinked(int limit);
+  FirestoreDBLinkedRequest<T> limitToLastLinked(int limit);
 
-  FirestoreDBLinkedRequest orderByLinked(dynamic field,
+  FirestoreDBLinkedRequest<T> orderByLinked(dynamic field,
       {bool descending = false});
 
   Future<List<T>> executeCurrentLinkedQueryRequest();

@@ -155,7 +155,7 @@ abstract class FirebaseFirestoreDB<T>
   Map<String, dynamic> getElementData(T object);
 
   @override
-  FirestoreDBLinkedRequest whereLinked(dynamic field,
+  FirestoreDBLinkedRequest<T> whereLinked(dynamic field,
       {dynamic isEqualTo,
       dynamic isNotEqualTo,
       dynamic isLessThan,
@@ -183,19 +183,19 @@ abstract class FirebaseFirestoreDB<T>
   }
 
   @override
-  FirestoreDBLinkedRequest limitLinked(int limit) {
+  FirestoreDBLinkedRequest<T> limitLinked(int limit) {
     this.currentQuery = this.currentQuery.limit(limit);
     return this;
   }
 
   @override
-  FirestoreDBLinkedRequest limitToLastLinked(int limit) {
+  FirestoreDBLinkedRequest<T> limitToLastLinked(int limit) {
     this.currentQuery = this.currentQuery.limitToLast(limit);
     return this;
   }
 
   @override
-  FirestoreDBLinkedRequest orderByLinked(dynamic field,
+  FirestoreDBLinkedRequest<T> orderByLinked(dynamic field,
       {bool descending = false}) {
     if (this.fields.contains(field)) {
       this.currentQuery =

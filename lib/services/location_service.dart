@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
 import 'storage_manager.dart';
+import '../settings.dart';
 
 /// Class provides an access to phone location.
 class LocationService extends ChangeNotifier {
@@ -50,7 +51,7 @@ class LocationService extends ChangeNotifier {
           await StorageManager.saveData(storageKey, true);
           if (!await _location.isBackgroundModeEnabled()) {
             _location.enableBackgroundMode(enable: true);
-            _location.changeSettings(interval: 20000);
+            _location.changeSettings(interval: intervalLocationChanges);
             _location.onLocationChanged.listen((event) {
               for (Function fn in this._onChangedFunctions) {
                 fn(event);

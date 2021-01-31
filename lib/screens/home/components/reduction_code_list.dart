@@ -134,6 +134,8 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
               ],
             ),
             SizedBox(height: getProportionateScreenHeight(30)),
+            _buildCodeFinishedSoon(),
+            SizedBox(height: getProportionateScreenHeight(30)),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: getProportionateScreenWidth(20)),
@@ -165,6 +167,38 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
                   )),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCodeFinishedSoon() {
+    DateTime now = DateTime.now();
+    DateTime nowPlus2Days = now.add(Duration(days: 2));
+    List<ReductionCode> codes = [];
+    for (List<ReductionCode> inMap in _codes.values) {
+      codes.addAll(inMap
+          .where((element) =>
+              element.endDate.isAfter(now) &&
+              element.endDate.isBefore(nowPlus2Days))
+          .toList());
+    }
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+      child: Column(
+        children: [
+          Text(
+            "Codes expirants bientôt",
+            style: TextStyle(
+              fontSize: getProportionateScreenWidth(18),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(6)),
+          (codes.length == 0
+              ? Text("Aucun code de réduction disponible pour le moment")
+              : _buildCodesScrollWidget(codes)),
+        ],
       ),
     );
   }

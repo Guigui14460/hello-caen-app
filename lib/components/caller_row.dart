@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hello_caen/model/database/commerce_model.dart';
 import 'package:hello_caen/screens/generated_screens/generated_store_screen.dart';
@@ -26,7 +28,8 @@ class _CallerRowState extends State<CallerRow> {
                   List<Widget> widgets = [];
                   for(var data in snapshot.data){
                     widgets.add(
-                        GestureDetector(onTap: () {Navigator.popAndPushNamed(context,GeneratedStoreScreen.routeName);} ,
+                        GestureDetector(onTap: () {Navigator.push(context,CupertinoPageRoute(
+                            builder: (context) => GeneratedStoreScreen(data: data) ));} ,
                             child:Column(
                                 children: [Container(
                                 //margin:EdgeInsets.all(5.0),g

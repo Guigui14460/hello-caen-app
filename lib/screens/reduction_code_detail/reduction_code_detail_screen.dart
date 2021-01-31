@@ -4,13 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'reduction_code_detail_qr_code_screen.dart';
+import '../sign_in/sign_in_screen.dart';
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../components/default_button.dart';
 import '../../model/reduction_code.dart';
 import '../../model/reduction_code_used.dart';
 import '../../model/database/reduction_code_used_model.dart';
-import '../../screens/sign_in/sign_in_screen.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
 import '../../services/user_manager.dart';

@@ -1,11 +1,13 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_caen/services/location_service.dart';
+import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../settings.dart';
+import '../../../utils.dart';
 import '../../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 import '../../sign_up/sign_up_screen.dart';
@@ -16,6 +18,7 @@ import '../../../model/commerce.dart';
 import '../../../model/database/commerce_model.dart';
 import '../../../model/database/reduction_code_model.dart';
 import '../../../model/reduction_code.dart';
+import '../../../services/location_service.dart';
 import '../../../services/size_config.dart';
 import '../../../services/theme_manager.dart';
 import '../../../services/user_manager.dart';
@@ -59,6 +62,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onRefresh(UserManager userManager) async {
+    if (this.mounted) {
+      setState(() {
+        _storesGetByLocation = [];
+        _locationData = null;
+      });
+    }
     await ReductionCodeModel().where("name", isEqualTo: "LAUNCH").then((value) {
       if (this.mounted) {
         setState(() {
@@ -191,38 +200,59 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildLocationStoreWidget(BuildContext context) {
     LocationService locationService = Provider.of<LocationService>(context);
-    locationService.addOnChangedFunction((LocationData location) {
-      print("${location.latitude},${location.longitude}");
-      if (this.mounted) {
-        setState(() {
-          _locationData = location;
-        });
-      }
+    locationService.addOnChangedFunction((LocationData location) async {
+      // if (location.latitude != _locationData.latitude ||
+      //     location.longitude != _locationData.longitude) {
+      List<LatLng> latlngs =
+          searchBorderBox(location.latitude, location.longitude);
+      await CommerceModel()
+          .whereLinked("latitude", isGreaterThanOrEqualTo: latlngs[0].latitude)
+          .whereLinked("latitude", isLessThanOrEqualTo: latlngs[1].latitude)
+          .executeCurrentLinkedQueryRequest()
+          .then((value) {
+        value = value
+            .where((element) =>
+                element.longitude >= latlngs[0].longitude &&
+                element.longitude <= latlngs[1].longitude)
+            .where((element) =>
+                getDistanceFromLatLonInKm(location.latitude, location.longitude,
+                        element.latitude, element.longitude) *
+                    1000 <=
+                maximalDistanceToSeeStore)
+            .toList();
+        if (this.mounted) {
+          setState(() {
+            _locationData = location;
+            _storesGetByLocation = value;
+          });
+        }
+      });
+      // }
     });
     if (_locationData == null) {
       return Text("Aucune données de localisation trouvées");
     }
-    print("${_locationData.latitude},${_locationData.longitude}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: getProportionateScreenHeight(10)),
-        Column(
-          children: [],
-          // List.generate(
-          //   favoriteStores.length,
-          //   (index) => StoreCard(
-          //     commerce: favoriteStores[index],
-          //     width: double.infinity,
-          //     height: 100,
-          //     onTap: () {},
-          //     // onTap: () => Navigator.push(
-          //     //       context,
-          //     //       CupertinoPageRoute(
-          //     //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
-          //   ),
-          // ),
-        ),
+        (_storesGetByLocation.length == 0
+            ? Text("Aucun commerce près de votre localisation")
+            : Column(
+                children: List.generate(
+                  _storesGetByLocation.length,
+                  (index) => StoreCard(
+                    commerce: _storesGetByLocation[index],
+                    width: double.infinity,
+                    height: 100,
+                    onTap: () {},
+                    // onTap: () => Navigator.push(
+                    //       context,
+                    //       CupertinoPageRoute(
+                    //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
+                  ),
+                ),
+              )),
       ],
     );
   }
@@ -241,21 +271,23 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: getProportionateScreenHeight(5)),
         SearchBar(onChanged: _search),
         SizedBox(height: getProportionateScreenHeight(10)),
-        Column(
-          children: List.generate(
-            favoriteStores.length,
-            (index) => StoreCard(
-              commerce: favoriteStores[index],
-              width: double.infinity,
-              height: 100,
-              onTap: () {},
-              // onTap: () => Navigator.push(
-              //       context,
-              //       CupertinoPageRoute(
-              //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
-            ),
-          ),
-        ),
+        (favoriteStores.length == 0
+            ? Text("Aucun commerce dans vos favoris")
+            : Column(
+                children: List.generate(
+                  favoriteStores.length,
+                  (index) => StoreCard(
+                    commerce: favoriteStores[index],
+                    width: double.infinity,
+                    height: 100,
+                    onTap: () {},
+                    // onTap: () => Navigator.push(
+                    //       context,
+                    //       CupertinoPageRoute(
+                    //           builder: (context) => CommerceDetailScreen(commerce: favoriteStores[index]))),
+                  ),
+                ),
+              )),
       ],
     );
   }
@@ -272,8 +304,9 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   "Connectez-vous",
                   style: TextStyle(
-                      color: primaryColor,
-                      fontSize: getProportionateScreenWidth(20)),
+                    color: primaryColor,
+                    fontSize: getProportionateScreenWidth(20),
+                  ),
                 )),
             Text(
               " ou ",
@@ -333,7 +366,7 @@ class SponsoredReductionCodeBanner extends StatelessWidget {
         child: Text.rich(
           TextSpan(
             text: "Bon plan sponsorisé\n",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
             children: [
               TextSpan(
                 text: code.name,

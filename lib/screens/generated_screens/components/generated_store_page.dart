@@ -36,14 +36,9 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                 child: Column(
                   children: [
                     Container(
-                      child: Row(
-                        //mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(widget.data.name,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 40))
-                        ],
-                      ),
+                      child: Text(widget.data.name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 40)),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10, left: 20),

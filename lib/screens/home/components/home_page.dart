@@ -69,7 +69,9 @@ class _HomePageState extends State<HomePage> {
         _locationData = null;
       });
     }
-    await ReductionCodeModel().where("name", isEqualTo: "LAUNCH").then((value) {
+    await ReductionCodeModel()
+        .where("name", isEqualTo: "Nouveau Code")
+        .then((value) {
       if (this.mounted) {
         setState(() {
           _sponsoredReductionCode = value[0];

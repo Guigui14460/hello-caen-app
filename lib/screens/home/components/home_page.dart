@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
     if (this.mounted) {
       setState(() {
         _currentSearch = value;
-        _searchResults = _favoriteStores;
+        _searchResults = List<Commerce>.from(_favoriteStores);
         if (value != "") {
           _searchResults = _searchResults
               .where((element) => removeDiacritics(element.name.toLowerCase())
@@ -69,18 +69,14 @@ class _HomePageState extends State<HomePage> {
         _locationData = null;
       });
     }
-    await ReductionCodeModel()
-        .where("name", isEqualTo: "Nouveau Code")
-        .then((value) {
+    await ReductionCodeModel().getAll().then((value) {
       if (this.mounted) {
         setState(() {
           _sponsoredReductionCode = value[0];
         });
       }
     });
-    await CommerceModel()
-        .where("name", isEqualTo: "Café 1")
-        .then((value) async {
+    await CommerceModel().getAll().then((value) async {
       if (this.mounted) {
         setState(() {
           _sponsoredStore = value[0];

@@ -45,7 +45,7 @@ class ProReductionCodeStatisticsScreenState
             child: Column(
               children: [
                 Text(
-                  "Vos commerces",
+                  "Statistiques",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,

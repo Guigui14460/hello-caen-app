@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class CategoryMenu extends StatefulWidget {
   final List<String> text;
   final List<VoidCallback> onPressed;
@@ -12,32 +14,43 @@ class CategoryMenu extends StatefulWidget {
 }
 
 class _CategoryMenuState extends State<CategoryMenu> {
+  int _currentSelected = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 35,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widget.text.length,
         itemBuilder: (context, index) {
           return Container(
-            // margin: const EdgeInsets.only(left: 5, right: 5),
             margin: index == widget.text.length - 1
                 ? EdgeInsets.only(right: 0)
-                : EdgeInsets.only(right: 10),
+                : EdgeInsets.only(right: 20),
+            decoration: BoxDecoration(
+                borderRadius: new BorderRadius.circular(24),
+                color: index == _currentSelected
+                    ? ternaryColor
+                    : Colors.transparent),
             child: OutlineButton(
-              onPressed: widget.onPressed[index],
+              onPressed: () => _onPressed(index),
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(24)),
-              child: Container(
-                child: Center(
-                  child: Text(widget.text[index]),
-                ),
-              ),
+              child: Text(widget.text[index]),
             ),
           );
         },
       ),
     );
+  }
+
+  void _onPressed(int index) {
+    widget.onPressed[index]();
+    if (this.mounted) {
+      setState(() {
+        _currentSelected = index;
+      });
+    }
   }
 }

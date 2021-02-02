@@ -103,7 +103,7 @@ class _StoreListPageState extends State<StoreListPage> {
       onLoading: _onLoading,
       enablePullDown: true,
       header: MaterialClassicHeader(
-        height: 20,
+        height: 80,
         color: primaryColor,
       ),
       footer: ClassicFooter(),
@@ -112,54 +112,43 @@ class _StoreListPageState extends State<StoreListPage> {
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenHeight(10)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Commerces",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: getProportionateScreenWidth(30)),
-                ),
-              ],
-            ),
-            SizedBox(height: getProportionateScreenHeight(20)),
+            SizedBox(height: getProportionateScreenHeight(30)),
             CategoryMenu(
               text: ["Tout"] + _types.map((e) => e.name).toList(),
               onPressed: [() => _filterByType(null)] +
                   _types.map((e) => (() => _filterByType(e))).toList(),
             ),
-            SizedBox(height: getProportionateScreenHeight(20)),
-            buildCommerceView(),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: buildCommerceView(),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildCommerceView() {
-    return SingleChildScrollView(
-      child: Column(
-        children: List.generate(
-          _searchResults.length,
-          (index) {
-            return StoreCard(
-              commerce: _searchResults[index],
-              width: double.infinity,
-              height: 105,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                        builder: (context) =>
-                            GeneratedStoreScreen(data: _searchResults[index])));
-              },
-            );
+  List<Widget> buildCommerceView() {
+    return List.generate(
+      _searchResults.length,
+      (index) {
+        return StoreCard(
+          commerce: _searchResults[index],
+          width: double.infinity,
+          height: 105,
+          onTap: () {
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (context) =>
+                        GeneratedStoreScreen(data: _searchResults[index])));
           },
-        ),
-      ),
+        );
+      },
     );
   }
 }

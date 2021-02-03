@@ -1,7 +1,9 @@
 import 'package:barcode_scan_fix/barcode_scan.dart';
 
 import '../../model/reduction_code_used.dart';
+import '../../model/database/reduction_code_model.dart';
 import '../../model/database/reduction_code_used_model.dart';
+import '../../model/database/user_model.dart';
 
 enum QRCodeResult {
   OK,
@@ -26,8 +28,11 @@ Future<QRCodeResult> readQrCodeAndApplyReductionCode() async {
   ReductionCodeUsedModel model = ReductionCodeUsedModel();
   try {
     return await model
-        .whereLinked("reductionCodeId", isEqualTo: splitedString[0])
-        .whereLinked("userId", isEqualTo: splitedString[1])
+        .whereLinked("reductionCode",
+            isEqualTo:
+                ReductionCodeModel().getDocumentReference(splitedString[0]))
+        .whereLinked("user",
+            isEqualTo: UserModel().getDocumentReference(splitedString[1]))
         .executeCurrentLinkedQueryRequest()
         .then((value) async {
       if (value.length > 0) {

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'user_account.dart';
+import 'database/commerce_model.dart';
 import 'database/user_model.dart';
 import '../utils.dart';
 
@@ -19,37 +21,45 @@ class SubComment {
 
   /// Comment author.
   final String authorId;
-  User author;
+
+  final String commentId;
 
   /// Constructor.
-  SubComment(
-      {this.id,
-      @required this.text,
-      @required this.authorId,
-      @required this.dateAdded,
-      @required this.dateModified});
+  SubComment({
+    this.id,
+    @required this.text,
+    @required this.authorId,
+    @required this.dateAdded,
+    @required this.dateModified,
+    @required this.commentId,
+  });
+
+  DocumentReference getAuthorRef() {
+    return UserModel().getDocumentReference(this.authorId);
+  }
+
+  DocumentReference getCommerceRef() {
+    return CommerceModel().getDocumentReference(this.commentId);
+  }
 
   /// Builds the comment widget.
   Widget build(context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            this.author.buildSmallProfile(),
-            this._getDateAdded(),
-            this._getDateModified(),
-          ],
-        ),
-        Text(this.text),
-      ],
-    );
-  }
-
-  /// Initializes all favorite commerces associated to this user.
-  Future<void> init() async {
-    Future.wait([
-      UserModel().getById(this.authorId).then((value) => this.author = value),
-    ]);
+    return FutureBuilder(
+        future: UserModel().getById(id),
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  snapshot.data.buildSmallProfile(),
+                  this._getDateAdded(),
+                  this._getDateModified(),
+                ],
+              ),
+              Text(this.text),
+            ],
+          );
+        });
   }
 
   /// Gets the added date widget.

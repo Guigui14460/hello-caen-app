@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'commerce_model.dart';
 import 'firebase_firestore_db.dart';
 import 'reduction_code_used_model.dart';
 import '../reduction_code_used.dart';
 import '../reduction_code.dart';
-import '../../utils.dart';
 
 /// Model used to communicate with the database for the
 /// reduction code collection.
@@ -27,10 +27,10 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
   ReductionCode getTElement(DocumentSnapshot value) {
     return ReductionCode(
       id: value.id,
-      commerceId: value['commerce'],
+      commerceId: value['commerce'].id,
       name: value['name'],
-      beginDate: convertStringToDatetime(value['beginDate']),
-      endDate: convertStringToDatetime(value['endDate']),
+      beginDate: value['beginDate'].toDate(),
+      endDate: value['endDate'].toDate(),
       notifyAllUser: value['notifyAllUser'],
       maxAvailableCodes: value['maxAvailableCodes'],
       conditions: value['conditions'],
@@ -42,9 +42,9 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
   @override
   Map<String, dynamic> getElementData(ReductionCode object) {
     return {
-      'commerce': object.commerceId,
-      'beginDate': convertDatetimeToString(object.beginDate),
-      'endDate': convertDatetimeToString(object.endDate),
+      'commerce': CommerceModel().getDocumentReference(object.commerceId),
+      'beginDate': Timestamp.fromDate(object.beginDate),
+      'endDate': Timestamp.fromDate(object.endDate),
       'notifyAllUser': object.notifyAllUser,
       'name': object.name,
       'maxAvailableCodes': object.maxAvailableCodes,
@@ -57,8 +57,8 @@ class ReductionCodeModel extends FirebaseFirestoreDB<ReductionCode> {
   @override
   Future<bool> delete(String id) async {
     ReductionCodeUsedModel model = ReductionCodeUsedModel();
-    List<ReductionCodeUsed> used =
-        await model.where("reductionCodeId", isEqualTo: id);
+    List<ReductionCodeUsed> used = await model.where("reductionCode",
+        isEqualTo: this.getDocumentReference(id));
     List<bool> results = await Future.wait(used.map((e) => model.delete(e.id)));
     for (bool r in results) {
       if (r == false) {

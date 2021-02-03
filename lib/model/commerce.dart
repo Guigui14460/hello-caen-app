@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'comment.dart';
-import 'commerce_type.dart';
-import 'user_account.dart';
 import 'database/commerce_type_model.dart';
 import 'database/user_model.dart';
 import '../utils.dart';
@@ -24,7 +23,6 @@ class Commerce {
 
   /// Owner of the commerce.
   String ownerId;
-  User owner;
 
   /// Date of creation.
   final DateTime dateAdded;
@@ -37,10 +35,6 @@ class Commerce {
 
   /// Type of commerce.
   String typeId;
-  CommerceType type;
-
-  /// All comments related to this commerce.
-  List<String> commentIds = [];
 
   /// Link for the image representing the commerce.
   String imageLink;
@@ -55,33 +49,16 @@ class Commerce {
       @required this.longitude,
       @required this.timetables,
       @required this.typeId,
-      this.commentIds,
       @required this.dateAdded,
       this.dateModified,
       @required this.imageLink});
 
-  /// Initializes all comments associated to this commerce and
-  /// the owner user.
-  Future<void> init() async {
-    await Future.wait<void>([
-      UserModel().getById(this.ownerId).then((value) => this.owner = value),
-      CommerceTypeModel()
-          .getById(this.typeId)
-          .then((value) => this.type = value),
-    ]);
+  DocumentReference getOwnerRef() {
+    return UserModel().getDocumentReference(this.ownerId);
   }
 
-  void addComment(Comment comment) {
-    this.commentIds.add(comment.id);
-  }
-
-  void updateComment(Comment comment) {
-    int index = this.commentIds.indexWhere((element) => element == comment.id);
-    this.commentIds[index] = comment.id;
-  }
-
-  void removeComment(Comment comment) {
-    this.commentIds.remove(comment.id);
+  DocumentReference getTypeRef() {
+    return CommerceTypeModel().getDocumentReference(this.typeId);
   }
 
   /// Gets the mean of all ratings.
@@ -124,16 +101,5 @@ class Commerce {
   /// Gets the image widget.
   Image getImage() {
     return Image.network(this.imageLink);
-  }
-
-  /// Gets all comments related to commerce in a
-  /// widget.
-  Widget getCommentsWidget(BuildContext context, List<Comment> comments) {
-    return ListView.builder(
-      itemCount: comments.length,
-      itemBuilder: (context, index) {
-        return comments[index].build(context);
-      },
-    ).build(context);
   }
 }

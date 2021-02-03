@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'commerce.dart';
 import 'compare.dart';
 import 'sex.dart';
 import 'database/commerce_model.dart';
@@ -27,7 +27,6 @@ class User with Compare<User> {
 
   /// List of the favorite commerce.
   List<String> favoriteCommerceIds = [];
-  List<Commerce> favoriteCommerces = [];
 
   /// Is a PRO account.
   bool proAccount = false;
@@ -57,15 +56,12 @@ class User with Compare<User> {
     this.favoriteCommerceIds = null;
   }
 
-  /// Initializes all favorite commerces associated to this user.
-  Future<void> init() async {
-    if (this.favoriteCommerceIds.length != null) {
-      Future.wait([
-        CommerceModel()
-            .getMultipleByIds(this.favoriteCommerceIds)
-            .then((value) => this.favoriteCommerces = value),
-      ]);
+  List<DocumentReference> getFavoriteCommerceRefs() {
+    List<DocumentReference> refs = [];
+    for (String commerceId in this.favoriteCommerceIds) {
+      refs.add(CommerceModel().getDocumentReference(commerceId));
     }
+    return refs;
   }
 
   /// Adds a commerce to favorites list.

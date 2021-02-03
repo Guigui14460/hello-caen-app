@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Models use this mixin to easily manipulate
 /// the CRUD.
 /// [T] must be replace by a class (can be represented
@@ -29,6 +31,11 @@ mixin DBModel<T> {
   /// Updates the document of [id] with the [object] in
   /// the database collection.
   Future<bool> update(String id, T object);
+
+  /// Updates some fields for document of [id] with the
+  /// [object] in the database collection.
+  Future<bool> updateFields(String id, T object, List<dynamic> fieldsToUpdate,
+      List<dynamic> associatedFields);
 
   /// Deletes the document of [id] from the database
   /// collection.

@@ -30,7 +30,7 @@ class CommerceTypeModel extends FirebaseFirestoreDB<CommerceType> {
   Future<bool> delete(String id) async {
     CommerceModel model = CommerceModel();
     List<Commerce> commerces = await model
-        .whereLinked("type", isEqualTo: id)
+        .whereLinked("type", isEqualTo: this.getDocumentReference(id))
         .executeCurrentLinkedQueryRequest();
     List<bool> results = await Future.wait(commerces.map((element) {
       return model.delete(element.id);

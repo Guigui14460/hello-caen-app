@@ -17,7 +17,7 @@ abstract class FirebaseFirestoreDB<T>
   /// Reference of the database collection.
   CollectionReference reference;
 
-  final List<String> fields;
+  final List<dynamic> fields;
   Query currentQuery;
 
   /// Constructor of the database.
@@ -26,6 +26,14 @@ abstract class FirebaseFirestoreDB<T>
     this.reference =
         FirebaseSettings.instance.getFirestore().collection(collectionName);
     this.currentQuery = this.reference;
+  }
+
+  DocumentReference getDocumentReference(String id) {
+    return this.reference.doc(id);
+  }
+
+  List<dynamic> getAvailableField() {
+    return this.fields;
   }
 
   Future<List<T>> where(dynamic field,
@@ -140,6 +148,25 @@ abstract class FirebaseFirestoreDB<T>
   }
 
   @override
+  Future<bool> updateFields(String id, T object, List<dynamic> fieldsToUpdate,
+      List<dynamic> associatedFields) async {
+    bool ok = true;
+    Map<String, dynamic> updateData = {};
+    for (int i = 0; i < fieldsToUpdate.length; i++) {
+      dynamic field = fieldsToUpdate[i];
+      if (!this.fields.contains(field)) {
+        throw new Exception("Field arg not in the available fields");
+      }
+      updateData.putIfAbsent(field, () => associatedFields[i]);
+    }
+    await reference.doc(id).update(updateData).catchError((error) {
+      ok = false;
+      print(error);
+    });
+    return ok;
+  }
+
+  @override
   Future<bool> delete(String id) async {
     bool ok = true;
     await reference.doc(id).delete().catchError((error) {
@@ -167,6 +194,9 @@ abstract class FirebaseFirestoreDB<T>
       List<dynamic> whereIn,
       List<dynamic> whereNotIn,
       bool isNull}) {
+    if (!this.fields.contains(field)) {
+      throw new Exception("Field arg not in the available fields");
+    }
     this.currentQuery = this.currentQuery.where(field,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
@@ -197,10 +227,11 @@ abstract class FirebaseFirestoreDB<T>
   @override
   FirestoreDBLinkedRequest<T> orderByLinked(dynamic field,
       {bool descending = false}) {
-    if (this.fields.contains(field)) {
-      this.currentQuery =
-          this.currentQuery.orderBy(field, descending: descending);
+    if (!this.fields.contains(field)) {
+      throw new Exception("Field arg not in the available fields");
     }
+    this.currentQuery =
+        this.currentQuery.orderBy(field, descending: descending);
     return this;
   }
 

@@ -11,7 +11,6 @@ import '../../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 import '../../sign_up/sign_up_screen.dart';
 import '../../../constants.dart';
-import '../../../settings.dart';
 import '../../../utils.dart';
 import '../../../components/search_bar.dart';
 import '../../../components/store_card.dart';
@@ -198,28 +197,29 @@ class _HomePageState extends State<HomePage> {
     locationService.addOnChangedFunction((LocationData location) async {
       List<LatLng> latlngs =
           searchBorderBox(location.latitude, location.longitude);
-      await CommerceModel()
-          .whereLinked("latitude", isGreaterThanOrEqualTo: latlngs[0].latitude)
-          .whereLinked("latitude", isLessThanOrEqualTo: latlngs[1].latitude)
-          .executeCurrentLinkedQueryRequest()
-          .then((value) {
-        value = value
-            .where((element) =>
-                element.longitude >= latlngs[0].longitude &&
-                element.longitude <= latlngs[1].longitude)
-            .where((element) =>
-                getDistanceFromLatLonInKm(location.latitude, location.longitude,
-                        element.latitude, element.longitude) *
-                    1000 <=
-                maximalDistanceToSeeStore)
-            .toList();
-        if (this.mounted) {
-          setState(() {
-            _locationData = location;
-            _storesGetByLocation = value;
-          });
-        }
-      });
+      // await CommerceModel()
+      //     .whereLinked("latitude", isGreaterThanOrEqualTo: latlngs[0].latitude)
+      //     .whereLinked("latitude", isLessThanOrEqualTo: latlngs[1].latitude)
+      //     .executeCurrentLinkedQueryRequest()
+      //     .then((value) {
+      //   value = value
+      //       .where((element) =>
+      //           element.longitude >= latlngs[0].longitude &&
+      //           element.longitude <= latlngs[1].longitude)
+      //       .where((element) =>
+      //           getDistanceFromLatLonInKm(location.latitude, location.longitude,
+      //                   element.latitude, element.longitude) *
+      //               1000 <=
+      //           maximalDistanceToSeeStore)
+      //       .toList();
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _locationData = location;
+      //       _storesGetByLocation = value;
+      //     });
+      //   }
+      // });
+      // TODO: à réadapter avec la nouvelle façon de stocker les données qui sera implémentée
     });
     if (_locationData == null) {
       return Text("Aucune données de localisation trouvées");

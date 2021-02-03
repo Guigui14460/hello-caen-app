@@ -10,8 +10,9 @@ import '../../constants.dart';
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../model/commerce.dart';
-import '../../model/database/reduction_code_model.dart';
 import '../../model/reduction_code.dart';
+import '../../model/database/commerce_model.dart';
+import '../../model/database/reduction_code_model.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
 
@@ -35,7 +36,8 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
   void initState() {
     super.initState();
     ReductionCodeModel()
-        .where("commerce", isEqualTo: widget.commerce.id)
+        .where("commerce",
+            isEqualTo: CommerceModel().getDocumentReference(widget.commerce.id))
         .then((value) {
       setState(() {
         _codes = value;

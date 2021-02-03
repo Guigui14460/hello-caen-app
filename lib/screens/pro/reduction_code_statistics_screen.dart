@@ -81,7 +81,7 @@ class ProReductionCodeStatisticsScreenState
       }).toList(),
       onChanged: (code) async {
         await ReductionCodeUsedModel()
-            .where("reductionCodeId", isEqualTo: code.id)
+            .where("reductionCode", isEqualTo: code.id)
             .then((value) {
           setState(() {
             value.sort((use1, use2) => use1.whenUsed.compareTo(use2.whenUsed));

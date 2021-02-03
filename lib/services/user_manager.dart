@@ -53,7 +53,9 @@ class UserManager with ChangeNotifier {
         .catchError((error) {
       print(error);
     });
+    print(results);
     if (results.user != null) {
+      print(results.user.uid);
       await UserModel().getById(results.user.uid).then((value) {
         _currentLoggedInUser = value;
       });

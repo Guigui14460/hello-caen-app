@@ -10,6 +10,7 @@ import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../model/commerce.dart';
 import '../../model/database/commerce_model.dart';
+import '../../model/database/user_model.dart';
 import '../../services/firebase_settings.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
@@ -30,7 +31,8 @@ class _ProHomeScreenState extends State<ProHomeScreen> {
     super.initState();
     CommerceModel()
         .whereLinked("owner",
-            isEqualTo: FirebaseSettings.instance.getAuth().currentUser.uid)
+            isEqualTo: UserModel().getDocumentReference(
+                FirebaseSettings.instance.getAuth().currentUser.uid))
         .orderByLinked("name")
         .executeCurrentLinkedQueryRequest()
         .then((value) {

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'commerce_model.dart';
 import 'firebase_firestore_db.dart';
 import 'sub_comment_model.dart';
+import 'user_model.dart';
 import '../comment.dart';
-import '../../utils.dart';
 
 /// Model used to communicate with the database for the
 /// comment collection.
@@ -13,9 +14,9 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
       : super("comments", [
           "text",
           "author",
+          "commerce",
           "dateAdded",
           "dateModified",
-          "subcomments",
           "rating",
         ]);
 
@@ -23,10 +24,10 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
   Map<String, dynamic> getElementData(Comment object) {
     return {
       "text": object.text,
-      "author": object.authorId,
-      "dateAdded": convertDatetimeToString(object.dateAdded),
-      "dateModified": convertDatetimeToString(object.dateModified),
-      "subcomments": object.subcommentIds,
+      "author": UserModel().getDocumentReference(object.authorId),
+      "commerce": CommerceModel().getDocumentReference(object.commerceId),
+      "dateAdded": Timestamp.fromDate(object.dateAdded),
+      "dateModified": Timestamp.fromDate(object.dateModified),
       "rating": object.rating,
     };
   }
@@ -36,22 +37,21 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
     return new Comment(
       id: value.id,
       text: value['text'],
-      authorId: value['author'],
-      dateAdded: convertStringToDatetime(value['dateAdded']),
-      dateModified: convertStringToDatetime(value['dateModified']),
-      subcommentIds: value['subcomments'] == null
-          ? []
-          : List<String>.from(value['subcomments']),
+      authorId: value['author'].id,
+      commerceId: value['commerce'].id,
+      dateAdded: value['dateAdded'].toDate(),
+      dateModified: value['dateModified'].toDate(),
       rating: value['rating'],
     );
   }
 
   @override
   Future<bool> delete(String id) async {
-    Comment comment = await this.getById(id);
-    SubCommentModel model = SubCommentModel();
-    List<bool> results = await Future.wait(comment.subcommentIds.map((element) {
-      return model.delete(element);
+    SubCommentModel subCommentModel = SubCommentModel();
+    List<bool> results = await Future.wait((await subCommentModel
+            .where("comment", isEqualTo: this.getDocumentReference(id)))
+        .map((element) {
+      return subCommentModel.delete(element.id);
     }));
     for (bool r in results) {
       if (r == false) {

@@ -4,6 +4,7 @@ import '../../../components/app_bar.dart';
 import '../../../model/comment.dart';
 import '../../../model/commerce.dart';
 import '../../../model/database/comment_model.dart';
+import '../../../model/database/commerce_model.dart';
 import '../../../services/size_config.dart';
 
 class GeneratedStorePage extends StatefulWidget {
@@ -18,7 +19,10 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
   Widget build(BuildContext context) {
     print(widget.data);
     List<Comment> comments = [];
-    CommentModel().getMultipleByIds(widget.data.commentIds).then((value) {
+    CommentModel()
+        .where("commerce",
+            isEqualTo: CommerceModel().getDocumentReference(widget.data.id))
+        .then((value) {
       setState(() {
         comments = value;
       });
@@ -109,13 +113,13 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
-                    if (widget.data.commentIds.length == 0)
+                    if (comments.length == 0)
                       Text(
                           "Aucun commentaire pour le moment, soyez le premier  !")
                     else
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.data.commentIds.length,
+                        itemCount: comments.length,
                         itemBuilder: (context, index) {
                           return Container(
                             width: getProportionateScreenWidth(1000),

@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'comment_model.dart';
 import 'commerce_model.dart';
-import 'sub_comment_model.dart';
 import 'firebase_firestore_db.dart';
+import 'reduction_code_used_model.dart';
 import '../comment.dart';
 import '../commerce.dart';
 import '../sex.dart';
-import '../sub_comment.dart';
+import '../reduction_code_used.dart';
 import '../user_account.dart';
-import '../../utils.dart';
 
 /// Model used to communicate with the database for the
 /// user collection.
@@ -30,17 +29,17 @@ class UserModel extends FirebaseFirestoreDB<User> {
   @override
   User getTElement(DocumentSnapshot value) {
     return User(
-        id: value.id,
-        firstName: value['firstName'],
-        lastName: value['lastName'],
-        profilePicture: value['profilePicture'],
-        sex: Sex.values[value['sex']],
-        favoriteCommerceIds: value['favoriteCommerces'] == null
-            ? []
-            : List<String>.from(value['favoriteCommerces']),
-        dateOfBirth: convertStringToDatetime(value['dateOfBirth']),
-        adminAccount: value['admin'],
-        proAccount: value['pro']);
+      id: value.id,
+      firstName: value['firstName'],
+      lastName: value['lastName'],
+      profilePicture: value['profilePicture'],
+      sex: Sex.values[value['sex']],
+      favoriteCommerceIds: List<String>.from(
+          value['favoriteCommerces'].map((element) => element.id).toList()),
+      dateOfBirth: value['dateOfBirth'].toDate(),
+      adminAccount: value['admin'],
+      proAccount: value['pro'],
+    );
   }
 
   @override
@@ -50,8 +49,10 @@ class UserModel extends FirebaseFirestoreDB<User> {
       'lastName': object.lastName,
       'profilePicture': object.profilePicture,
       'sex': object.sex.index,
-      'dateOfBirth': convertDatetimeToString(object.dateOfBirth),
-      'favoriteCommerces': object.favoriteCommerceIds,
+      'dateOfBirth': Timestamp.fromDate(object.dateOfBirth),
+      'favoriteCommerces': object.favoriteCommerceIds
+          .map((e) => CommerceModel().getDocumentReference(e))
+          .toList(),
       'admin': object.adminAccount,
       'pro': object.proAccount,
     };
@@ -59,17 +60,17 @@ class UserModel extends FirebaseFirestoreDB<User> {
 
   @override
   Future<bool> delete(String id) async {
-    SubCommentModel model = SubCommentModel();
-    List<SubComment> subComments = await model
-        .whereLinked("author", isEqualTo: id)
-        .executeCurrentLinkedQueryRequest();
     CommentModel model2 = CommentModel();
     List<Comment> comments = await model2
-        .whereLinked("author", isEqualTo: id)
+        .whereLinked("author", isEqualTo: this.getDocumentReference(id))
         .executeCurrentLinkedQueryRequest();
     CommerceModel model3 = CommerceModel();
     List<Commerce> commerces = await model3
-        .whereLinked("author", isEqualTo: id)
+        .whereLinked("author", isEqualTo: this.getDocumentReference(id))
+        .executeCurrentLinkedQueryRequest();
+    ReductionCodeUsedModel model4 = ReductionCodeUsedModel();
+    List<ReductionCodeUsed> used = await model4
+        .whereLinked("user", isEqualTo: this.getDocumentReference(id))
         .executeCurrentLinkedQueryRequest();
 
     List<bool> results = await Future.wait(commerces.map((element) {
@@ -90,8 +91,8 @@ class UserModel extends FirebaseFirestoreDB<User> {
       }
     }
 
-    results = await Future.wait(subComments.map((element) {
-      return model3.delete(element.id);
+    results = await Future.wait(used.map((element) {
+      return model4.delete(element.id);
     }).toList());
     for (bool r in results) {
       if (r == false) {

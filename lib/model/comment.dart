@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'sub_comment.dart';
 import 'user_account.dart';
-import 'database/sub_comment_model.dart';
+import 'database/commerce_model.dart';
 import 'database/user_model.dart';
 import '../utils.dart';
 
@@ -15,45 +16,40 @@ class Comment {
   /// Date of creation.
   final DateTime dateAdded;
 
+  String commerceId;
+
   /// Date of last modification.
   DateTime dateModified;
 
   /// Rating associated to the comment
   double rating;
 
-  /// All subcomments of this comment.
-  List<String> subcommentIds = [];
-  List<SubComment> subcomments = [];
-
   /// Main text.
   String text;
 
   /// Comment author.
   final String authorId;
-  User author;
 
   /// Constructor.
   Comment(
       {this.id,
+      @required this.commerceId,
       @required this.dateAdded,
       @required this.dateModified,
       @required this.rating,
-      this.subcommentIds,
       @required this.text,
       @required this.authorId});
 
-  /// Initializes all sub-comments associated to this comment.
-  Future<void> init() async {
-    Future.wait([
-      SubCommentModel()
-          .getMultipleByIds(this.subcommentIds)
-          .then((value) => this.subcomments = value),
-      UserModel().getById(this.authorId).then((value) => this.author = value),
-    ]);
+  DocumentReference getAuthorRef() {
+    return UserModel().getDocumentReference(this.authorId);
+  }
+
+  DocumentReference getCommerceRef() {
+    return CommerceModel().getDocumentReference(this.commerceId);
   }
 
   /// Builds the comment widget.
-  Widget build(context) {
+  Widget build(context, List<SubComment> subcomments) {
     return Column(
       children: [
         Row(
@@ -65,7 +61,9 @@ class Comment {
         ),
         this._getRatingBar(),
         Text(this.text),
-        (this.subcomments.length > 0 ? this._getSubComments(context) : null),
+        (subcomments.length > 0
+            ? this._getSubComments(context, subcomments)
+            : null),
       ],
     );
   }
@@ -110,7 +108,7 @@ class Comment {
   }
 
   /// Gets the widget which contains all subcomments.
-  Widget _getSubComments(context) {
+  Widget _getSubComments(context, List<SubComment> subcomments) {
     return ExpansionTile(
       title: Text("Sous-commentaires"),
       initiallyExpanded: false,
@@ -118,7 +116,7 @@ class Comment {
       trailing: Icon(Icons.arrow_drop_down),
       children: [
         ListView.builder(
-          itemCount: this.subcomments.length,
+          itemCount: subcomments.length,
           itemBuilder: (context, index) {
             return subcomments[index].build(context);
           },

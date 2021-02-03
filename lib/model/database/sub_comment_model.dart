@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'comment_model.dart';
 import 'firebase_firestore_db.dart';
+import 'user_model.dart';
 import '../sub_comment.dart';
-import '../../utils.dart';
 
 /// Model used to communicate with the database for the
 /// sub-comment collection.
@@ -14,15 +15,17 @@ class SubCommentModel extends FirebaseFirestoreDB<SubComment> {
           "author",
           "dateAdded",
           "dateModified",
+          "comment",
         ]);
 
   @override
   Map<String, dynamic> getElementData(SubComment object) {
     return {
       "text": object.text,
-      "author": object.authorId,
-      "dateAdded": convertDatetimeToString(object.dateAdded),
-      "dateModified": convertDatetimeToString(object.dateModified),
+      "author": UserModel().getDocumentReference(object.authorId),
+      "dateAdded": Timestamp.fromDate(object.dateAdded),
+      "dateModified": Timestamp.fromDate(object.dateModified),
+      "comment": CommentModel().getDocumentReference(object.commentId),
     };
   }
 
@@ -30,10 +33,11 @@ class SubCommentModel extends FirebaseFirestoreDB<SubComment> {
   SubComment getTElement(DocumentSnapshot value) {
     return new SubComment(
       id: value.id,
-      text: value['text'],
+      text: value['text'].id,
       authorId: value['author'],
-      dateAdded: convertStringToDatetime(value['dateAdded']),
-      dateModified: convertStringToDatetime(value['dateModified']),
+      dateAdded: value['dateAdded'].toDate(),
+      dateModified: value['dateModified'].toDate(),
+      commentId: value['comment'].id,
     );
   }
 }

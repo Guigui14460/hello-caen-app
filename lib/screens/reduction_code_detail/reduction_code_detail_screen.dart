@@ -13,6 +13,7 @@ import '../../model/commerce.dart';
 import '../../model/reduction_code.dart';
 import '../../model/reduction_code_used.dart';
 import '../../model/database/commerce_model.dart';
+import '../../model/database/reduction_code_model.dart';
 import '../../model/database/reduction_code_used_model.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
@@ -37,7 +38,9 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
   @override
   void initState() {
     ReductionCodeUsedModel()
-        .where("reductionCodeId", isEqualTo: widget.code.id)
+        .where("reductionCode",
+            isEqualTo:
+                ReductionCodeModel().getDocumentReference(widget.code.id))
         .then((value) {
       setState(() {
         _used = value;

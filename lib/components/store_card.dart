@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/comment.dart';
 import '../model/commerce.dart';
 import '../model/database/comment_model.dart';
+import '../model/database/commerce_model.dart';
 import '../services/size_config.dart';
 
 class StoreCard extends StatelessWidget {
@@ -24,7 +25,10 @@ class StoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Comment> comments = [];
-    CommentModel().getMultipleByIds(commerce.commentIds).then((value) {
+    CommentModel()
+        .where("commerce",
+            isEqualTo: CommerceModel().getDocumentReference(commerce.id))
+        .then((value) {
       comments = value;
     });
     return Padding(
@@ -97,9 +101,9 @@ class StoreCard extends StatelessWidget {
                                           color: Colors.white, size: 19),
                                       Text(
                                         " " +
-                                            (this.commerce.commentIds.isEmpty
+                                            (comments.isEmpty
                                                 ? "Aucun commentaire"
-                                                : "${this.commerce.commentIds.length}"),
+                                                : "${comments.length}"),
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ],

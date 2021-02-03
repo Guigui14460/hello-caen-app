@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'commerce.dart';
 import 'database/commerce_model.dart';
 import '../components/qr_code_generator.dart';
 
@@ -13,7 +13,6 @@ class ReductionCode {
 
   /// Commerce associated.
   final String commerceId;
-  Commerce commerce;
 
   /// Date of beginning.
   DateTime beginDate;
@@ -41,7 +40,6 @@ class ReductionCode {
   ReductionCode({
     this.id,
     this.notifyAllUser,
-    this.commerce,
     @required this.name,
     @required this.commerceId,
     @required this.beginDate,
@@ -52,14 +50,8 @@ class ReductionCode {
     @required this.reductionAmount,
   });
 
-  /// Initializes commerce associated to this
-  /// code.
-  Future<void> init() async {
-    await Future.wait([
-      CommerceModel()
-          .getById(this.commerceId)
-          .then((value) => this.commerce = value)
-    ]);
+  DocumentReference getCommerceRef() {
+    return CommerceModel().getDocumentReference(this.commerceId);
   }
 
   /// Gets the QR Code image generated for this

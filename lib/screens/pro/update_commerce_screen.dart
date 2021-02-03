@@ -409,7 +409,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                   longitude: _longitude,
                   timetables: _timetables,
                   typeId: _type.id,
-                  commentIds: widget.commerce.commentIds,
                   dateAdded: widget.commerce.dateAdded,
                   dateModified: DateTime.now(),
                   imageLink: link,
@@ -432,7 +431,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
             longitude: _longitude,
             timetables: _timetables,
             typeId: _type.id,
-            commentIds: widget.commerce.commentIds,
             dateAdded: widget.commerce.dateAdded,
             dateModified: DateTime.now(),
             imageLink: widget.commerce.imageLink,
@@ -483,7 +481,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                 longitude: _longitude,
                 timetables: _timetables,
                 typeId: _type.id,
-                commentIds: [],
                 dateAdded: DateTime.now(),
                 imageLink: link,
               );

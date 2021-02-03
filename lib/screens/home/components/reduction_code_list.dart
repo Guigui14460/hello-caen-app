@@ -69,17 +69,23 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
   void _onRefresh() async {
     DateTime now = DateTime.now();
     for (CommerceType type in _types) {
-      await CommerceModel().where("type", isEqualTo: type.id).then((commerces) {
+      await CommerceModel()
+          .where("type",
+              isEqualTo: CommerceTypeModel().getDocumentReference(type.id))
+          .then((commerces) {
         List<ReductionCode> codesByType = [];
         commerces.forEach((commerce) async {
           await ReductionCodeModel()
-              .where("commerce", isEqualTo: commerce.id)
+              .where("commerce",
+                  isEqualTo: CommerceModel().getDocumentReference(commerce.id))
               .then((codes) async {
             codes = codes.where((e) => e.endDate.isAfter(now)).toList();
             codesByType.addAll(codes);
             for (ReductionCode code in codes) {
               await ReductionCodeUsedModel()
-                  .where("reductionCodeId", isEqualTo: code.id)
+                  .where("reductionCode",
+                      isEqualTo:
+                          ReductionCodeModel().getDocumentReference(code.id))
                   .then((value) {
                 if (this.mounted) {
                   setState(() {

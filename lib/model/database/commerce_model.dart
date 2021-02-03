@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'comment_model.dart';
+import 'commerce_type_model.dart';
 import 'firebase_firestore_db.dart';
 import 'reduction_code_model.dart';
+import 'user_model.dart';
 import '../commerce.dart';
 import '../reduction_code.dart';
-import '../../utils.dart';
 
 /// Model used to communicate with the database for the
 /// commerce collection.
@@ -15,13 +16,11 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       : super("commerces", [
           "name",
           "description",
-          "latitude",
-          "longitude",
+          "location",
           "dateAdded",
           "dateModified",
           "timetables",
           "type",
-          "comments",
           "imageLink",
           "owner",
         ]);
@@ -31,15 +30,15 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
     return {
       "name": object.name,
       "description": object.description,
-      "latitude": object.latitude,
-      "longitude": object.longitude,
-      "dateAdded": convertDatetimeToString(object.dateAdded),
-      "dateModified": convertDatetimeToString(object.dateModified),
+      "location": GeoPoint(object.latitude, object.longitude),
+      "dateAdded": Timestamp.fromDate(object.dateAdded),
+      "dateModified": object.dateModified == null
+          ? object.dateModified
+          : Timestamp.fromDate(object.dateModified),
       "timetables": object.timetables,
-      "type": object.typeId,
-      "comments": object.commentIds,
+      "type": CommerceTypeModel().getDocumentReference(object.typeId),
       "imageLink": object.imageLink,
-      "owner": object.ownerId,
+      "owner": UserModel().getDocumentReference(object.ownerId),
     };
   }
 
@@ -49,28 +48,30 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       id: value.id,
       name: value['name'],
       description: value['description'],
-      latitude: value['latitude'] / 1.0,
-      longitude: value['longitude'] / 1.0,
-      dateAdded: convertStringToDatetime(value['dateAdded']),
-      dateModified: convertStringToDatetime(value['dateModified']),
+      latitude: value['location'].latitude,
+      longitude: value['location'].longitude,
+      dateAdded: value['dateAdded'].toDate(),
+      dateModified: value['dateModified'] == null
+          ? value['dateModified']
+          : value['dateModified'].toDate(),
       timetables: value['timetables'],
-      typeId: value['type'],
-      commentIds: List<String>.from(value['comments']),
+      typeId: value['type'].id,
       imageLink: value['imageLink'],
-      ownerId: value['owner'],
+      ownerId: value['owner'].id,
     );
   }
 
   @override
   Future<bool> delete(String id) async {
-    Commerce commerce = await this.getById(id);
     CommentModel model = CommentModel();
     ReductionCodeModel model2 = ReductionCodeModel();
     List<ReductionCode> codes = await model2
-        .whereLinked("commerce", isEqualTo: id)
+        .whereLinked("commerce", isEqualTo: this.getDocumentReference(id))
         .executeCurrentLinkedQueryRequest();
-    List<bool> results = await Future.wait(commerce.commentIds.map((element) {
-          return model.delete(element);
+    List<bool> results = await Future.wait((await model.where("commerce",
+                isEqualTo: this.getDocumentReference(id)))
+            .map((element) {
+          return model.delete(element.id);
         }).toList() +
         codes.map((element) {
           return model2.delete(element.id);

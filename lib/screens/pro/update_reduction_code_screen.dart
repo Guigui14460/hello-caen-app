@@ -12,6 +12,7 @@ import '../../components/form_error.dart';
 import '../../helper/keyboard.dart';
 import '../../model/commerce.dart';
 import '../../model/reduction_code.dart';
+import '../../model/database/commerce_model.dart';
 import '../../model/database/reduction_code_model.dart';
 import '../../services/size_config.dart';
 
@@ -84,7 +85,8 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
       });
     }
     ReductionCodeModel()
-        .where("commerce", isEqualTo: widget.commerce.id)
+        .where("commerce",
+            isEqualTo: CommerceModel().getDocumentReference(widget.commerce.id))
         .then((value) {
       setState(() {
         _otherCommerceCode = value;
@@ -399,7 +401,9 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
           print(error);
         });
         await ReductionCodeModel()
-            .whereLinked("commerce", isEqualTo: widget.commerce.id)
+            .whereLinked("commerce",
+                isEqualTo:
+                    CommerceModel().getDocumentReference(widget.commerce.id))
             .whereLinked("name", isEqualTo: _name)
             .executeCurrentLinkedQueryRequest()
             .then((value) {

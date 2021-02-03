@@ -254,28 +254,24 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                 "Choisissez une nouvelle image de profil en deux clics !",
             text: "Choisir",
             onPressed: () async {
-              PickedFile image =
-                  await ImagePicker().getImage(source: ImageSource.gallery);
-              await FirebaseSettings.instance
-                  .uploadFile(
-                      image, context, "profiles-pictures", "${user.id}.jpg")
-                  .then((value) {
-                FirebaseSettings.instance
-                    .downloadLink(FirebaseSettings.instance
+              try {
+                PickedFile image =
+                    await ImagePicker().getImage(source: ImageSource.gallery);
+                await FirebaseSettings.instance.uploadFile(
+                    image, context, "profiles-pictures", "${user.id}.jpg");
+                await Future.delayed(Duration(seconds: 2));
+                String url = await FirebaseSettings.instance.downloadLink(
+                    FirebaseSettings.instance
                         .getStorage()
-                        .ref("profiles-pictures/${user.id}.jpg"))
-                    .then((value) {
-                  user.profilePicture = value;
-                  UserModel().update(user.id, user).catchError((error) {
-                    print(error);
-                  });
-                  userManager.updateLoggedInUser(user);
-                }).catchError((error) {
-                  print(error);
-                });
-              }).catchError((error) {
-                print(error);
-              });
+                        .ref("profiles-pictures/${user.id}.jpg"));
+                user.profilePicture = url;
+                await UserModel().update(user.id, user);
+                userManager.updateLoggedInUser(user);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        "Erreur lors de l'envoi de la nouvelle image de profil")));
+              }
               Navigator.pop(context);
             },
           );

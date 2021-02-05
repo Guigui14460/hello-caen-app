@@ -366,13 +366,12 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
           notifyAllUser: widget.code.notifyAllUser,
           commerceId: widget.commerce.id,
         );
-        await ReductionCodeModel().update(code.id, code).catchError((error) {
-          print(error);
+        await ReductionCodeModel().update(code.id, code).then((value) {
+          widget.modifyCallback(code);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Données mises à jour")));
+          Navigator.pop(context);
         });
-        widget.modifyCallback(code);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Données mises à jour")));
-        Navigator.pop(context);
       } catch (e) {
         print(e);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

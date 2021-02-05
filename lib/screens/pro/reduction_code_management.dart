@@ -59,7 +59,9 @@ class _ReductionManagementScreenState extends State<ReductionManagementScreen> {
   }
 
   void deleteCode(ReductionCode code) {
-    _codes.remove(code);
+    setState(() {
+      _codes.remove(code);
+    });
   }
 
   @override

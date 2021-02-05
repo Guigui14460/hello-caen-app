@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 
 const primaryColor = Color(0xFF643865);
 const secondaryColor = Color(0xFFEB6265);
@@ -36,8 +37,7 @@ const int minimumPasswordLength = 1; // TODO: à échanger
 const String kCommerceNameNullError = "Le nom ne doit pas être vide";
 const String kCommerceTypeNullError = "Veuillez sélectionner un type";
 const String kCommerceImageLinkNullError = "Veuillez sélectionner une image";
-const String kCommerceLatitudeNullError = "Veuillez ajouter la latitude";
-const String kCommerceLongitudeNullError = "Veuillez ajouter la longitude";
+const String kLocationNullError = "Veuillez sélectionner une localisation";
 const String kCommerceTimetablesNullError =
     "Veuillez ajouter vos horaires\nd'ouvertures/fermetures";
 
@@ -65,3 +65,5 @@ const String kCodeReductionAmountInvalidError =
     "Le champ ne doit contenir que des chiffres";
 const String kCodeReductionAmountNegativError =
     "Veuillez saisir un montant positif";
+
+final LatLng caenLocation = LatLng(49.1705, -0.3650);

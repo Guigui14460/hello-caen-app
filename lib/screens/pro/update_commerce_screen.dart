@@ -3,15 +3,20 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'map_object.dart';
 import 'preview_commerce.dart';
 import '../../constants.dart';
 import '../../components/app_bar.dart';
 import '../../components/default_button.dart';
 import '../../components/form_error.dart';
+import '../../components/modal_box.dart';
+import '../../helper/zoombuttons_plugin.dart';
 import '../../helper/keyboard.dart';
 import '../../model/commerce.dart';
 import '../../model/commerce_type.dart';
@@ -53,10 +58,12 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
   List<CommerceType> _typesAvailable = [];
 
   final _formKey = GlobalKey<FormState>();
+  MapController _mapController = MapController();
+
   String _name;
   String _description;
-  double _latitude;
-  double _longitude;
+  LatLng _location;
+  LatLng _selectedLocation;
   String _timetables;
   CommerceType _type;
   String _imageLink;
@@ -64,19 +71,21 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
 
   final List<String> errors = [];
 
+  void _handleTap(LatLng latlng) {
+    setState(() {
+      _location = latlng;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     if (widget.modify) {
+      LatLng loc = LatLng(widget.commerce.latitude, widget.commerce.longitude);
       setState(() {
         _name = widget.commerce.name;
-        try {
-          _latitude = widget.commerce.latitude;
-          _longitude = widget.commerce.longitude;
-        } catch (e) {
-          _latitude = null;
-          _longitude = null;
-        }
+        _location = loc;
+        _selectedLocation = loc;
         _timetables = widget.commerce.timetables;
         _description = widget.commerce.description;
         _imageLink = widget.commerce.imageLink;
@@ -121,8 +130,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                       builder: (context) => PreviewCommerceScreen(
                             name: _name,
                             description: _description,
-                            latitude: _latitude,
-                            longitude: _longitude,
+                            latitude: _selectedLocation.latitude,
+                            longitude: _selectedLocation.longitude,
                             image: _image,
                             imageLink: _imageLink,
                             type: _type,
@@ -163,9 +172,9 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                         SizedBox(height: getProportionateScreenHeight(20)),
                         buildImageLinkPreview(),
                         SizedBox(height: getProportionateScreenHeight(20)),
-                        buildLocationSelection(),
-                        SizedBox(height: getProportionateScreenHeight(20)),
                         buildTimetablesFormField(),
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        buildMapLocationField(context),
                         SizedBox(height: getProportionateScreenHeight(20)),
                         FormError(errors: errors),
                         SizedBox(height: getProportionateScreenHeight(20)),
@@ -186,6 +195,84 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _openMap(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ModalBox(
+          title: "Choisir la localisation du lieu",
+          textButton: "Confirmer la localisation",
+          widget: MapObject(
+            height: 300,
+            initialZoom: 11.5,
+            maxZoom: 19,
+            initialLocation: _location,
+            onTap: _handleTap,
+            slideOnBoundaries: true,
+          ),
+          onPressed: () {
+            setState(() {
+              _selectedLocation = _location;
+            });
+            Navigator.pop(context);
+            _mapController.move(_selectedLocation, _mapController.zoom);
+          },
+        );
+      },
+    );
+  }
+
+  Widget buildMapLocationField(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: getProportionateScreenHeight(300),
+          child: FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              center:
+                  _selectedLocation == null ? caenLocation : _selectedLocation,
+              zoom: 15,
+              minZoom: 11.5,
+              boundsOptions: FitBoundsOptions(padding: EdgeInsets.zero),
+              plugins: [
+                ZoomButtonsPlugin(),
+              ],
+            ),
+            layers: [
+              TileLayerOptions(
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+              ),
+              new MarkerLayerOptions(
+                markers: [
+                  new Marker(
+                    width: 30,
+                    height: 30,
+                    point: _selectedLocation,
+                    anchorPos: AnchorPos.align(AnchorAlign.top),
+                    builder: (ctx) =>
+                        Icon(Icons.place, color: Colors.red, size: 30),
+                  ),
+                ],
+              ),
+            ],
+            nonRotatedLayers: [
+              ZoomButtonsPluginOption(
+                minZoom: 4,
+                maxZoom: 19,
+              ),
+            ],
+          ),
+        ),
+        TextButton(
+            onPressed: () => _openMap(context),
+            child: Text("Ouvrir la carte", style: TextStyle(fontSize: 18))),
+      ],
     );
   }
 
@@ -232,58 +319,6 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
         Text(
           "N.B.: Nous vous conseillons d'écrire les horaires sous la forme à chaque ligne : \"JOUR HH:MM - HH:MM\".",
           style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-      ],
-    );
-  }
-
-  Widget buildLocationSelection() {
-    return Column(
-      children: [
-        TextFormField(
-          keyboardType: TextInputType.number,
-          initialValue: "${_latitude == null ? 0 : _latitude}",
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9.-]')),
-          ],
-          onSaved: (newValue) => _latitude = double.parse(newValue),
-          onChanged: (value) {
-            if (value.isNotEmpty) {
-              removeError(error: kCommerceLatitudeNullError);
-            }
-          },
-          validator: (value) {
-            if (value.isEmpty) {
-              addError(error: kCommerceLatitudeNullError);
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-              labelText: "Latitude",
-              hintText: "Entrez la latitude de votre commerce"),
-        ),
-        SizedBox(height: getProportionateScreenHeight(20)),
-        TextFormField(
-          keyboardType: TextInputType.number,
-          initialValue: "${_longitude == null ? 0 : _longitude}",
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9.-]')),
-          ],
-          onSaved: (newValue) => _longitude = double.parse(newValue),
-          onChanged: (value) {
-            if (value.isNotEmpty) {
-              removeError(error: kCommerceLongitudeNullError);
-            }
-          },
-          validator: (value) {
-            if (value.isEmpty) {
-              addError(error: kCommerceLongitudeNullError);
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-              labelText: "Longitude",
-              hintText: "Entrez la longitude de votre commerce"),
         ),
       ],
     );
@@ -386,6 +421,11 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
     } else {
       addError(error: kCommerceImageLinkNullError);
     }
+    if (_selectedLocation != null) {
+      removeError(error: kLocationNullError);
+    } else {
+      addError(error: kLocationNullError);
+    }
     if (_formKey.currentState.validate() && errors.isEmpty) {
       _formKey.currentState.save();
       KeyboardUtil.hideKeyboard(context);
@@ -405,8 +445,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                   ownerId: widget.commerce.ownerId,
                   name: _name,
                   description: _description,
-                  latitude: _latitude,
-                  longitude: _longitude,
+                  latitude: _selectedLocation.latitude,
+                  longitude: _selectedLocation.longitude,
                   timetables: _timetables,
                   typeId: _type.id,
                   dateAdded: widget.commerce.dateAdded,
@@ -427,8 +467,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
             ownerId: widget.commerce.ownerId,
             name: _name,
             description: _description,
-            latitude: _latitude,
-            longitude: _longitude,
+            latitude: _selectedLocation.latitude,
+            longitude: _selectedLocation.longitude,
             timetables: _timetables,
             typeId: _type.id,
             dateAdded: widget.commerce.dateAdded,
@@ -459,6 +499,11 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
     } else {
       addError(error: kCommerceImageLinkNullError);
     }
+    if (_selectedLocation != null) {
+      removeError(error: kLocationNullError);
+    } else {
+      addError(error: kLocationNullError);
+    }
     if (_formKey.currentState.validate() && errors.isEmpty) {
       _formKey.currentState.save();
       KeyboardUtil.hideKeyboard(context);
@@ -477,8 +522,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
                 ownerId: userManager.getLoggedInUser().id,
                 name: _name,
                 description: _description,
-                latitude: _latitude,
-                longitude: _longitude,
+                latitude: _selectedLocation.latitude,
+                longitude: _selectedLocation.longitude,
                 timetables: _timetables,
                 typeId: _type.id,
                 dateAdded: DateTime.now(),

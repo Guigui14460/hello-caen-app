@@ -8,7 +8,7 @@ import '../services/size_config.dart';
 class CustomDialogBox extends StatefulWidget {
   final String title, description, text;
   final ImageProvider<Object> img;
-  final VoidCallback onPressed;
+  final Function onPressed;
 
   CustomDialogBox(
       {Key key,

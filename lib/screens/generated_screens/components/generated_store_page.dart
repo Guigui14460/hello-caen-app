@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/components/new_comment_box.dart';
 
 import '../../../components/app_bar.dart';
 import '../../../model/comment.dart';
@@ -69,7 +70,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
               ),
               Container(
                 width: getProportionateScreenWidth(1000),
-                height: getProportionateScreenHeight(200),
+                height: getProportionateScreenHeight(160),
                 margin: EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -106,16 +107,16 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                 height: getProportionateScreenHeight(130),
                 margin: EdgeInsets.only(top: 10),
                 //mainAxisAlignment: MainAxisAlignment.center,
-                child: Column(
+                  child:Column(
                   children: [
                     Text(
                       "Commentaires",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
+                    NewCommentBox(),
                     if (comments.length == 0)
-                      Text(
-                          "Aucun commentaire pour le moment, soyez le premier  !")
+                      Text("Aucun commentaire pour le moment, soyez le premier  !")
                     else
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -130,6 +131,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       )
                   ],
                 ),
+
               ),
             ],
           ),

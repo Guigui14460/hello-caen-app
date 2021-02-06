@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/services/firebase_settings.dart';
 import 'package:hello_caen/services/size_config.dart';
 
 
@@ -19,7 +20,7 @@ class _NewCommentBoxState extends State<NewCommentBox> {
             height: getProportionateScreenHeight(75),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage("https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg"),
+                  image: NetworkImage(FirebaseSettings.instance.getAuth().currentUser.photoURL),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(100))),

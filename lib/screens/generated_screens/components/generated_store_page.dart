@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/components/comment_verifier.dart';
 import 'package:hello_caen/components/new_comment_box.dart';
 
 import '../../../components/app_bar.dart';
@@ -114,7 +115,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
-                    NewCommentBox(),
+                    CommentVerifier(),
                     if (comments.length == 0)
                       Text("Aucun commentaire pour le moment, soyez le premier  !")
                     else

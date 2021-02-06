@@ -58,7 +58,7 @@ class _CommentVerifierState extends State<CommentVerifier> {
                 )),
           ],
         ),
-        Text("pour accéder à des propositions de contenus personnalisées",
+        Text("pour pouvoir, vous-aussi donner votre avis !",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: getProportionateScreenWidth(20))),
       ],

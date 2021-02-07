@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hello_caen/model/comment.dart';
 import 'package:hello_caen/model/commerce.dart';
 import 'package:hello_caen/model/database/comment_model.dart';
+import 'package:hello_caen/model/database/user_model.dart';
+import 'package:hello_caen/model/user_account.dart';
 import 'package:hello_caen/services/firebase_settings.dart';
 import 'package:hello_caen/services/size_config.dart';
 
@@ -9,9 +11,9 @@ import 'package:hello_caen/services/size_config.dart';
 class NewCommentBox extends StatefulWidget {
 
   final Commerce data;
-
   const NewCommentBox({Key key, this.data})
       : super(key: key);
+
 
   @override
   _NewCommentBoxState createState() => _NewCommentBoxState();
@@ -21,8 +23,20 @@ class NewCommentBox extends StatefulWidget {
 
 class _NewCommentBoxState extends State<NewCommentBox> {
 
+  User user;
+
+  Future<User> _fetchLoggedUser(String UserId) async {
+    return UserModel().getById(UserId);
+  }
+
+  // ignore: missing_return
+  Future<User> setUser() async { this.user = await _fetchLoggedUser(FirebaseSettings.instance.getAuth().currentUser.uid);}
+
+
+
   Widget build(BuildContext context) {
-  return Container(
+    setUser();
+    return Container(
       width: getProportionateScreenWidth(1000),
       height: getProportionateScreenHeight(75),
       child: Row(
@@ -32,7 +46,7 @@ class _NewCommentBoxState extends State<NewCommentBox> {
             height: getProportionateScreenHeight(75),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(FirebaseSettings.instance.getAuth().currentUser.photoURL),
+                  image: NetworkImage(user.profilePicture),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(100))),
@@ -48,7 +62,7 @@ class _NewCommentBoxState extends State<NewCommentBox> {
                 onFieldSubmitted: (String value) async {
                   print(value);
                   //Send To Batadase Goes Hereeeeeeeeeeeeeeeeeeeeeeeeeeeee  !!!!!         <-----------------------------------------------------------------
-                  await CommentModel().create(new Comment(commerceId: widget.data.id, dateAdded: new DateTime.now(), dateModified: new DateTime.now(), rating: 4.0, text: value, authorId: FirebaseSettings.instance.getAuth().currentUser.tenantId ));
+                  await CommentModel().create(new Comment(commerceId: widget.data.id, dateAdded: new DateTime.now(), dateModified: new DateTime.now(), rating: 4.0, text: value, authorId: this.user.id ));
 
                 },
               ),

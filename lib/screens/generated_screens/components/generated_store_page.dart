@@ -115,7 +115,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
-                    CommentVerifier(),
+                    CommentVerifier(data: widget.data),
                     if (comments.length == 0)
                       Text("Aucun commentaire pour le moment, soyez le premier  !")
                     else

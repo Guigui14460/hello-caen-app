@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/model/comment.dart';
+import 'package:hello_caen/model/commerce.dart';
+import 'package:hello_caen/model/database/comment_model.dart';
 import 'package:hello_caen/services/firebase_settings.dart';
 import 'package:hello_caen/services/size_config.dart';
 
 
 class NewCommentBox extends StatefulWidget {
+
+  final Commerce data;
+
+  const NewCommentBox({Key key, this.data})
+      : super(key: key);
+
   @override
   _NewCommentBoxState createState() => _NewCommentBoxState();
+
+
 }
 
 class _NewCommentBoxState extends State<NewCommentBox> {
+
   Widget build(BuildContext context) {
   return Container(
       width: getProportionateScreenWidth(1000),
@@ -33,9 +45,11 @@ class _NewCommentBoxState extends State<NewCommentBox> {
             child: Column(children: [
               Text("Un avis ? Exprimez vous  !",style: TextStyle(fontSize: 12),),
               TextFormField(
-                onFieldSubmitted: (String value){
+                onFieldSubmitted: (String value) async {
                   print(value);
                   //Send To Batadase Goes Hereeeeeeeeeeeeeeeeeeeeeeeeeeeee  !!!!!         <-----------------------------------------------------------------
+                  await CommentModel().create(new Comment(commerceId: widget.data.id, dateAdded: new DateTime.now(), dateModified: new DateTime.now(), rating: 4.0, text: value, authorId: FirebaseSettings.instance.getAuth().currentUser.tenantId ));
+
                 },
               ),
               ]

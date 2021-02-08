@@ -216,7 +216,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                 ? Column(
                     children: [
                       _getButton(
-                        title: "Supprimer le compte définitivement",
+                        title: "Supprimer le compte\ndéfinitivement",
                         iconData: Icons.delete_forever,
                         onTap: () => _showDeleteAccountDialog(context, picture),
                         isDarkMode: isDarkMode,
@@ -296,9 +296,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
               isDarkMode ? darkModeBackgroundcolor : lightModeBackgroundcolor,
         ),
         width: double.infinity,
-        height: getProportionateScreenHeight(50),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(12),
+            vertical: getProportionateScreenWidth(12),
+          ),
           child: (showRightArrow
               ? Row(
                   children: [
@@ -313,8 +315,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                         SizedBox(width: getProportionateScreenWidth(10)),
                         Text(
                           title,
+                          softWrap: true,
                           style: TextStyle(
-                            fontSize: getProportionateScreenHeight(17),
+                            fontSize: getProportionateScreenWidth(17),
                             color: isDarkMode
                                 ? darkModeForegroundcolor
                                 : lightModeForegroundcolor,
@@ -342,8 +345,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                     SizedBox(width: getProportionateScreenWidth(10)),
                     Text(
                       title,
+                      softWrap: true,
                       style: TextStyle(
-                        fontSize: getProportionateScreenHeight(17),
+                        fontSize: getProportionateScreenWidth(17),
                         color: isDarkMode
                             ? darkModeForegroundcolor
                             : lightModeForegroundcolor,

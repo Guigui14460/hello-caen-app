@@ -1,80 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/model/comment.dart';
-import 'package:hello_caen/model/commerce.dart';
-import 'package:hello_caen/model/database/comment_model.dart';
-import 'package:hello_caen/model/database/user_model.dart';
-import 'package:hello_caen/model/user_account.dart';
-import 'package:hello_caen/services/firebase_settings.dart';
-import 'package:hello_caen/services/size_config.dart';
+import 'package:provider/provider.dart';
 
+import '../model/comment.dart';
+import '../model/commerce.dart';
+import '../model/database/comment_model.dart';
+import '../model/user_account.dart';
+import '../services/size_config.dart';
+import '../services/user_manager.dart';
 
 class NewCommentBox extends StatefulWidget {
-
   final Commerce data;
-  const NewCommentBox({Key key, this.data})
-      : super(key: key);
-
+  const NewCommentBox({Key key, this.data}) : super(key: key);
 
   @override
   _NewCommentBoxState createState() => _NewCommentBoxState();
-
-
 }
 
 class _NewCommentBoxState extends State<NewCommentBox> {
-
-  User user;
-
-  Future<User> _fetchLoggedUser(String UserId) async {
-    return UserModel().getById(UserId);
-  }
-
-  // ignore: missing_return
-  Future<User> setUser() async { this.user = await _fetchLoggedUser(FirebaseSettings.instance.getAuth().currentUser.uid);}
-
-
+  User _user;
 
   Widget build(BuildContext context) {
-    setUser();
-    return Container(
-      width: getProportionateScreenWidth(1000),
-      height: getProportionateScreenHeight(75),
-      child: Row(
-        children : [
-          Container(
-            width: getProportionateScreenWidth(75),
-            height: getProportionateScreenHeight(75),
-            decoration: BoxDecoration(
+    if (this.mounted) {
+      setState(() {
+        _user = Provider.of<UserManager>(context).getLoggedInUser();
+      });
+    }
+    return Column(
+      children: [
+        Text(
+          "Un avis ? Exprimez vous  !",
+          style: TextStyle(fontSize: 12),
+        ),
+        Row(
+          children: [
+            Container(
+              width: getProportionateScreenHeight(50),
+              height: getProportionateScreenHeight(50),
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(user.profilePicture),
+                  image: NetworkImage(_user.profilePicture),
                   fit: BoxFit.cover,
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-            //child:  ,
-          ),
-          Container(
-            width: getProportionateScreenWidth(300),
-            height: getProportionateScreenHeight(80),
-            //color: Colors.black,
-            child: Column(children: [
-              Text("Un avis ? Exprimez vous  !",style: TextStyle(fontSize: 12),),
-              TextFormField(
-                onFieldSubmitted: (String value) async {
-                  print(value);
-                  //Send To Batadase Goes Hereeeeeeeeeeeeeeeeeeeeeeeeeeeee  !!!!!         <-----------------------------------------------------------------
-                  await CommentModel().create(new Comment(commerceId: widget.data.id, dateAdded: new DateTime.now(), dateModified: new DateTime.now(), rating: 4.0, text: value, authorId: this.user.id ));
-
-                },
+                borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
-              ]
+            ),
+            SizedBox(width: getProportionateScreenWidth(10)),
+            Expanded(
+              child: Container(
+                height: getProportionateScreenHeight(75),
+                //color: Colors.black,
+                child: TextFormField(
+                  onFieldSubmitted: (String value) async {
+                    //Send To Batadase Goes Hereeeeeeeeeeeeeeeeeeeeeeeeeeeee  !!!!!         <-----------------------------------------------------------------
+                    await CommentModel().create(new Comment(
+                        commerceId: widget.data.id,
+                        dateAdded: new DateTime.now(),
+                        dateModified: new DateTime.now(),
+                        rating: 4.0,
+                        text: value,
+                        authorId: _user.id));
+                  },
+                ),
+              ),
             )
-          )
-
-
-
-
-        ]
-      )
+          ],
+        ),
+      ],
     );
   }
 }

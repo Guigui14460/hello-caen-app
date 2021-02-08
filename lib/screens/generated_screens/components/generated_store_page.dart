@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/components/comment_verifier.dart';
-import 'package:hello_caen/components/new_comment_box.dart';
 
 import '../../../components/app_bar.dart';
+import '../../../components/comment_verifier.dart';
+import '../../../components/new_comment_box.dart';
 import '../../../model/comment.dart';
 import '../../../model/commerce.dart';
 import '../../../model/database/comment_model.dart';
@@ -19,15 +19,16 @@ class GeneratedStorePage extends StatefulWidget {
 
 class _GeneratedStorePageState extends State<GeneratedStorePage> {
   Widget build(BuildContext context) {
-    print(widget.data);
     List<Comment> comments = [];
     CommentModel()
         .where("commerce",
             isEqualTo: CommerceModel().getDocumentReference(widget.data.id))
         .then((value) {
-      setState(() {
-        comments = value;
-      });
+      if (this.mounted) {
+        setState(() {
+          comments = value;
+        });
+      }
     });
     return SafeArea(
       child: Scaffold(
@@ -104,35 +105,33 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                 ),
               ),
               Container(
-                width: getProportionateScreenWidth(1000),
-                height: getProportionateScreenHeight(130),
                 margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.symmetric(
+                    horizontal: getProportionateScreenWidth(20)),
                 //mainAxisAlignment: MainAxisAlignment.center,
-                  child:Column(
+                child: Column(
                   children: [
                     Text(
                       "Commentaires",
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                     CommentVerifier(data: widget.data),
                     if (comments.length == 0)
-                      Text("Aucun commentaire pour le moment, soyez le premier  !")
+                      Text(
+                          "Aucun commentaire pour le moment, soyez le premier  !")
                     else
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: comments.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            width: getProportionateScreenWidth(1000),
-                            height: getProportionateScreenHeight(100),
                             child: Text(comments[index].text),
                           );
                         },
                       )
                   ],
                 ),
-
               ),
             ],
           ),

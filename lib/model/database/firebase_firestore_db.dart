@@ -115,7 +115,6 @@ abstract class FirebaseFirestoreDB<T>
 
   /// Gets [T] element from the [value] provided by
   /// [getAll] and [getById] methods.
-  @protected
   T getTElement(DocumentSnapshot value);
 
   @override
@@ -178,7 +177,6 @@ abstract class FirebaseFirestoreDB<T>
 
   /// Gets data from the [object].
   /// Used in [create] and [update] methods.
-  @protected
   Map<String, dynamic> getElementData(T object);
 
   @override

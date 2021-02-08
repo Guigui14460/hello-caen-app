@@ -1,6 +1,7 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_caen/components/search_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -53,8 +54,11 @@ class _StoreListPageState extends State<StoreListPage> {
         if (value != "") {
           setState(() {
             _searchResults = _currentDisplayedStores
-                .where((element) => removeDiacritics(element.name.toLowerCase())
-                    .contains(removeDiacritics(value.toLowerCase())))
+                .where((element) =>
+                    (this._currentType == null ||
+                        element.typeId == this._currentType.id) &&
+                    removeDiacritics(element.name.toLowerCase())
+                        .contains(removeDiacritics(value.toLowerCase())))
                 .toList();
           });
         }
@@ -113,6 +117,8 @@ class _StoreListPageState extends State<StoreListPage> {
         child: Column(
           children: [
             SizedBox(height: getProportionateScreenHeight(30)),
+            SearchBar(onChanged: _search),
+            SizedBox(height: getProportionateScreenHeight(20)),
             CategoryMenu(
               text: ["Tout"] + _types.map((e) => e.name).toList(),
               onPressed: [() => _filterByType(null)] +

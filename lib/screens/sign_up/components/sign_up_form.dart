@@ -17,22 +17,22 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  String email;
-  String password;
-  String confirmPassword;
-  final List<String> errors = [];
+  String _email;
+  String _password;
+  String _confirmPassword;
+  final List<String> _errors = [];
 
   void addError({String error}) {
-    if (!errors.contains(error))
+    if (!_errors.contains(error))
       setState(() {
-        errors.add(error);
+        _errors.add(error);
       });
   }
 
   void removeError({String error}) {
-    if (errors.contains(error))
+    if (_errors.contains(error))
       setState(() {
-        errors.remove(error);
+        _errors.remove(error);
       });
   }
 
@@ -47,25 +47,26 @@ class _SignUpFormState extends State<SignUpForm> {
           buildPasswordFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordConfirmFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          SizedBox(height: getProportionateScreenHeight(20)),
           Text(
             "En continuant, vous acceptez d'être en accord\navec nos termes et conditions d'utilisation",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.caption,
           ),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          FormError(errors: errors),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          FormError(errors: _errors),
+          SizedBox(height: getProportionateScreenHeight(10)),
           DefaultButton(
             text: 'Continuer',
             height: getProportionateScreenHeight(50),
             longPress: () {},
             press: () async {
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState.validate() && _errors.isEmpty) {
                 _formKey.currentState.save();
                 KeyboardUtil.hideKeyboard(context);
                 try {
                   await Provider.of<UserManager>(context, listen: false)
-                      .registerWithEmailAndPassword(email, password);
+                      .registerWithEmailAndPassword(_email, _password);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Vous êtes désormais inscrit")));
                   Navigator.pushReplacementNamed(
@@ -96,16 +97,19 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField buildPasswordConfirmFormField() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => confirmPassword = newValue,
+      onSaved: (newValue) => _confirmPassword = newValue,
       onChanged: (value) {
         removeError(error: kWeakPassword);
         if (value.isNotEmpty) {
           removeError(error: kPassConfirmNullError);
         } else if (value.length >= minimumPasswordLength) {
           removeError(error: kShortPassError);
-        } else if (value == password) {
+        } else if (value == _password) {
           removeError(error: kMatchPassError);
         }
+        setState(() {
+          _confirmPassword = value;
+        });
         return null;
       },
       validator: (value) {
@@ -113,7 +117,7 @@ class _SignUpFormState extends State<SignUpForm> {
           addError(error: kPassConfirmNullError);
         } else if (value.length < minimumPasswordLength) {
           addError(error: kShortPassError);
-        } else if (value != password) {
+        } else if (value != _password) {
           addError(error: kMatchPassError);
         }
         return null;
@@ -129,14 +133,18 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => _password = newValue,
       onChanged: (value) {
         removeError(error: kWeakPassword);
+        removeError(error: kMatchPassError);
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
         } else if (value.length >= minimumPasswordLength) {
           removeError(error: kShortPassError);
         }
+        setState(() {
+          _password = value;
+        });
         return null;
       },
       validator: (value) {
@@ -158,7 +166,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => _email = newValue,
       onChanged: (value) {
         removeError(error: kAlreadyUsedEmail);
         if (value.isNotEmpty) {

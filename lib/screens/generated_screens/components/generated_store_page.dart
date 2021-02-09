@@ -20,8 +20,6 @@ class GeneratedStorePage extends StatefulWidget {
 }
 
 class _GeneratedStorePageState extends State<GeneratedStorePage> {
-
-
   Widget build(BuildContext context) {
     ThemeManager manager = Provider.of<ThemeManager>(context);
 
@@ -44,10 +42,20 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
             children: [
               Container(
                 height: getProportionateScreenHeight(300),
-                decoration: BoxDecoration( borderRadius: BorderRadius.all(Radius.circular(20)),),
-                child: Stack(children : [
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Stack(children: [
                   Container(
-                    decoration: BoxDecoration( borderRadius: BorderRadius.all(Radius.circular(20)),image: DecorationImage(image: NetworkImage(widget.data.imageLink), fit: BoxFit.cover,),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      image: DecorationImage(
+                        image: NetworkImage(widget.data.imageLink),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   /*Container(
@@ -62,37 +70,46 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                               ]))),*/
                 ]),
               ),
-
-
-          Container(
+              Container(
                 transform: Matrix4.translationValues(0.0, -50.0, 0.0),
                 height: getProportionateScreenHeight(1000),
                 margin: EdgeInsets.only(top: 10),
-                decoration: BoxDecoration( borderRadius: BorderRadius.all(Radius.circular(50)), color: manager.isDarkMode() ? Colors.black:Colors.white ),
-
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    color: manager.isDarkMode() ? Colors.black : Colors.white),
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.only(top: 20,left :30),
-                      child: Row(children :[Opacity( opacity : 0.5 ,child: Text("Localisation", style: TextStyle( fontSize: 15),)),]
-                    )),
+                        padding: EdgeInsets.only(top: 20, left: 30),
+                        child: Row(children: [
+                          Opacity(
+                              opacity: 0.5,
+                              child: Text(
+                                "Localisation",
+                                style: TextStyle(fontSize: 15),
+                              )),
+                        ])),
                     Container(
-                      padding: EdgeInsets.only(top: 10,left :30),
-                      child: Row( children : [Text(widget.data.name, style: TextStyle( fontSize: 30),), Container(
-                          width: 100,
-                          height: 100,
-                          margin: EdgeInsets.only(left: 50),
-                          padding: EdgeInsets.only(top: 10,right :20),
-                          color: Colors.green,
-                          child: Center(
-                            child: Text(
-                              widget.data.timetables,
-                              style: TextStyle(
-                                  fontSize: 20),
+                        padding: EdgeInsets.only(top: 10, left: 30),
+                        child: Row(children: [
+                          Text(
+                            widget.data.name,
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 100,
+                            margin: EdgeInsets.only(left: 50),
+                            padding: EdgeInsets.only(top: 10, right: 20),
+                            color: Colors.green,
+                            child: Center(
+                              child: Text(
+                                widget.data.timetables,
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
                           ),
-                        ),])
-                    ),
+                        ])),
                     Container(
                       margin: EdgeInsets.only(top: 10, left: 40),
                       child: Row(
@@ -104,10 +121,8 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                       ),
                     ),
                     Container(
-
                       height: getProportionateScreenHeight(160),
                       margin: EdgeInsets.only(top: 10),
-
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -120,7 +135,6 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                           SizedBox(
                             width: 10,
                           ),
-
                         ],
                       ),
                     ),
@@ -133,8 +147,8 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                         children: [
                           Text(
                             "Commentaires",
-                            style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 25),
                           ),
                           CommentVerifier(data: widget.data),
                           if (comments.length == 0)
@@ -153,14 +167,9 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                         ],
                       ),
                     ),
-
-
                   ],
                 ),
               ),
-
-
-
             ],
           ),
         ),

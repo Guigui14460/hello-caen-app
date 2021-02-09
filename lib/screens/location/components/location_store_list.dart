@@ -18,7 +18,7 @@ class LocationStoreList extends State<MapPage> {
       MarketMarker(
         market: Market(
           name: 'test marker',
-          imagePath: 'test.jpg',
+          imagePath: 'assets/images/test.jpg',
           lat: 49.1705,
           long: -0.3650,
         ),
@@ -48,7 +48,7 @@ class LocationStoreList extends State<MapPage> {
                   MarketMarker(
                     market: Market(
                       name: 'test marker',
-                      imagePath: 'test.jpg',
+                      imagePath: 'assets/images/test.jpg',
                       lat: 49.1705,
                       long: -0.3650,
                     ),

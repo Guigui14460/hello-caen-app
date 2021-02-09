@@ -41,7 +41,7 @@ class MarketMarkerPopup extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Image.network(market.imagePath, width: 200),
+            Image.asset(market.imagePath, width: 200),
             Text(market.name),
             // Text('${market.lat}-${market.long}'),
           ],

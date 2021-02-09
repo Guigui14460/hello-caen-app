@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/services/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/app_bar.dart';
 import '../../../components/comment_verifier.dart';
@@ -18,7 +20,11 @@ class GeneratedStorePage extends StatefulWidget {
 }
 
 class _GeneratedStorePageState extends State<GeneratedStorePage> {
+
+
   Widget build(BuildContext context) {
+    ThemeManager manager = Provider.of<ThemeManager>(context);
+
     List<Comment> comments = [];
     CommentModel()
         .where("commerce",
@@ -37,18 +43,58 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
           child: Column(
             children: [
               Container(
-                width: getProportionateScreenWidth(1000),
-                height: getProportionateScreenHeight(130),
-                margin: EdgeInsets.only(top: 10, left: 20),
+                height: getProportionateScreenHeight(300),
+                decoration: BoxDecoration( borderRadius: BorderRadius.all(Radius.circular(20)),),
+                child: Stack(children : [
+                  Container(
+                    decoration: BoxDecoration( borderRadius: BorderRadius.all(Radius.circular(20)),image: DecorationImage(image: NetworkImage(widget.data.imageLink), fit: BoxFit.cover,),
+                    ),
+                  ),
+                  /*Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color(0xFF343434).withOpacity(0.7),
+                                Color(0xFF343434).withOpacity(0.55),
+                              ]))),*/
+                ]),
+              ),
+
+
+          Container(
+                transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+                height: getProportionateScreenHeight(1000),
+                margin: EdgeInsets.only(top: 10),
+                decoration: BoxDecoration( borderRadius: BorderRadius.all(Radius.circular(50)), color: manager.isDarkMode() ? Colors.black:Colors.white ),
+
                 child: Column(
                   children: [
                     Container(
-                      child: Text(widget.data.name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40)),
+                      padding: EdgeInsets.only(top: 20,left :30),
+                      child: Row(children :[Opacity( opacity : 0.5 ,child: Text("Localisation", style: TextStyle( fontSize: 15),)),]
+                    )),
+                    Container(
+                      padding: EdgeInsets.only(top: 10,left :30),
+                      child: Row( children : [Text(widget.data.name, style: TextStyle( fontSize: 30),), Container(
+                          width: 100,
+                          height: 100,
+                          margin: EdgeInsets.only(left: 50),
+                          padding: EdgeInsets.only(top: 10,right :20),
+                          color: Colors.green,
+                          child: Center(
+                            child: Text(
+                              widget.data.timetables,
+                              style: TextStyle(
+                                  fontSize: 20),
+                            ),
+                          ),
+                        ),])
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 10, left: 20),
+                      margin: EdgeInsets.only(top: 10, left: 40),
                       child: Row(
                         //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -57,82 +103,64 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                width: getProportionateScreenWidth(330),
-                height: getProportionateScreenHeight(200),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(widget.data.imageLink),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(15))),
-              ),
-              Container(
-                width: getProportionateScreenWidth(1000),
-                height: getProportionateScreenHeight(160),
-                margin: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
                     Container(
-                      width: getProportionateScreenWidth(150),
-                      height: getProportionateScreenHeight(200),
-                      // color: Colors.white,
-                      child: Text(widget.data.description),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: getProportionateScreenWidth(150),
-                      height: getProportionateScreenHeight(200),
-                      color: Colors.redAccent,
-                      child: Container(
-                        // margin: EdgeInsets.only(top: 65, left: 55),
-                        child: Center(
-                          child: Text(
-                            widget.data.timetables,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+
+                      height: getProportionateScreenHeight(160),
+                      margin: EdgeInsets.only(top: 10),
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: getProportionateScreenWidth(150),
+                            height: getProportionateScreenHeight(200),
+                            // color: Colors.white,
+                            child: Text(widget.data.description),
                           ),
-                        ),
+                          SizedBox(
+                            width: 10,
+                          ),
+
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(20)),
-                //mainAxisAlignment: MainAxisAlignment.center,
-                child: Column(
-                  children: [
-                    Text(
-                      "Commentaires",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
-                    CommentVerifier(data: widget.data),
-                    if (comments.length == 0)
-                      Text(
-                          "Aucun commentaire pour le moment, soyez le premier  !")
-                    else
-                      ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: comments.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            child: Text(comments[index].text),
-                          );
-                        },
-                      )
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(20)),
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
+                        children: [
+                          Text(
+                            "Commentaires",
+                            style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                          ),
+                          CommentVerifier(data: widget.data),
+                          if (comments.length == 0)
+                            Text(
+                                "Aucun commentaire pour le moment, soyez le premier  !")
+                          else
+                            ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: comments.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: Text(comments[index].text),
+                                );
+                              },
+                            )
+                        ],
+                      ),
+                    ),
+
+
                   ],
                 ),
               ),
+
+
+
             ],
           ),
         ),

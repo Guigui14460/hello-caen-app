@@ -1,7 +1,6 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -11,12 +10,11 @@ import '../../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 import '../../sign_up/sign_up_screen.dart';
 import '../../../constants.dart';
+import '../../../settings.dart';
 import '../../../utils.dart';
 import '../../../components/search_bar.dart';
 import '../../../components/store_card.dart';
 import '../../../model/commerce.dart';
-import '../../../model/database/commerce_model.dart';
-import '../../../model/database/reduction_code_model.dart';
 import '../../../model/reduction_code.dart';
 import '../../../services/location_service.dart';
 import '../../../services/size_config.dart';
@@ -24,27 +22,38 @@ import '../../../services/theme_manager.dart';
 import '../../../services/user_manager.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  final Future<void> Function() refreshCommerces,
+      refreshCodes,
+      refreshCommerceTypes;
+  final List<Commerce> Function() getCommerces;
+  final List<ReductionCode> Function() getCodes;
+
+  HomePage(
+      {Key key,
+      @required this.getCommerces,
+      @required this.getCodes,
+      @required this.refreshCommerces,
+      @required this.refreshCodes,
+      @required this.refreshCommerceTypes})
+      : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  Commerce _sponsoredStore;
-  ReductionCode _sponsoredReductionCode;
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
+  Commerce _sponsoredStore;
+  ReductionCode _sponsoredReductionCode;
   String _currentSearch = "";
+  List<Commerce> _stores = [];
+  List<ReductionCode> _codes = [];
   List<Commerce> _favoriteStores = [];
   List<Commerce> _searchResults = [];
   LocationData _locationData;
   List<Commerce> _storesGetByLocation = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  List<double> _storesDistancesByLocation = [];
 
   void _search(String value) {
     if (this.mounted) {
@@ -62,36 +71,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onRefresh(UserManager userManager) async {
+    await Future.wait([
+      widget.refreshCommerces(),
+      widget.refreshCodes(),
+      widget.refreshCommerceTypes(),
+    ]);
     if (this.mounted) {
       setState(() {
         _storesGetByLocation = [];
         _locationData = null;
+        _codes = widget.getCodes();
+        _stores = widget.getCommerces();
+        _sponsoredReductionCode = _codes[0];
+        _sponsoredStore = _stores[0];
       });
-    }
-    await ReductionCodeModel().getAll().then((value) {
-      if (this.mounted) {
+
+      if (userManager.isLoggedIn()) {
+        List<String> fav = userManager.getLoggedInUser().favoriteCommerceIds;
         setState(() {
-          _sponsoredReductionCode = value[0];
+          _favoriteStores =
+              _stores.where((element) => fav.contains(element.id)).toList();
         });
       }
-    });
-    await CommerceModel().getAll().then((value) async {
-      if (this.mounted) {
-        setState(() {
-          _sponsoredStore = value[0];
-        });
-      }
-    });
-    if (userManager.isLoggedIn()) {
-      await CommerceModel()
-          .getMultipleByIds(userManager.getLoggedInUser().favoriteCommerceIds)
-          .then((value) async {
-        if (this.mounted) {
-          setState(() {
-            _favoriteStores = value;
-          });
-        }
-      });
     }
     this._search(_currentSearch);
     _refreshController.refreshCompleted();
@@ -194,32 +195,25 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildLocationStoreWidget(BuildContext context) {
     LocationService locationService = Provider.of<LocationService>(context);
-    locationService.addOnChangedFunction((LocationData location) async {
-      List<LatLng> latlngs =
-          searchBorderBox(location.latitude, location.longitude);
-      // await CommerceModel()
-      //     .whereLinked("latitude", isGreaterThanOrEqualTo: latlngs[0].latitude)
-      //     .whereLinked("latitude", isLessThanOrEqualTo: latlngs[1].latitude)
-      //     .executeCurrentLinkedQueryRequest()
-      //     .then((value) {
-      //   value = value
-      //       .where((element) =>
-      //           element.longitude >= latlngs[0].longitude &&
-      //           element.longitude <= latlngs[1].longitude)
-      //       .where((element) =>
-      //           getDistanceFromLatLonInKm(location.latitude, location.longitude,
-      //                   element.latitude, element.longitude) *
-      //               1000 <=
-      //           maximalDistanceToSeeStore)
-      //       .toList();
-      //   if (this.mounted) {
-      //     setState(() {
-      //       _locationData = location;
-      //       _storesGetByLocation = value;
-      //     });
-      //   }
-      // });
-      // TODO: à réadapter avec la nouvelle façon de stocker les données qui sera implémentée
+    locationService.addOnChangedFunction((LocationData location) {
+      if (this.mounted) {
+        setState(() {
+          _storesDistancesByLocation = [];
+          _locationData = location;
+          _storesGetByLocation = widget.getCommerces().where((element) {
+            double distance = getDistanceFromLatLonInKm(location.latitude,
+                    location.longitude, element.latitude, element.longitude) *
+                1000;
+            bool ok = distance <= maximalDistanceToSeeStore;
+            if (ok) {
+              setState(() {
+                _storesDistancesByLocation.add(distance);
+              });
+            }
+            return ok;
+          }).toList();
+        });
+      }
     });
     if (_locationData == null) {
       return Text("Aucune données de localisation trouvées");

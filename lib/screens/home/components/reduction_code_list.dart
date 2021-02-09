@@ -7,42 +7,90 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../reduction_code_detail/reduction_code_detail_screen.dart';
 import '../../../constants.dart';
 import '../../../components/search_bar.dart';
+import '../../../model/commerce.dart';
 import '../../../model/commerce_type.dart';
 import '../../../model/reduction_code.dart';
 import '../../../model/reduction_code_used.dart';
-import '../../../model/database/commerce_model.dart';
-import '../../../model/database/commerce_type_model.dart';
 import '../../../model/database/reduction_code_model.dart';
 import '../../../model/database/reduction_code_used_model.dart';
 import '../../../services/size_config.dart';
 import '../../../services/theme_manager.dart';
 
 class ReductionCodeListPage extends StatefulWidget {
-  ReductionCodeListPage({Key key}) : super(key: key);
+  final Future<void> Function() refreshCommerceTypes, refreshCodes;
+  final List<CommerceType> Function() getCommerceTypes;
+  final List<ReductionCode> Function() getCodes;
+  final List<Commerce> Function() getCommerces;
+
+  ReductionCodeListPage(
+      {Key key,
+      @required this.getCodes,
+      @required this.getCommerces,
+      @required this.getCommerceTypes,
+      @required this.refreshCodes,
+      @required this.refreshCommerceTypes})
+      : super(key: key);
 
   @override
   _ReductionCodeListPageState createState() => _ReductionCodeListPageState();
 }
 
 class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
+  RefreshController _refreshController = RefreshController();
   List<CommerceType> _types = [];
   Map<CommerceType, List<ReductionCode>> _codes = {};
   Map<ReductionCode, List<ReductionCodeUsed>> _used = {};
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
   String _currentSearch = "";
   Map<CommerceType, List<ReductionCode>> _searchResults = {};
 
   @override
   void initState() {
-    CommerceTypeModel().getAll().then((value) {
-      if (this.mounted) {
-        setState(() {
-          _types = value;
-        });
-      }
-    });
     super.initState();
+    if (this.mounted) {
+      setState(() {
+        _types = widget.getCommerceTypes();
+      });
+    }
+    _rewriteCodes();
+    _rewriteUsedCodes().then((value) => null);
+  }
+
+  void _rewriteCodes() {
+    Map<CommerceType, List<ReductionCode>> codesMap = {};
+    for (CommerceType type in _types) {
+      codesMap[type] = [];
+    }
+    DateTime now = DateTime.now();
+    List<ReductionCode> codes =
+        widget.getCodes().where((e) => e.endDate.isAfter(now)).toList();
+    codes.sort((code1, code2) => code1.endDate.compareTo(code2.endDate));
+    for (ReductionCode code in codes) {
+      CommerceType type = _types.firstWhere((element) =>
+          element.id ==
+          widget
+              .getCommerces()
+              .firstWhere((element) => element.id == code.commerceId)
+              .typeId);
+      codesMap[type].add(code);
+    }
+    if (this.mounted) {
+      setState(() {
+        _searchResults = _codes = codesMap;
+      });
+    }
+  }
+
+  Future<void> _rewriteUsedCodes() async {
+    Map<ReductionCode, List<ReductionCodeUsed>> used = {};
+    for (ReductionCode code in widget.getCodes()) {
+      used[code] = await ReductionCodeUsedModel().where("reductionCode",
+          isEqualTo: ReductionCodeModel().getDocumentReference(code.id));
+    }
+    if (this.mounted) {
+      setState(() {
+        _used = used;
+      });
+    }
   }
 
   void _search(String value) {
@@ -67,44 +115,13 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
   }
 
   void _onRefresh() async {
-    DateTime now = DateTime.now();
-    for (CommerceType type in _types) {
-      await CommerceModel()
-          .where("type",
-              isEqualTo: CommerceTypeModel().getDocumentReference(type.id))
-          .then((commerces) {
-        List<ReductionCode> codesByType = [];
-        commerces.forEach((commerce) async {
-          await ReductionCodeModel()
-              .where("commerce",
-                  isEqualTo: CommerceModel().getDocumentReference(commerce.id))
-              .then((codes) async {
-            codes = codes.where((e) => e.endDate.isAfter(now)).toList();
-            codesByType.addAll(codes);
-            for (ReductionCode code in codes) {
-              await ReductionCodeUsedModel()
-                  .where("reductionCode",
-                      isEqualTo:
-                          ReductionCodeModel().getDocumentReference(code.id))
-                  .then((value) {
-                if (this.mounted) {
-                  setState(() {
-                    _used[code] = value;
-                  });
-                }
-              });
-            }
-          });
-        });
-        if (this.mounted) {
-          setState(() {
-            codesByType
-                .sort((code1, code2) => code1.endDate.compareTo(code2.endDate));
-            _codes[type] = codesByType;
-          });
-        }
-      });
-    }
+    await Future.wait([
+      widget.refreshCodes(),
+      widget.refreshCommerceTypes(),
+    ]);
+    this._rewriteCodes();
+    await this._rewriteUsedCodes();
+
     this._search(this._currentSearch);
     _refreshController.refreshCompleted();
   }
@@ -115,7 +132,7 @@ class _ReductionCodeListPageState extends State<ReductionCodeListPage> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeManager>(context).getTheme();
+    Provider.of<ThemeManager>(context);
     return SmartRefresher(
       controller: _refreshController,
       onRefresh: _onRefresh,

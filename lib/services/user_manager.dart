@@ -14,6 +14,8 @@ class UserManager with ChangeNotifier {
   /// Key used in the local storage.
   static String storageKey = "user_id";
 
+  static UserManager instance;
+
   /// Current logged in user.
   account.User _currentLoggedInUser;
 
@@ -36,6 +38,7 @@ class UserManager with ChangeNotifier {
         _currentLoggedInUser = account.User.getAnonymousUser();
       }
     });
+    instance = this;
   }
 
   Future<void> signIn(String uid) async {

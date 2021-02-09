@@ -8,6 +8,12 @@ import '../../stores/components/store_list.dart';
 import '../../location/location_screen.dart';
 import '../../../constants.dart';
 import '../../../components/app_bar.dart';
+import '../../../model/commerce.dart';
+import '../../../model/commerce_type.dart';
+import '../../../model/database/commerce_model.dart';
+import '../../../model/database/commerce_type_model.dart';
+import '../../../model/database/reduction_code_model.dart';
+import '../../../model/reduction_code.dart';
 import '../../../services/theme_manager.dart';
 
 /// Class to build all widgets of the [HomeScreen].
@@ -23,21 +29,79 @@ class _HomeBodyState extends State<HomeBody> {
   int _currentIndex = 0;
   List<Widget> _children = [];
 
+  List<Commerce> _commerces = [];
+  List<ReductionCode> _codes = [];
+  List<CommerceType> _types = [];
+
   @override
   void initState() {
-    super.initState();
     _children = [
-      HomePage(),
-      StoreListPage(),
-      ReductionCodeListPage(),
+      HomePage(
+        getCommerces: getCommerces,
+        getCodes: getCodes,
+        refreshCommerces: _refreshCommerces,
+        refreshCodes: _refreshCodes,
+        refreshCommerceTypes: _refreshCommerceTypes,
+      ),
+      StoreListPage(
+        getCommerces: getCommerces,
+        getCommerceTypes: getCommerceTypes,
+        refreshCommerceTypes: _refreshCommerceTypes,
+        refreshCommerces: _refreshCommerces,
+      ),
+      ReductionCodeListPage(
+        getCodes: getCodes,
+        getCommerces: getCommerces,
+        getCommerceTypes: getCommerceTypes,
+        refreshCodes: _refreshCodes,
+        refreshCommerceTypes: _refreshCommerceTypes,
+      ),
       LocationScreen(),
       AccountProfilePage(widget),
     ];
+    super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  List<ReductionCode> getCodes() {
+    return this._codes;
+  }
+
+  Future<void> _refreshCodes() async {
+    await ReductionCodeModel().getAll().then((value) {
+      if (this.mounted) {
+        setState(() {
+          _codes = value;
+        });
+      }
+    });
+  }
+
+  List<Commerce> getCommerces() {
+    return this._commerces;
+  }
+
+  Future<void> _refreshCommerces() async {
+    await CommerceModel().getAll().then((value) {
+      if (this.mounted) {
+        setState(() {
+          _commerces = value;
+        });
+      }
+    });
+  }
+
+  List<CommerceType> getCommerceTypes() {
+    return this._types;
+  }
+
+  Future<void> _refreshCommerceTypes() async {
+    await CommerceTypeModel().getAll().then((value) {
+      if (this.mounted) {
+        setState(() {
+          _types = value;
+        });
+      }
+    });
   }
 
   @override

@@ -46,15 +46,14 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Stack(children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      image: DecorationImage(
-                        image: NetworkImage(widget.data.imageLink),
-                        fit: BoxFit.cover,
+                  Hero(
+                    tag: widget.data.id,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(widget.data.imageLink),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -71,12 +70,13 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                 ]),
               ),
               Container(
-                transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+                transform: Matrix4.translationValues(0.0, -75.0, 0.0),
                 height: getProportionateScreenHeight(1000),
                 margin: EdgeInsets.only(top: 10),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                    color: manager.isDarkMode() ? Colors.black : Colors.white),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                  color: manager.getTheme().backgroundColor,
+                ),
                 child: Column(
                   children: [
                     Container(

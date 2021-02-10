@@ -17,8 +17,6 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
           "name",
           "description",
           "location",
-          "dateAdded",
-          "dateModified",
           "timetables",
           "type",
           "imageLink",
@@ -31,10 +29,6 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       "name": object.name,
       "description": object.description,
       "location": GeoPoint(object.latitude, object.longitude),
-      "dateAdded": Timestamp.fromDate(object.dateAdded),
-      "dateModified": object.dateModified == null
-          ? object.dateModified
-          : Timestamp.fromDate(object.dateModified),
       "timetables": object.timetables,
       "type": CommerceTypeModel().getDocumentReference(object.typeId),
       "imageLink": object.imageLink,
@@ -50,10 +44,6 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       description: value['description'],
       latitude: value['location'].latitude,
       longitude: value['location'].longitude,
-      dateAdded: value['dateAdded'].toDate(),
-      dateModified: value['dateModified'] == null
-          ? value['dateModified']
-          : value['dateModified'].toDate(),
       timetables: value['timetables'],
       typeId: value['type'].id,
       imageLink: value['imageLink'],

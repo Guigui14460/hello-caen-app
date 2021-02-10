@@ -5,7 +5,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'comment.dart';
 import 'database/commerce_type_model.dart';
 import 'database/user_model.dart';
-import '../utils.dart';
 
 /// Represents a commerce.
 class Commerce {
@@ -23,12 +22,6 @@ class Commerce {
 
   /// Owner of the commerce.
   String ownerId;
-
-  /// Date of creation.
-  final DateTime dateAdded;
-
-  /// Date of last modification.
-  DateTime dateModified;
 
   /// Time tables of the merchant.
   String timetables;
@@ -49,8 +42,6 @@ class Commerce {
       @required this.longitude,
       @required this.timetables,
       @required this.typeId,
-      @required this.dateAdded,
-      this.dateModified,
       @required this.imageLink});
 
   DocumentReference getOwnerRef() {
@@ -86,16 +77,6 @@ class Commerce {
         color: Colors.amber,
       ),
     );
-  }
-
-  /// Gets the added date in the database widget.
-  Widget getDateAdded() {
-    return Text(convertDatetimeToString(this.dateAdded));
-  }
-
-  /// Gets the last modified date widget.
-  Widget getDateModified() {
-    return Text(convertDatetimeToString(this.dateModified));
   }
 
   /// Gets the image widget.

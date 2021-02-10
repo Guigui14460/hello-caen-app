@@ -103,6 +103,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Provider.of<ThemeManager>(context);
     UserManager userManager = Provider.of<UserManager>(context);

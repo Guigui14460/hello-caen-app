@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_caen/model/database/commerce_model.dart';
 import 'package:hello_caen/screens/generated_screens/generated_store_screen.dart';
-import 'package:hello_caen/screens/stores/components/store_list.dart';
-import 'package:hello_caen/screens/stores/stores_screen.dart';
+import 'package:hello_caen/screens/home/pages/store_list.dart';
 
 import 'screens/explanations/explanations_screen.dart';
 import 'screens/home/home_screen.dart';
@@ -35,7 +34,6 @@ final Map<String, WidgetBuilder> routes = {
   // Generated commerce from Database Model
   //GeneratedStoreScreen.routeName:(context) => GeneratedStoreScreen(),
 
-  StoresScreen.routeName:(context) => StoresScreen(),
   // pro screens
   ProHomeScreen.routeName: (context) => ProHomeScreen(),
   UpdateCommerceScreen.routeName: (context) => UpdateCommerceScreen(),

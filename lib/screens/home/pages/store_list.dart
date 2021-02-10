@@ -35,6 +35,7 @@ class StoreListPage extends StatefulWidget {
 class _StoreListPageState extends State<StoreListPage> {
   RefreshController _refreshController = RefreshController();
   String _currentSearch = "";
+  bool _showFavoriteStores = false;
   List<Commerce> _favoriteStores = [];
   List<Commerce> _stores = [];
   List<CommerceType> _types = [];
@@ -121,6 +122,12 @@ class _StoreListPageState extends State<StoreListPage> {
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Provider.of<ThemeManager>(context);
     return SmartRefresher(
@@ -139,8 +146,40 @@ class _StoreListPageState extends State<StoreListPage> {
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenHeight(30)),
-            SearchBar(onChanged: _search),
+            SizedBox(height: getProportionateScreenHeight(20)),
+            Row(
+              children: [
+                Expanded(
+                  child: SearchBar(onChanged: _search),
+                ),
+                SizedBox(width: getProportionateScreenWidth(10)),
+                InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    if (this.mounted) {
+                      setState(() {
+                        _showFavoriteStores = !_showFavoriteStores;
+                      });
+                      print(_showFavoriteStores);
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 150),
+                      child: Icon(
+                        _showFavoriteStores
+                            ? Icons.bookmarks
+                            : Icons.bookmarks_outlined,
+                        color: _showFavoriteStores
+                            ? Colors.red
+                            : Theme.of(context).textTheme.bodyText1.color,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: getProportionateScreenHeight(20)),
             CategoryMenu(
               text: ["Tout"] + _types.map((e) => e.name).toList(),
@@ -172,7 +211,7 @@ class _StoreListPageState extends State<StoreListPage> {
           onTap: () {
             Navigator.push(
                 context,
-                CupertinoPageRoute(
+                MaterialPageRoute(
                     builder: (context) =>
                         GeneratedStoreScreen(data: _searchResults[index])));
           },

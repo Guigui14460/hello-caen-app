@@ -42,11 +42,14 @@ class StoreCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
-                Image.network(
-                  this.commerce.imageLink,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
+                Hero(
+                  tag: this.commerce.id,
+                  child: Image.network(
+                    this.commerce.imageLink,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
                 ),
                 Container(
                   width: double.infinity,

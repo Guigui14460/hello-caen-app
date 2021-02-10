@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                           smallTitle: "Commerce sponsorisé",
                           onTap: () => Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              MaterialPageRoute(
                                   builder: (context) => GeneratedStoreScreen(
                                       data: _sponsoredStore))),
                         )

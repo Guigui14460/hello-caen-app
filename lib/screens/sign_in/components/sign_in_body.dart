@@ -58,8 +58,8 @@ class SignInBody extends StatelessWidget {
                               content: Text(
                                   "Votre adresse email est déjà assoiciée à un compte existant")));
                         }
-                      } catch (e) {
-                        print(e);
+                      } catch (error) {
+                        print(error);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Erreur lors de la connection")));
                       }

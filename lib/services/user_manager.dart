@@ -27,18 +27,14 @@ class UserManager with ChangeNotifier {
   }
 
   UserManager() {
-    StorageManager.exists(storageKey).then((exists) {
+    StorageManager.exists(storageKey).then((exists) async {
       if (exists) {
-        StorageManager.readData(storageKey).then((uid) {
-          UserModel().getById(uid).then((value) {
-            _currentLoggedInUser = value;
-          });
-        });
+        String uid = await StorageManager.readData(storageKey);
+        _currentLoggedInUser = await UserModel().getById(uid);
       } else {
         _currentLoggedInUser = account.User.getAnonymousUser();
       }
     });
-    instance = this;
   }
 
   Future<void> signIn(String uid) async {

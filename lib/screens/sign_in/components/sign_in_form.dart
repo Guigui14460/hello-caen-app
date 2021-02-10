@@ -80,8 +80,8 @@ class _SignInFormState extends State<SignInForm> {
                   } else if (e.code == 'wrong-password') {
                     addError(error: kWrongPassword);
                   }
-                } catch (e) {
-                  print(e);
+                } catch (error) {
+                  print(error);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Erreur lors de la connection")));
                 }

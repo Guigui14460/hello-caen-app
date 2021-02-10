@@ -32,6 +32,8 @@ class Commerce {
   /// Link for the image representing the commerce.
   String imageLink;
 
+  List<Comment> comments = [];
+
   /// Constructor.
   Commerce(
       {this.id,
@@ -53,7 +55,7 @@ class Commerce {
   }
 
   /// Gets the mean of all ratings.
-  double getRating(List<Comment> comments) {
+  double getRating() {
     if (comments.length == 0) {
       return double.nan;
     }
@@ -66,9 +68,9 @@ class Commerce {
   }
 
   /// Gets the rating bar widget.
-  Widget getRatingBar(List<Comment> comments) {
+  Widget getRatingBar() {
     return RatingBarIndicator(
-      rating: this.getRating(comments),
+      rating: this.getRating(),
       direction: Axis.horizontal,
       itemCount: 5,
       itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -82,5 +84,17 @@ class Commerce {
   /// Gets the image widget.
   Image getImage() {
     return Image.network(this.imageLink);
+  }
+
+  void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
+  void addComment(Comment comment) {
+    this.comments.add(comment);
+  }
+
+  void removeComment(Comment comment) {
+    this.comments.remove(comment);
   }
 }

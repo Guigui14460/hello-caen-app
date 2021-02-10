@@ -53,7 +53,7 @@ class User with Compare<User> {
     this.profilePicture = null;
     this.dateOfBirth = null;
     this.sex = null;
-    this.favoriteCommerceIds = null;
+    this.favoriteCommerceIds = [];
   }
 
   List<DocumentReference> getFavoriteCommerceRefs() {

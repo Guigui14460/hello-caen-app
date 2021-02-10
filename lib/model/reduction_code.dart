@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'database/commerce_model.dart';
-import '../components/qr_code_generator.dart';
 
 /// Represents a reduction code.
 class ReductionCode {
@@ -52,11 +51,5 @@ class ReductionCode {
 
   DocumentReference getCommerceRef() {
     return CommerceModel().getDocumentReference(this.commerceId);
-  }
-
-  /// Gets the QR Code image generated for this
-  /// code with the [uid] (user id).
-  Widget getQRCodeWidget(String uid) {
-    return QRCodeGenerator(data: "${this.id},$uid");
   }
 }

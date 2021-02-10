@@ -61,7 +61,7 @@ class _StoreListPageState extends State<StoreListPage> {
         _searchResults = _currentDisplayedStores;
         if (value != "") {
           setState(() {
-            _searchResults = _currentDisplayedStores
+            _searchResults = _searchResults
                 .where((element) =>
                     (this._currentType == null ||
                         element.typeId == this._currentType.id) &&
@@ -79,12 +79,13 @@ class _StoreListPageState extends State<StoreListPage> {
       setState(() {
         _currentType = type;
         if (type != null) {
-          _currentDisplayedStores = widget
-              .getCommerces()
-              .where((element) => element.typeId == type.id)
-              .toList();
+          _currentDisplayedStores =
+              (_showFavoriteStores ? _favoriteStores : _stores)
+                  .where((element) => element.typeId == type.id)
+                  .toList();
         } else {
-          _currentDisplayedStores = widget.getCommerces();
+          _currentDisplayedStores =
+              _showFavoriteStores ? _favoriteStores : _stores;
         }
       });
     }
@@ -130,10 +131,21 @@ class _StoreListPageState extends State<StoreListPage> {
   @override
   Widget build(BuildContext context) {
     Provider.of<ThemeManager>(context);
+    UserManager userManager = Provider.of<UserManager>(context);
+    if (this.mounted) {
+      setState(() {
+        _favoriteStores = widget
+            .getCommerces()
+            .where((element) => userManager
+                .getLoggedInUser()
+                .favoriteCommerceIds
+                .contains(element.id))
+            .toList();
+      });
+    }
     return SmartRefresher(
       controller: _refreshController,
-      onRefresh: () =>
-          _onRefresh(Provider.of<UserManager>(context, listen: false)),
+      onRefresh: () => _onRefresh(userManager),
       onLoading: _onLoading,
       enablePullDown: true,
       header: MaterialClassicHeader(
@@ -160,7 +172,7 @@ class _StoreListPageState extends State<StoreListPage> {
                       setState(() {
                         _showFavoriteStores = !_showFavoriteStores;
                       });
-                      print(_showFavoriteStores);
+                      this._filterByType(this._currentType);
                     }
                   },
                   child: Container(
@@ -171,9 +183,6 @@ class _StoreListPageState extends State<StoreListPage> {
                         _showFavoriteStores
                             ? Icons.bookmarks
                             : Icons.bookmarks_outlined,
-                        color: _showFavoriteStores
-                            ? Colors.red
-                            : Theme.of(context).textTheme.bodyText1.color,
                       ),
                     ),
                   ),

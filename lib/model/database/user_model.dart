@@ -34,8 +34,7 @@ class UserModel extends FirebaseFirestoreDB<User> {
       lastName: value['lastName'],
       profilePicture: value['profilePicture'],
       sex: Sex.values[value['sex']],
-      favoriteCommerceIds: List<String>.from(
-          value['favoriteCommerces'].map((element) => element.id).toList()),
+      favoriteCommerceIds: List<String>.from(value['favoriteCommerces']),
       dateOfBirth: value['dateOfBirth'].toDate(),
       adminAccount: value['admin'],
       proAccount: value['pro'],
@@ -50,9 +49,7 @@ class UserModel extends FirebaseFirestoreDB<User> {
       'profilePicture': object.profilePicture,
       'sex': object.sex.index,
       'dateOfBirth': Timestamp.fromDate(object.dateOfBirth),
-      'favoriteCommerces': object.favoriteCommerceIds
-          .map((e) => CommerceModel().getDocumentReference(e))
-          .toList(),
+      'favoriteCommerces': object.favoriteCommerceIds,
       'admin': object.adminAccount,
       'pro': object.proAccount,
     };

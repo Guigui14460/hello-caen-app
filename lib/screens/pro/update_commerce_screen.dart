@@ -536,8 +536,8 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Commerce ajouté")));
         Navigator.pop(context);
-      } catch (e) {
-        print(e);
+      } catch (error) {
+        print(error);
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Erreur lors de la création")));
       }

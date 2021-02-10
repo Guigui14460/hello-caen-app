@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
+import '../../components/qr_code_generator.dart';
 import '../../model/reduction_code.dart';
 import '../../model/user_account.dart';
 import '../../services/size_config.dart';
@@ -43,7 +44,7 @@ class QRCodeReductionCodeDetailScreen extends StatelessWidget {
               SizedBox(height: getProportionateScreenHeight(30)),
               Padding(
                 padding: EdgeInsets.all(8.0),
-                child: code.getQRCodeWidget(user.id),
+                child: QRCodeGenerator(data: "${code.id},${user.id}"),
               ),
             ],
           ),

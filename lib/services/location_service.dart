@@ -95,8 +95,8 @@ class LocationService extends ChangeNotifier {
       var currentLocation;
       try {
         currentLocation = await _location.getLocation();
-      } catch (e) {
-        print(e);
+      } catch (error) {
+        print(error);
       }
       return currentLocation;
     }

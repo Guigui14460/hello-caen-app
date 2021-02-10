@@ -372,8 +372,8 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
               .showSnackBar(SnackBar(content: Text("Données mises à jour")));
           Navigator.pop(context);
         });
-      } catch (e) {
-        print(e);
+      } catch (error) {
+        print(error);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Erreur lors de la mise à jour des données")));
       }
@@ -411,8 +411,8 @@ class _UpdateReductionCodeScreenState extends State<UpdateReductionCodeScreen> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Code de réduction ajouté")));
         Navigator.pop(context);
-      } catch (e) {
-        print(e);
+      } catch (error) {
+        print(error);
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Erreur lors de la création")));
       }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hello_caen/model/database/user_model.dart';
+import 'package:hello_caen/model/user_account.dart';
+import 'package:hello_caen/services/user_manager.dart';
+import 'package:provider/provider.dart';
 
-import '../model/comment.dart';
 import '../model/commerce.dart';
 import '../model/database/comment_model.dart';
 import '../model/database/commerce_model.dart';
@@ -24,12 +27,12 @@ class StoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Comment> comments = [];
+    UserManager userManager = Provider.of<UserManager>(context);
     CommentModel()
         .where("commerce",
             isEqualTo: CommerceModel().getDocumentReference(commerce.id))
         .then((value) {
-      comments = value;
+      this.commerce.setComments(value);
     });
     return Padding(
       padding: EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
@@ -75,38 +78,82 @@ class StoreCard extends StatelessWidget {
                             ? Text(
                                 this.smallTitle,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               )
                             : SizedBox()),
-                        Text(
-                          this.commerce.name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: getProportionateScreenWidth(24),
-                              fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            Text(
+                              this.commerce.name,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: getProportionateScreenWidth(24),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Spacer(),
+                            (userManager.isLoggedIn()
+                                ? GestureDetector(
+                                    child: Icon(
+                                      userManager
+                                              .getLoggedInUser()
+                                              .favoriteCommerceIds
+                                              .contains(commerce.id)
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_border,
+                                      color: Colors.white,
+                                    ),
+                                    onTap: () async {
+                                      User user = userManager.getLoggedInUser();
+                                      if (user.favoriteCommerceIds
+                                          .contains(commerce.id)) {
+                                        user.favoriteCommerceIds
+                                            .remove(commerce.id);
+                                      } else {
+                                        user.favoriteCommerceIds
+                                            .add(commerce.id);
+                                      }
+                                      await UserModel().updateFields(
+                                        user.id,
+                                        user,
+                                        ['favoriteCommerces'],
+                                        [user.favoriteCommerceIds],
+                                      );
+                                      userManager.updateLoggedInUser(user);
+                                    },
+                                  )
+                                : Container()),
+                          ],
                         ),
                         Row(
                           children: [
-                            Icon(Icons.star,
-                                color: Colors.yellow[600], size: 19),
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow[600],
+                              size: 19,
+                            ),
                             Text(
-                              (this.commerce.getRating(comments).isNaN
+                              (this.commerce.getRating().isNaN
                                   ? "Aucune note"
-                                  : "${this.commerce.getRating(comments)}/5"),
+                                  : "${this.commerce.getRating()}/5"),
                               style: TextStyle(color: Colors.white),
                             ),
                             Spacer(),
                             (this.showComments
                                 ? Row(
                                     children: [
-                                      Icon(Icons.comment,
-                                          color: Colors.white, size: 19),
+                                      Icon(
+                                        Icons.comment,
+                                        color: Colors.white,
+                                        size: 19,
+                                      ),
                                       Text(
                                         " " +
-                                            (comments.isEmpty
+                                            (this.commerce.comments.isEmpty
                                                 ? "Aucun commentaire"
-                                                : "${comments.length}"),
+                                                : "${this.commerce.comments.length}"),
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ],

@@ -364,87 +364,105 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   void _showDeleteAccountDialog(
       BuildContext context, ImageProvider<Object> picture) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomDialogBox(
-            title: "Supprimer votre compte",
-            description:
-                "La suppression de votre compte est irréversible et vos informations ne pourront plus être récupérées. Confirmez-vous la suppression ?",
-            img: picture,
-            text: "Confirmer",
-            onPressed: () async {
-              User user = context.read<UserManager>().getLoggedInUser();
-              Navigator.pop(context);
-              try {
-                await context.read<UserManager>().deleteUser();
-              } catch (e) {
-                Navigator.pushNamed(context, SignInScreen.routeName);
-                if (context
-                    .read<UserManager>()
-                    .getLoggedInUser()
-                    .equals(user)) {
-                  await context.read<UserManager>().deleteUser();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "Veuillez vous connecter avec le compte avec lequel vous avez commencé la suppression.")));
-                }
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return CustomDialogBox(
+          title: "Supprimer votre compte",
+          description:
+              "La suppression de votre compte est irréversible et vos informations ne pourront plus être récupérées. Confirmez-vous la suppression ?",
+          img: picture,
+          text: "Confirmer",
+          onPressed: () async {
+            User user = dialogContext.read<UserManager>().getLoggedInUser();
+            Navigator.pop(dialogContext);
+            try {
+              await dialogContext.read<UserManager>().deleteUser();
+            } catch (e) {
+              Navigator.pushNamed(dialogContext, SignInScreen.routeName);
+              if (dialogContext
+                  .read<UserManager>()
+                  .getLoggedInUser()
+                  .equals(user)) {
+                await dialogContext.read<UserManager>().deleteUser();
+              } else {
+                ScaffoldMessenger.of(dialogContext).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        "Veuillez vous connecter avec le compte avec lequel vous avez commencé la suppression."),
+                  ),
+                );
               }
-            },
-          );
-        });
+            }
+          },
+        );
+      },
+    );
   }
 
   void _activateLocation(BuildContext context) async {
     await Provider.of<LocationService>(context, listen: false).enableService();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Localisation activée")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Localisation activée"),
+      ),
+    );
   }
 
   void _showDeactivateLocationDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomDialogBox(
-            title: "Désactiver la localisation",
-            description:
-                "Vous ne pourrez plus avoir les commerçants proche de vous dans l'onglet \"Localisation\". Confirmez-vous la désactivation ?",
-            text: "Confirmer",
-            onPressed: () async {
-              await Provider.of<LocationService>(context, listen: false)
-                  .disableService();
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Localisation désactivée")));
-            },
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialogBox(
+          title: "Désactiver la localisation",
+          description:
+              "Vous ne pourrez plus avoir les commerçants proche de vous dans l'onglet \"Localisation\". Confirmez-vous la désactivation ?",
+          text: "Confirmer",
+          onPressed: () async {
+            await Provider.of<LocationService>(context, listen: false)
+                .disableService();
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Localisation désactivée"),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void _activateNotifications(BuildContext context) async {
     await Provider.of<NotificationService>(context, listen: false)
         .enableService();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Notifications activées")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Notifications activées"),
+      ),
+    );
   }
 
   void _showDeactivateNotificationsDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomDialogBox(
-            title: "Désactiver les notifications",
-            description:
-                "Vous ne recevrez plus de notifications de bon plans. Confirmez-vous la désactivation ?",
-            text: "Confirmer",
-            onPressed: () async {
-              await Provider.of<NotificationService>(context, listen: false)
-                  .disableService();
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Notifications désactivées")));
-            },
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialogBox(
+          title: "Désactiver les notifications",
+          description:
+              "Vous ne recevrez plus de notifications de bon plans. Confirmez-vous la désactivation ?",
+          text: "Confirmer",
+          onPressed: () async {
+            await Provider.of<NotificationService>(context, listen: false)
+                .disableService();
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Notifications désactivées"),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

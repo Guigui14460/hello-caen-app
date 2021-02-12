@@ -63,7 +63,7 @@ class UserModel extends FirebaseFirestoreDB<User> {
         .executeCurrentLinkedQueryRequest();
     CommerceModel model3 = CommerceModel();
     List<Commerce> commerces = await model3
-        .whereLinked("author", isEqualTo: this.getDocumentReference(id))
+        .whereLinked("owner", isEqualTo: this.getDocumentReference(id))
         .executeCurrentLinkedQueryRequest();
     ReductionCodeUsedModel model4 = ReductionCodeUsedModel();
     List<ReductionCodeUsed> used = await model4

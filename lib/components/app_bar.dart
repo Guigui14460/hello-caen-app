@@ -10,11 +10,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<VoidCallback> actionsCallback;
   final Icon leading;
   final VoidCallback leadingCallback;
+  final bool automaticBackArrow;
 
   MyAppBar(
       {this.leading,
       this.leadingCallback,
       this.actions,
+      this.automaticBackArrow = true,
       this.actionsCallback}) {
     assert((this.leading != null && this.leadingCallback != null) ||
         (this.leading == null && this.leadingCallback == null));
@@ -36,6 +38,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       primary: false,
       iconTheme: IconThemeData(color: textColor),
       title: _title,
+      automaticallyImplyLeading: automaticBackArrow,
       leading: this.leading != null
           ? IconButton(
               icon: this.leading,

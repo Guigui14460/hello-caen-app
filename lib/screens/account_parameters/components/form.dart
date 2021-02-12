@@ -60,6 +60,38 @@ class _ParametersFormState extends State<ParametersForm> {
     UserManager userManager = Provider.of<UserManager>(context);
     User user = userManager.getLoggedInUser();
 
+    DefaultButton button = DefaultButton(
+      text: 'Sauvegarder',
+      height: getProportionateScreenHeight(50),
+      longPress: () {},
+      press: () async {
+        if (_formKey.currentState.validate()) {
+          _formKey.currentState.save();
+          KeyboardUtil.hideKeyboard(context);
+          try {
+            User updatedUser = User(
+                id: user.id,
+                firstName: firstName,
+                lastName: lastName,
+                profilePicture: user.profilePicture,
+                dateOfBirth: dateOfBirth,
+                sex: sex,
+                proAccount: user.proAccount,
+                adminAccount: user.adminAccount,
+                favoriteCommerceIds: user.favoriteCommerceIds);
+            UserModel().update(updatedUser.id, updatedUser);
+            userManager.updateLoggedInUser(updatedUser);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Données mises à jour")));
+            Navigator.pop(context);
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Erreur lors de la mise à jour des données")));
+          }
+        }
+      },
+    );
+
     return Form(
       key: _formKey,
       child: Column(
@@ -88,38 +120,15 @@ class _ParametersFormState extends State<ParametersForm> {
             style: TextStyle(fontWeight: FontWeight.w400),
           ),
           SizedBox(height: getProportionateScreenHeight(20)),
-          DefaultButton(
-            text: 'Sauvegarder',
-            height: getProportionateScreenHeight(50),
-            longPress: () {},
-            press: () async {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                KeyboardUtil.hideKeyboard(context);
-                try {
-                  User updatedUser = User(
-                      id: user.id,
-                      firstName: firstName,
-                      lastName: lastName,
-                      profilePicture: user.profilePicture,
-                      dateOfBirth: dateOfBirth,
-                      sex: sex,
-                      proAccount: user.proAccount,
-                      adminAccount: user.adminAccount,
-                      favoriteCommerceIds: user.favoriteCommerceIds);
-                  UserModel().update(updatedUser.id, updatedUser);
-                  userManager.updateLoggedInUser(updatedUser);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Données mises à jour")));
-                  Navigator.pop(context);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content:
-                          Text("Erreur lors de la mise à jour des données")));
-                }
-              }
-            },
-          ),
+          (firstName != "" || lastName != ""
+              ? button
+              : Visibility(
+                  child: button,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  visible: false,
+                )),
         ],
       ),
     );
@@ -156,6 +165,9 @@ class _ParametersFormState extends State<ParametersForm> {
         if (value.isNotEmpty) {
           removeError(error: kFirstNameNullError);
         }
+        setState(() {
+          firstName = value;
+        });
         return null;
       },
       validator: (value) {
@@ -180,6 +192,9 @@ class _ParametersFormState extends State<ParametersForm> {
         if (value.isNotEmpty) {
           removeError(error: kLastNameNullError);
         }
+        setState(() {
+          lastName = value;
+        });
         return null;
       },
       validator: (value) {

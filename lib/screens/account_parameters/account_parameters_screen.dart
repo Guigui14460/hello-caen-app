@@ -6,13 +6,17 @@ import '../../components/custom_dialog.dart';
 
 class AccountParametersScreen extends StatelessWidget {
   static String routeName = "/accounts/update";
-  const AccountParametersScreen({Key key}) : super(key: key);
+  final bool firstTime;
+
+  const AccountParametersScreen({Key key, this.firstTime = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: MyAppBar(
+        automaticBackArrow: false,
         actions: [Icon(Icons.info_outline_rounded)],
         actionsCallback: [() => _info(context)],
       ),

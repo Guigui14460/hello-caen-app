@@ -19,7 +19,6 @@ class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   String _email;
   String _password;
-  String _confirmPassword;
   final List<String> _errors = [];
 
   void addError({String error}) {
@@ -69,8 +68,11 @@ class _SignUpFormState extends State<SignUpForm> {
                       .registerWithEmailAndPassword(_email, _password);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Vous êtes désormais inscrit")));
-                  Navigator.pushReplacementNamed(
-                      context, AccountParametersScreen.routeName);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AccountParametersScreen(firstTime: true)));
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
                     addError(error: kWeakPassword);
@@ -97,7 +99,6 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField buildPasswordConfirmFormField() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => _confirmPassword = newValue,
       onChanged: (value) {
         removeError(error: kWeakPassword);
         if (value.isNotEmpty) {
@@ -107,9 +108,6 @@ class _SignUpFormState extends State<SignUpForm> {
         } else if (value == _password) {
           removeError(error: kMatchPassError);
         }
-        setState(() {
-          _confirmPassword = value;
-        });
         return null;
       },
       validator: (value) {

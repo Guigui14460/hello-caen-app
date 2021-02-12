@@ -6,12 +6,13 @@ import 'package:latlong/latlong.dart';
 class Market {
   static const double size = 25;
 
-  Market({this.name, this.imagePath, this.lat, this.long});
+  Market({this.name, this.imagePath, this.lat, this.long, this.open});
 
   final String name;
   final String imagePath;
   final double lat;
   final double long;
+  final String open;
 }
 
 class MarketMarker extends Marker {
@@ -30,6 +31,7 @@ class MarketMarker extends Marker {
 class MarketMarkerPopup extends StatelessWidget {
   const MarketMarkerPopup({Key key, this.market}) : super(key: key);
   final Market market;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,9 +43,15 @@ class MarketMarkerPopup extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Image.asset(market.imagePath, width: 200),
-            Text(market.name),
-            // Text('${market.lat}-${market.long}'),
+            ListTile(
+              leading: Image.asset(
+                market.imagePath,
+                width: 50,
+                height: 50,
+              ),
+              title: Text(market.name),
+              subtitle: Text(market.open),
+            )
           ],
         ),
       ),

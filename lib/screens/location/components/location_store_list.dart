@@ -17,11 +17,11 @@ class LocationStoreList extends State<MapPage> {
     locationList.add(
       MarketMarker(
         market: Market(
-          name: 'test marker',
-          imagePath: 'assets/images/test.jpg',
-          lat: 49.1705,
-          long: -0.3650,
-        ),
+            name: 'test marker',
+            imagePath: 'assets/images/test.jpg',
+            lat: 49.1705,
+            long: -0.3650,
+            open: "Ouvert"),
       ),
     );
 
@@ -47,11 +47,11 @@ class LocationStoreList extends State<MapPage> {
                 locationList.add(
                   MarketMarker(
                     market: Market(
-                      name: 'test marker',
-                      imagePath: 'assets/images/test.jpg',
-                      lat: 49.1705,
-                      long: -0.3650,
-                    ),
+                        name: 'test marker',
+                        imagePath: 'assets/images/test.jpg',
+                        lat: 49.1705,
+                        long: -0.3650,
+                        open: "Ouvert"),
                   ),
                 );
               }

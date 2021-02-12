@@ -27,19 +27,19 @@ class HomePage extends StatefulWidget {
       refreshCommerceTypes;
   final List<Commerce> Function() getCommerces;
   final List<ReductionCode> Function() getCodes;
-  final List<double> Function() getCommerceDistances;
+  final Map<Commerce, double> Function() getCommerceDistances;
   final Map<Commerce, RatingAndCommentCount> Function() getRatings;
 
-  HomePage(
-      {Key key,
-      @required this.getCommerces,
-      @required this.getCodes,
-      @required this.getCommerceDistances,
-      @required this.getRatings,
-      @required this.refreshCommerces,
-      @required this.refreshCodes,
-      @required this.refreshCommerceTypes})
-      : super(key: key);
+  HomePage({
+    Key key,
+    @required this.getCommerces,
+    @required this.getCodes,
+    @required this.getCommerceDistances,
+    @required this.getRatings,
+    @required this.refreshCommerces,
+    @required this.refreshCodes,
+    @required this.refreshCommerceTypes,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -203,11 +203,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Commerce> _filterCommercesByDistance() {
-    List<double> distances = widget.getCommerceDistances();
+    Map<Commerce, double> distances = widget.getCommerceDistances();
     List<Commerce> commercesNextToUser =
-        distances.asMap().keys.map<Commerce>((element) {
+        distances.keys.map<Commerce>((element) {
       if (distances[element] <= maximalDistanceToSeeStore) {
-        return _stores[element];
+        return element;
       }
       return null;
     }).toList();
@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                   (index) => StoreCard(
                     commerce: commercesNextToUser[index],
                     width: double.infinity,
-                    height: 100,
+                    height: 105,
                     rating: _ratings[commercesNextToUser[index]],
                     onTap: () => Navigator.push(
                         context,
@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                   (index) => StoreCard(
                     commerce: favoriteStores[index],
                     width: double.infinity,
-                    height: 100,
+                    height: 105,
                     rating: _ratings[favoriteStores[index]],
                     onTap: () => Navigator.push(
                         context,

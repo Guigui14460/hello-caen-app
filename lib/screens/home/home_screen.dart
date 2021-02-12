@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
-import '../../helper/rating_and_comment_count.dart';
 import 'pages/account_profile.dart';
 import 'pages/home_page.dart';
 import 'pages/reduction_code_list.dart';
@@ -11,6 +10,7 @@ import '../location/location_screen.dart';
 import '../../constants.dart';
 import '../../utils.dart';
 import '../../components/app_bar.dart';
+import '../../helper/rating_and_comment_count.dart';
 import '../../model/commerce.dart';
 import '../../model/commerce_type.dart';
 import '../../model/rating.dart';
@@ -41,8 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Commerce> _commerces = [];
   List<ReductionCode> _codes = [];
   List<CommerceType> _types = [];
-  List<double>
-      _commerceDistances; // TODO: finir ça pour la page liste commerces
+  Map<Commerce, double> _commerceDistances;
   LocationData _locationData;
   List<Commerce> _favoriteCommerces = [];
   Map<Commerce, RatingAndCommentCount> _ratings = {};
@@ -60,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         refreshCommerceTypes: _refreshCommerceTypes,
       ),
       StoreListPage(
+        getCommerceDistances: getCommerceDistances,
         getCommerces: getCommerces,
         getCommerceTypes: getCommerceTypes,
         getRatings: getRatings,
@@ -124,23 +124,23 @@ class _HomeScreenState extends State<HomeScreen> {
     this._refreshCommerceDistances(this._locationData);
   }
 
-  List<double> getCommerceDistances() {
+  Map<Commerce, double> getCommerceDistances() {
     return this._commerceDistances;
   }
 
   void _refreshCommerceDistances(LocationData currentLocation) {
     if (currentLocation != null && this.mounted) {
       setState(() {
-        _commerceDistances = [];
+        _commerceDistances = {};
         _locationData = currentLocation;
       });
       for (Commerce commerce in _commerces) {
-        _commerceDistances.add(getDistanceFromLatLonInKm(
+        _commerceDistances[commerce] = getDistanceFromLatLonInKm(
                 currentLocation.latitude,
                 currentLocation.longitude,
                 commerce.latitude,
                 commerce.longitude) *
-            1000);
+            1000;
       }
     } else {
       _commerceDistances = null;

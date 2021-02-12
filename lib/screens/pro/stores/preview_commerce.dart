@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/app_bar.dart';
-import '../../model/commerce_type.dart';
-import '../../services/size_config.dart';
-import '../../services/theme_manager.dart';
+import '../../../components/app_bar.dart';
+import '../../../model/commerce_type.dart';
+import '../../../services/size_config.dart';
+import '../../../services/theme_manager.dart';
 
 class PreviewCommerceScreen extends StatelessWidget {
   static final String routeName = "/pro/commerce/preview";

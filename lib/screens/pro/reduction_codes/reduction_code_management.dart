@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'read_qr_code.dart';
 import 'reduction_code_statistics_screen.dart';
 import 'update_reduction_code_screen.dart';
-import '../reduction_code_detail/reduction_code_detail_screen.dart';
-import '../../constants.dart';
-import '../../components/app_bar.dart';
-import '../../components/custom_dialog.dart';
-import '../../model/commerce.dart';
-import '../../model/reduction_code.dart';
-import '../../model/database/commerce_model.dart';
-import '../../model/database/reduction_code_model.dart';
-import '../../services/size_config.dart';
-import '../../services/theme_manager.dart';
+import '../helper/read_qr_code.dart';
+import '../../reduction_code_detail/reduction_code_detail_screen.dart';
+import '../../../constants.dart';
+import '../../../components/app_bar.dart';
+import '../../../components/custom_dialog.dart';
+import '../../../model/commerce.dart';
+import '../../../model/reduction_code.dart';
+import '../../../model/database/commerce_model.dart';
+import '../../../model/database/reduction_code_model.dart';
+import '../../../services/size_config.dart';
+import '../../../services/theme_manager.dart';
 
 class ReductionManagementScreen extends StatefulWidget {
   static final String routeName = "/pro/reduction-codes";

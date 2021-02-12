@@ -9,22 +9,22 @@ import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import 'map_object.dart';
 import 'preview_commerce.dart';
-import '../../constants.dart';
-import '../../components/app_bar.dart';
-import '../../components/default_button.dart';
-import '../../components/form_error.dart';
-import '../../components/modal_box.dart';
-import '../../helper/zoombuttons_plugin.dart';
-import '../../helper/keyboard.dart';
-import '../../model/commerce.dart';
-import '../../model/commerce_type.dart';
-import '../../model/database/commerce_model.dart';
-import '../../model/database/commerce_type_model.dart';
-import '../../services/firebase_settings.dart';
-import '../../services/size_config.dart';
-import '../../services/user_manager.dart';
+import '../components/map_object.dart';
+import '../../../constants.dart';
+import '../../../components/app_bar.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../components/modal_box.dart';
+import '../../../helper/zoombuttons_plugin.dart';
+import '../../../helper/keyboard.dart';
+import '../../../model/commerce.dart';
+import '../../../model/commerce_type.dart';
+import '../../../model/database/commerce_model.dart';
+import '../../../model/database/commerce_type_model.dart';
+import '../../../services/firebase_settings.dart';
+import '../../../services/size_config.dart';
+import '../../../services/user_manager.dart';
 
 class UpdateCommerceScreen extends StatefulWidget {
   static String routeName = "/pro/commerce/update";

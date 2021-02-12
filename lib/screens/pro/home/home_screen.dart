@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'read_qr_code.dart';
-import 'reduction_code_management.dart';
-import 'update_commerce_screen.dart';
-import '../../constants.dart';
-import '../../components/app_bar.dart';
-import '../../components/custom_dialog.dart';
-import '../../model/commerce.dart';
-import '../../model/database/commerce_model.dart';
-import '../../model/database/user_model.dart';
-import '../../services/firebase_settings.dart';
-import '../../services/size_config.dart';
-import '../../services/theme_manager.dart';
+import '../helper/read_qr_code.dart';
+import '../reduction_codes/reduction_code_management.dart';
+import '../stores/update_commerce_screen.dart';
+import '../../../constants.dart';
+import '../../../components/app_bar.dart';
+import '../../../components/custom_dialog.dart';
+import '../../../model/commerce.dart';
+import '../../../model/database/commerce_model.dart';
+import '../../../model/database/user_model.dart';
+import '../../../services/firebase_settings.dart';
+import '../../../services/size_config.dart';
+import '../../../services/theme_manager.dart';
 
 class ProHomeScreen extends StatefulWidget {
   static String routeName = "/pro/home";

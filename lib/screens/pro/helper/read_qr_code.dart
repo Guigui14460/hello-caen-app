@@ -1,9 +1,9 @@
 import 'package:barcode_scan_fix/barcode_scan.dart';
 
-import '../../model/reduction_code_used.dart';
-import '../../model/database/reduction_code_model.dart';
-import '../../model/database/reduction_code_used_model.dart';
-import '../../model/database/user_model.dart';
+import '../../../model/reduction_code_used.dart';
+import '../../../model/database/reduction_code_model.dart';
+import '../../../model/database/reduction_code_used_model.dart';
+import '../../../model/database/user_model.dart';
 
 enum QRCodeResult {
   OK,

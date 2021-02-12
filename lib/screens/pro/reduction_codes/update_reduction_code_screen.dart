@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../constants.dart';
-import '../../components/app_bar.dart';
-import '../../components/checkbox_form_field.dart';
-import '../../components/custom_dialog.dart';
-import '../../components/date_picker.dart';
-import '../../components/default_button.dart';
-import '../../components/form_error.dart';
-import '../../helper/keyboard.dart';
-import '../../model/commerce.dart';
-import '../../model/reduction_code.dart';
-import '../../model/database/commerce_model.dart';
-import '../../model/database/reduction_code_model.dart';
-import '../../services/size_config.dart';
+import '../../../constants.dart';
+import '../../../components/app_bar.dart';
+import '../../../components/checkbox_form_field.dart';
+import '../../../components/custom_dialog.dart';
+import '../../../components/date_picker.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../helper/keyboard.dart';
+import '../../../model/commerce.dart';
+import '../../../model/reduction_code.dart';
+import '../../../model/database/commerce_model.dart';
+import '../../../model/database/reduction_code_model.dart';
+import '../../../services/size_config.dart';
 
 class UpdateReductionCodeScreen extends StatefulWidget {
   static String routeName = "/pro/reduction-codes/update";

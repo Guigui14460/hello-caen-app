@@ -86,9 +86,10 @@ class ZoomButtons extends StatelessWidget {
                   map.move(centerZoom.center, zoom);
                 }
               },
-              child: Icon(zoomButtonsOpts.zoomInIcon,
-                  color: zoomButtonsOpts.zoomInColorIcon ??
-                      IconTheme.of(context).color),
+              child: Icon(
+                zoomButtonsOpts.zoomInIcon,
+                color: zoomButtonsOpts.zoomInColorIcon ?? primaryColor,
+              ),
             ),
           ),
           Padding(
@@ -107,9 +108,10 @@ class ZoomButtons extends StatelessWidget {
                   map.move(centerZoom.center, zoom);
                 }
               },
-              child: Icon(zoomButtonsOpts.zoomOutIcon,
-                  color: zoomButtonsOpts.zoomOutColorIcon ??
-                      IconTheme.of(context).color),
+              child: Icon(
+                zoomButtonsOpts.zoomOutIcon,
+                color: zoomButtonsOpts.zoomOutColorIcon ?? primaryColor,
+              ),
             ),
           ),
         ],

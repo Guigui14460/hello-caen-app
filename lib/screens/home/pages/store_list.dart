@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../generated_screens/generated_store_screen.dart';
+import '../../../settings.dart';
 import '../../../constants.dart';
 import '../../../components/category_menu.dart';
 import '../../../components/store_card.dart';
@@ -20,16 +21,18 @@ class StoreListPage extends StatefulWidget {
   final Future<void> Function() refreshCommerces, refreshCommerceTypes;
   final List<Commerce> Function() getCommerces;
   final List<CommerceType> Function() getCommerceTypes;
+  final Map<Commerce, double> Function() getCommerceDistances;
   final Map<Commerce, RatingAndCommentCount> Function() getRatings;
 
-  const StoreListPage(
-      {Key key,
-      @required this.getCommerces,
-      @required this.getCommerceTypes,
-      @required this.getRatings,
-      @required this.refreshCommerces,
-      @required this.refreshCommerceTypes})
-      : super(key: key);
+  const StoreListPage({
+    Key key,
+    @required this.getCommerces,
+    @required this.getCommerceTypes,
+    @required this.getCommerceDistances,
+    @required this.getRatings,
+    @required this.refreshCommerces,
+    @required this.refreshCommerceTypes,
+  }) : super(key: key);
 
   @override
   _StoreListPageState createState() => _StoreListPageState();
@@ -39,6 +42,7 @@ class _StoreListPageState extends State<StoreListPage> {
   RefreshController _refreshController = RefreshController();
   String _currentSearch = "";
   bool _showFavoriteStores = false;
+  bool _showStoresNextToUser = false;
   List<Commerce> _favoriteStores = [];
   List<Commerce> _stores = [];
   List<CommerceType> _types = [];
@@ -80,17 +84,23 @@ class _StoreListPageState extends State<StoreListPage> {
   }
 
   void _filterByType(CommerceType type) {
+    Iterable<Commerce> filteredList = _stores;
+    if (_showStoresNextToUser) {
+      filteredList = _filterCommercesByDistance();
+    }
+    if (_showFavoriteStores) {
+      filteredList =
+          filteredList.where((element) => _favoriteStores.contains(element));
+    }
     if (this.mounted) {
       setState(() {
         _currentType = type;
         if (type != null) {
-          _currentDisplayedStores =
-              (_showFavoriteStores ? _favoriteStores : _stores)
-                  .where((element) => element.typeId == type.id)
-                  .toList();
+          _currentDisplayedStores = filteredList
+              .where((element) => element.typeId == type.id)
+              .toList();
         } else {
-          _currentDisplayedStores =
-              _showFavoriteStores ? _favoriteStores : _stores;
+          _currentDisplayedStores = filteredList.toList();
         }
       });
     }
@@ -109,9 +119,7 @@ class _StoreListPageState extends State<StoreListPage> {
         _stores = widget.getCommerces();
         _ratings = widget.getRatings();
       });
-    }
-    if (userManager.isLoggedIn() && this.mounted) {
-      if (this.mounted) {
+      if (userManager.isLoggedIn()) {
         List<String> fav = userManager.getLoggedInUser().favoriteCommerceIds;
         setState(() {
           _favoriteStores =
@@ -193,6 +201,29 @@ class _StoreListPageState extends State<StoreListPage> {
                     ),
                   ),
                 ),
+                SizedBox(width: getProportionateScreenWidth(10)),
+                InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    if (this.mounted) {
+                      setState(() {
+                        _showStoresNextToUser = !_showStoresNextToUser;
+                      });
+                      this._filterByType(this._currentType);
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 150),
+                      child: Icon(
+                        _showStoresNextToUser
+                            ? Icons.place
+                            : Icons.place_outlined,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
@@ -235,5 +266,18 @@ class _StoreListPageState extends State<StoreListPage> {
         );
       },
     );
+  }
+
+  List<Commerce> _filterCommercesByDistance() {
+    Map<Commerce, double> distances = widget.getCommerceDistances();
+    List<Commerce> commercesNextToUser =
+        distances.keys.map<Commerce>((element) {
+      if (distances[element] <= maximalDistanceToSeeStore) {
+        return element;
+      }
+      return null;
+    }).toList();
+    commercesNextToUser.removeWhere((element) => element == null);
+    return commercesNextToUser;
   }
 }

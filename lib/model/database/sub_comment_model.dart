@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'comment_model.dart';
 import 'firebase_firestore_db.dart';
-import 'user_model.dart';
 import '../sub_comment.dart';
 
 /// Model used to communicate with the database for the
@@ -22,10 +20,10 @@ class SubCommentModel extends FirebaseFirestoreDB<SubComment> {
   Map<String, dynamic> getElementData(SubComment object) {
     return {
       "text": object.text,
-      "author": UserModel().getDocumentReference(object.authorId),
+      "author": object.getAuthorRef(),
       "dateAdded": Timestamp.fromDate(object.dateAdded),
       "dateModified": Timestamp.fromDate(object.dateModified),
-      "comment": CommentModel().getDocumentReference(object.commentId),
+      "comment": object.getCommerceRef(),
     };
   }
 

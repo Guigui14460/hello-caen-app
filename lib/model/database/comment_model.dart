@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'commerce_model.dart';
 import 'firebase_firestore_db.dart';
 import 'sub_comment_model.dart';
-import 'user_model.dart';
 import '../comment.dart';
 
 /// Model used to communicate with the database for the
@@ -24,8 +22,8 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
   Map<String, dynamic> getElementData(Comment object) {
     return {
       "text": object.text,
-      "author": UserModel().getDocumentReference(object.authorId),
-      "commerce": CommerceModel().getDocumentReference(object.commerceId),
+      "author": object.getAuthorRef(),
+      "commerce": object.getCommerceRef(),
       "dateAdded": Timestamp.fromDate(object.dateAdded),
       "dateModified": Timestamp.fromDate(object.dateModified),
       "rating": object.rating,
@@ -41,7 +39,7 @@ class CommentModel extends FirebaseFirestoreDB<Comment> {
       commerceId: value['commerce'].id,
       dateAdded: value['dateAdded'].toDate(),
       dateModified: value['dateModified'].toDate(),
-      rating: value['rating'],
+      rating: value['rating'] + 0.0,
     );
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/services/theme_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/app_bar.dart';
@@ -10,6 +9,7 @@ import '../../../model/commerce.dart';
 import '../../../model/database/comment_model.dart';
 import '../../../model/database/commerce_model.dart';
 import '../../../services/size_config.dart';
+import '../../../services/theme_manager.dart';
 
 class GeneratedStorePage extends StatefulWidget {
   final Commerce data;

@@ -9,6 +9,7 @@ import '../../../constants.dart';
 import '../../../components/category_menu.dart';
 import '../../../components/store_card.dart';
 import '../../../components/search_bar.dart';
+import '../../../helper/rating_and_comment_count.dart';
 import '../../../model/commerce.dart';
 import '../../../model/commerce_type.dart';
 import '../../../services/size_config.dart';
@@ -19,11 +20,13 @@ class StoreListPage extends StatefulWidget {
   final Future<void> Function() refreshCommerces, refreshCommerceTypes;
   final List<Commerce> Function() getCommerces;
   final List<CommerceType> Function() getCommerceTypes;
+  final Map<Commerce, RatingAndCommentCount> Function() getRatings;
 
   const StoreListPage(
       {Key key,
       @required this.getCommerces,
       @required this.getCommerceTypes,
+      @required this.getRatings,
       @required this.refreshCommerces,
       @required this.refreshCommerceTypes})
       : super(key: key);
@@ -42,6 +45,7 @@ class _StoreListPageState extends State<StoreListPage> {
   List<Commerce> _currentDisplayedStores = [];
   List<Commerce> _searchResults = [];
   CommerceType _currentType;
+  Map<Commerce, RatingAndCommentCount> _ratings = {};
 
   @override
   void initState() {
@@ -50,6 +54,7 @@ class _StoreListPageState extends State<StoreListPage> {
       setState(() {
         _types = widget.getCommerceTypes();
         _stores = _searchResults = widget.getCommerces();
+        _ratings = widget.getRatings();
       });
     }
   }
@@ -102,6 +107,7 @@ class _StoreListPageState extends State<StoreListPage> {
       setState(() {
         _types = widget.getCommerceTypes();
         _stores = widget.getCommerces();
+        _ratings = widget.getRatings();
       });
     }
     if (userManager.isLoggedIn() && this.mounted) {
@@ -217,12 +223,14 @@ class _StoreListPageState extends State<StoreListPage> {
           commerce: _searchResults[index],
           width: double.infinity,
           height: 105,
+          rating: _ratings[_searchResults[index]],
           onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        GeneratedStoreScreen(data: _searchResults[index])));
+                    builder: (context) => GeneratedStoreScreen(
+                          data: _searchResults[index],
+                        )));
           },
         );
       },

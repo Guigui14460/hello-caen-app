@@ -11,5 +11,5 @@ final String androidAppId = "1:426795396848:android:33fe6a9ef33b0befef1c35";
 final String iosApiKey = "AIzaSyBpwFrvuElPFYnXtac4Q-ZqDfma8PrZFGQ";
 final String androidApiKey = "AIzaSyBjDbtTJ_GYm0mnv5xNrmhUBpgXiKGSEvs";
 
-final int intervalLocationChanges = 30000; // 30 sec
+final int intervalLocationChanges = 15000; // 15 sec
 final double maximalDistanceToSeeStore = 100; // 100 meters

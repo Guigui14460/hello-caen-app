@@ -70,11 +70,14 @@ Future<void> main() async {
   // location initialization
   await LocationService.init();
 
+  // user initialization
+  await UserManager.init();
+
   // app and managers
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<ThemeManager>.value(value: ThemeManager()),
-      ChangeNotifierProvider<UserManager>.value(value: UserManager()),
+      ChangeNotifierProvider<UserManager>.value(value: UserManager.instance),
       ChangeNotifierProvider<NotificationService>.value(
           value: NotificationService.instance),
       ChangeNotifierProvider<LocationService>.value(

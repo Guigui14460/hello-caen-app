@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'firebase_firestore_db.dart';
-import 'reduction_code_model.dart';
-import 'user_model.dart';
 import '../reduction_code_used.dart';
 
 /// Model used to communicate with the database for the
@@ -29,10 +27,9 @@ class ReductionCodeUsedModel extends FirebaseFirestoreDB<ReductionCodeUsed> {
   @override
   Map<String, dynamic> getElementData(ReductionCodeUsed object) {
     return {
-      'user': UserModel().getDocumentReference(object.userId),
+      'user': object.getUserRef(),
       'whenUsed': Timestamp.fromDate(object.whenUsed),
-      'reductionCode':
-          ReductionCodeModel().getDocumentReference(object.reductionCodeId),
+      'reductionCode': object.getReductionCodeRef(),
     };
   }
 }

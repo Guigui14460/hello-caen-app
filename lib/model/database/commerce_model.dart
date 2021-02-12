@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'comment_model.dart';
-import 'commerce_type_model.dart';
 import 'firebase_firestore_db.dart';
 import 'reduction_code_model.dart';
-import 'user_model.dart';
 import '../commerce.dart';
 import '../reduction_code.dart';
 
@@ -30,9 +28,9 @@ class CommerceModel extends FirebaseFirestoreDB<Commerce> {
       "description": object.description,
       "location": GeoPoint(object.latitude, object.longitude),
       "timetables": object.timetables,
-      "type": CommerceTypeModel().getDocumentReference(object.typeId),
+      "type": object.getTypeRef(),
       "imageLink": object.imageLink,
-      "owner": UserModel().getDocumentReference(object.ownerId),
+      "owner": object.getOwnerRef(),
     };
   }
 

@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
+import '../../helper/rating_and_comment_count.dart';
 import 'pages/account_profile.dart';
 import 'pages/home_page.dart';
 import 'pages/reduction_code_list.dart';
 import 'pages/store_list.dart';
 import '../location/location_screen.dart';
 import '../../constants.dart';
+import '../../utils.dart';
 import '../../components/app_bar.dart';
 import '../../model/commerce.dart';
 import '../../model/commerce_type.dart';
+import '../../model/rating.dart';
+import '../../model/user_account.dart';
 import '../../model/database/commerce_model.dart';
 import '../../model/database/commerce_type_model.dart';
+import '../../model/database/rating_model.dart';
 import '../../model/database/reduction_code_model.dart';
 import '../../model/reduction_code.dart';
+import '../../services/location_service.dart';
 import '../../services/theme_manager.dart';
 import '../../services/size_config.dart';
+import '../../services/user_manager.dart';
 
 /// Screen displayed by default for all users.
 class HomeScreen extends StatefulWidget {
@@ -33,6 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Commerce> _commerces = [];
   List<ReductionCode> _codes = [];
   List<CommerceType> _types = [];
+  List<double>
+      _commerceDistances; // TODO: finir ça pour la page liste commerces
+  LocationData _locationData;
+  List<Commerce> _favoriteCommerces = [];
+  Map<Commerce, RatingAndCommentCount> _ratings = {};
 
   @override
   void initState() {
@@ -40,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
       HomePage(
         getCommerces: getCommerces,
         getCodes: getCodes,
+        getCommerceDistances: getCommerceDistances,
+        getRatings: getRatings,
         refreshCommerces: _refreshCommerces,
         refreshCodes: _refreshCodes,
         refreshCommerceTypes: _refreshCommerceTypes,
@@ -47,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       StoreListPage(
         getCommerces: getCommerces,
         getCommerceTypes: getCommerceTypes,
+        getRatings: getRatings,
         refreshCommerceTypes: _refreshCommerceTypes,
         refreshCommerces: _refreshCommerces,
       ),
@@ -81,14 +97,58 @@ class _HomeScreenState extends State<HomeScreen> {
     return this._commerces;
   }
 
+  Map<Commerce, RatingAndCommentCount> getRatings() {
+    return this._ratings;
+  }
+
   Future<void> _refreshCommerces() async {
-    await CommerceModel().getAll().then((value) {
+    User user = UserManager.instance.getLoggedInUser();
+    await CommerceModel().getAll().then((value) async {
       if (this.mounted) {
         setState(() {
           _commerces = value;
+          _ratings = {};
+          _favoriteCommerces = value
+              .where((element) => user.favoriteCommerceIds.contains(element.id))
+              .toList();
         });
+        List<Rating> ratings = await RatingModel().getAll();
+        for (Commerce commerce in value) {
+          setState(() {
+            _ratings[commerce] = RatingAndCommentCount.getObject(
+                ratings.where((element) => element.commerceId == commerce.id));
+          });
+        }
       }
     });
+    this._refreshCommerceDistances(this._locationData);
+  }
+
+  List<double> getCommerceDistances() {
+    return this._commerceDistances;
+  }
+
+  void _refreshCommerceDistances(LocationData currentLocation) {
+    if (currentLocation != null && this.mounted) {
+      setState(() {
+        _commerceDistances = [];
+        _locationData = currentLocation;
+      });
+      for (Commerce commerce in _commerces) {
+        _commerceDistances.add(getDistanceFromLatLonInKm(
+                currentLocation.latitude,
+                currentLocation.longitude,
+                commerce.latitude,
+                commerce.longitude) *
+            1000);
+      }
+    } else {
+      _commerceDistances = null;
+    }
+  }
+
+  List<Commerce> getFavoriteCommerces() {
+    return this._favoriteCommerces;
   }
 
   List<CommerceType> getCommerceTypes() {
@@ -109,6 +169,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     bool isDarkMode = Provider.of<ThemeManager>(context).isDarkMode();
+    LocationService locationService = Provider.of<LocationService>(context);
+    if (locationService.isEnabled()) {
+      locationService.addOnChangedFunction(this._refreshCommerceDistances);
+    }
     return SafeArea(
       child: Scaffold(
         appBar: MyAppBar(),

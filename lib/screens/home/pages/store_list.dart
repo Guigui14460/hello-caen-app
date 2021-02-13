@@ -50,6 +50,7 @@ class _StoreListPageState extends State<StoreListPage> {
   List<Commerce> _searchResults = [];
   CommerceType _currentType;
   Map<Commerce, RatingAndCommentCount> _ratings = {};
+  Iterable<Commerce> _storesNextToUser = [];
 
   @override
   void initState() {
@@ -86,7 +87,12 @@ class _StoreListPageState extends State<StoreListPage> {
   void _filterByType(CommerceType type) {
     Iterable<Commerce> filteredList = _stores;
     if (_showStoresNextToUser) {
-      filteredList = _filterCommercesByDistance();
+      if (this.mounted) {
+        setState(() {
+          _storesNextToUser = _filterCommercesByDistance().keys;
+        });
+      }
+      filteredList = _storesNextToUser;
     }
     if (_showFavoriteStores) {
       filteredList =
@@ -247,37 +253,40 @@ class _StoreListPageState extends State<StoreListPage> {
   }
 
   List<Widget> buildCommerceView() {
+    Map<Commerce, double> distances = widget.getCommerceDistances();
     return List.generate(
       _searchResults.length,
       (index) {
+        Commerce commerce = _searchResults[index];
         return StoreCard(
-          commerce: _searchResults[index],
+          commerce: commerce,
           width: double.infinity,
           height: 105,
-          rating: _ratings[_searchResults[index]],
+          rating: _ratings[commerce],
+          distance: _storesNextToUser.contains(commerce)
+              ? distances[commerce]
+              : double.nan,
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => GeneratedStoreScreen(
-                          data: _searchResults[index],
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => GeneratedStoreScreen(data: commerce),
+              ),
+            );
           },
         );
       },
     );
   }
 
-  List<Commerce> _filterCommercesByDistance() {
-    Map<Commerce, double> distances = widget.getCommerceDistances();
-    List<Commerce> commercesNextToUser =
-        distances.keys.map<Commerce>((element) {
-      if (distances[element] <= maximalDistanceToSeeStore) {
-        return element;
+  Map<Commerce, double> _filterCommercesByDistance() {
+    Map<Commerce, double> distances = widget.getCommerceDistances(),
+        returns = {};
+    distances.entries.forEach((element) {
+      if (element.value <= maximalDistanceToSeeStore) {
+        returns[element.key] = element.value;
       }
-      return null;
-    }).toList();
-    commercesNextToUser.removeWhere((element) => element == null);
-    return commercesNextToUser;
+    });
+    return returns;
   }
 }

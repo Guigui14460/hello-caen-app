@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hello_caen/helper/rating_and_comment_count.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/rating_and_comment_count.dart';
 import '../model/commerce.dart';
 import '../model/user_account.dart';
 import '../model/database/user_model.dart';
+import '../services/location_service.dart';
 import '../services/size_config.dart';
 import '../services/user_manager.dart';
 
@@ -15,6 +16,8 @@ class StoreCard extends StatelessWidget {
   final bool showComments;
   final VoidCallback onTap;
   final RatingAndCommentCount rating;
+  final double distance;
+  final bool heroAnimationActivated;
   const StoreCard({
     Key key,
     @required this.commerce,
@@ -24,11 +27,14 @@ class StoreCard extends StatelessWidget {
     @required this.rating,
     this.smallTitle,
     this.showComments = true,
+    this.distance = double.nan,
+    this.heroAnimationActivated = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     UserManager userManager = Provider.of<UserManager>(context);
+    LocationService locationService = Provider.of<LocationService>(context);
     return Padding(
       padding: EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
       child: GestureDetector(
@@ -45,15 +51,22 @@ class StoreCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               child: Stack(
                 children: [
-                  Hero(
-                    tag: this.commerce.id,
-                    child: Image.network(
-                      this.commerce.imageLink,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
-                  ),
+                  (heroAnimationActivated
+                      ? Hero(
+                          tag: this.commerce.id,
+                          child: Image.network(
+                            this.commerce.imageLink,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        )
+                      : Image.network(
+                          this.commerce.imageLink,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        )),
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -169,6 +182,31 @@ class StoreCard extends StatelessWidget {
                                   : SizedBox()),
                             ],
                           ),
+                          (this.distance.isNaN
+                              ? Container()
+                              : Column(
+                                  children: [
+                                    SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(5)),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.place,
+                                          color: Colors.red[600],
+                                          size: 19,
+                                        ),
+                                        Text(
+                                          (!locationService.isEnabled()
+                                              ? "Distance non dispo"
+                                              : "${this.distance.toInt()} m"),
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        Spacer(),
+                                      ],
+                                    ),
+                                  ],
+                                )),
                         ],
                       ),
                     ),

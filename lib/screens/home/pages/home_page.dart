@@ -166,6 +166,7 @@ class _HomePageState extends State<HomePage> {
                           showComments: false,
                           smallTitle: "Commerce sponsorisé",
                           rating: _ratings[_sponsoredStore],
+                          heroAnimationActivated: false,
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -202,17 +203,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Commerce> _filterCommercesByDistance() {
-    Map<Commerce, double> distances = widget.getCommerceDistances();
-    List<Commerce> commercesNextToUser =
-        distances.keys.map<Commerce>((element) {
-      if (distances[element] <= maximalDistanceToSeeStore) {
-        return element;
+  Map<Commerce, double> _filterCommercesByDistance() {
+    Map<Commerce, double> distances = widget.getCommerceDistances(),
+        returns = {};
+    distances.entries.forEach((element) {
+      if (element.value <= maximalDistanceToSeeStore) {
+        returns[element.key] = element.value;
       }
-      return null;
-    }).toList();
-    commercesNextToUser.removeWhere((element) => element == null);
-    return commercesNextToUser;
+    });
+    return returns;
   }
 
   Widget buildLocationStoreWidget(BuildContext context) {
@@ -227,7 +226,8 @@ class _HomePageState extends State<HomePage> {
     if (_locationData == null) {
       return Text("Aucune données de localisation trouvées");
     }
-    List<Commerce> commercesNextToUser = _filterCommercesByDistance();
+    Map<Commerce, double> commercesNextToUser = _filterCommercesByDistance();
+    List<Commerce> keys = commercesNextToUser.keys.toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -238,16 +238,19 @@ class _HomePageState extends State<HomePage> {
                 children: List.generate(
                   commercesNextToUser.length,
                   (index) => StoreCard(
-                    commerce: commercesNextToUser[index],
+                    commerce: keys[index],
                     width: double.infinity,
                     height: 105,
-                    rating: _ratings[commercesNextToUser[index]],
+                    rating: _ratings[keys[index]],
+                    distance: commercesNextToUser[keys[index]],
+                    heroAnimationActivated: false,
                     onTap: () => Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => GeneratedStoreScreen(
-                                  data: commercesNextToUser[index],
-                                ))),
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) =>
+                            GeneratedStoreScreen(data: keys[index]),
+                      ),
+                    ),
                   ),
                 ),
               )),
@@ -280,11 +283,12 @@ class _HomePageState extends State<HomePage> {
                     height: 105,
                     rating: _ratings[favoriteStores[index]],
                     onTap: () => Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => GeneratedStoreScreen(
-                                  data: favoriteStores[index],
-                                ))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            GeneratedStoreScreen(data: favoriteStores[index]),
+                      ),
+                    ),
                   ),
                 ),
               )),
@@ -299,15 +303,18 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: () => Navigator.push(context,
-                    CupertinoPageRoute(builder: (context) => SignInScreen())),
-                child: Text(
-                  "Connectez-vous",
-                  style: TextStyle(
-                    color: primaryColor,
-                    fontSize: getProportionateScreenWidth(20),
-                  ),
-                )),
+              onTap: () => Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => SignInScreen()),
+              ),
+              child: Text(
+                "Connectez-vous",
+                style: TextStyle(
+                  color: primaryColor,
+                  fontSize: getProportionateScreenWidth(20),
+                ),
+              ),
+            ),
             Text(
               " ou ",
               style: TextStyle(

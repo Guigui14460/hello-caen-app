@@ -12,4 +12,4 @@ final String iosApiKey = "AIzaSyBpwFrvuElPFYnXtac4Q-ZqDfma8PrZFGQ";
 final String androidApiKey = "AIzaSyBjDbtTJ_GYm0mnv5xNrmhUBpgXiKGSEvs";
 
 final int intervalLocationChanges = 10000; // 10 sec
-final double maximalDistanceToSeeStore = 100; // 100 meters
+final double maximalDistanceToSeeStore = 200; // 200 meters

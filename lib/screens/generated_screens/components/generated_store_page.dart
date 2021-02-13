@@ -90,26 +90,13 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                               )),
                         ])),
                     Container(
-                        padding: EdgeInsets.only(top: 10, left: 30),
-                        child: Row(children: [
-                          Text(
-                            widget.data.name,
-                            style: TextStyle(fontSize: 30),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 100,
-                            margin: EdgeInsets.only(left: 50),
-                            padding: EdgeInsets.only(top: 10, right: 20),
-                            color: Colors.green,
-                            child: Center(
-                              child: Text(
-                                widget.data.timetables,
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ),
-                        ])),
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text(
+                        widget.data.name,
+                        softWrap: true,
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 10, left: 40),
                       child: Row(
@@ -118,6 +105,19 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                           Text("4 étoiles ",
                               style: TextStyle(fontWeight: FontWeight.bold))
                         ],
+                      ),
+                    ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      margin: EdgeInsets.only(left: 50),
+                      padding: EdgeInsets.only(top: 10, right: 20),
+                      color: Colors.green,
+                      child: Center(
+                        child: Text(
+                          widget.data.timetables,
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
                     ),
                     Container(

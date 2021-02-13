@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import '../../../model/commerce.dart';
 
 // import 'popup.dart';
 import '../location_screen.dart';
@@ -13,62 +14,33 @@ class LocationStoreList extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     print("salut toi");
+    List<Commerce> markets = widget.getCommerces();
     List<Marker> locationList = [];
-    locationList.add(
-      MarketMarker(
-        market: Market(
-            name: 'test marker',
-            imagePath: 'assets/images/test.jpg',
-            lat: 49.1705,
-            long: -0.3650,
-            open: "Ouvert"),
-      ),
-    );
+    // locationList.add(
+    //   MarketMarker(
+    //     market: Market(
+    //         name: 'test marker',
+    //         imagePath: 'assets/images/test.jpg',
+    //         lat: 49.1705,
+    //         long: -0.3650,
+    //         open: "Ouvert"),
+    //   ),
+    // );
 
-    SafeArea(
-      child: FutureBuilder(
-        future: CommerceModel().getAll(),
-        builder: (context, snapshot) {
-          print("debut future");
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              print(
-                  "--------------------------------------------------------------");
-              print(snapshot.data);
-              print(
-                  "--------------------------------------------------------------");
+    for (var m in markets) {
+      locationList.add(
+        MarketMarker(
+          market: Market(
+              name: m.name,
+              imagePath: 'assets/images/test.jpg',
+              lat: m.latitude,
+              long: m.longitude,
+              open: "Ouvert",
+              commerce: m),
+        ),
+      );
+    }
 
-              for (var data in snapshot.data) {
-                print("lat");
-                print(data.latitude);
-                print("long");
-                print(data.longitude);
-
-                locationList.add(
-                  MarketMarker(
-                    market: Market(
-                        name: 'test marker',
-                        imagePath: 'assets/images/test.jpg',
-                        lat: 49.1705,
-                        long: -0.3650,
-                        open: "Ouvert"),
-                  ),
-                );
-              }
-            }
-
-            if (snapshot.hasError) {
-              return Text("Snapshot Has error");
-            } else {
-              return Text("No Commerce Found");
-            }
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
-      ),
-    );
-    print("fin future");
     return Scaffold(
       body: FlutterMap(
         options: MapOptions(
@@ -76,7 +48,7 @@ class LocationStoreList extends State<MapPage> {
           // center: LatLng(0.0, 0.0),
           center: LatLng(49.1705, -0.3650),
           zoom: 12.0,
-          interactive: true,
+          interactiveFlags: InteractiveFlag.all - InteractiveFlag.rotate,
           onTap: (_) => _popupLayerController.hidePopup(),
           // zoom: 1.0,
         ),

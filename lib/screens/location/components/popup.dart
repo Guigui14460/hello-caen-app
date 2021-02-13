@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:hello_caen/model/commerce.dart';
+import 'package:hello_caen/screens/generated_screens/generated_store_screen.dart';
 import 'package:latlong/latlong.dart';
+import '../../../constants.dart';
 
 class Market {
   static const double size = 25;
 
-  Market({this.name, this.imagePath, this.lat, this.long, this.open});
+  Market(
+      {this.name,
+      this.imagePath,
+      this.lat,
+      this.long,
+      this.open,
+      this.commerce});
 
   final String name;
   final String imagePath;
   final double lat;
   final double long;
   final String open;
+  final Commerce commerce;
 }
 
 class MarketMarker extends Marker {
@@ -22,7 +32,9 @@ class MarketMarker extends Marker {
           height: Market.size,
           width: Market.size,
           point: LatLng(market.lat, market.long),
-          builder: (BuildContext ctx) => Icon(Icons.place),
+          builder: (BuildContext ctx) => IconTheme(
+              data: IconThemeData(color: primaryColor),
+              child: Icon(Icons.place)),
         );
 
   final Market market;
@@ -51,6 +63,13 @@ class MarketMarkerPopup extends StatelessWidget {
               ),
               title: Text(market.name),
               subtitle: Text(market.open),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => GeneratedStoreScreen(
+                          data: market.commerce,
+                        )),
+              ),
             )
           ],
         ),

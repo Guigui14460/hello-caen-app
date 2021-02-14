@@ -61,10 +61,13 @@ class LocationService extends ChangeNotifier {
           notifyListeners();
           break;
         default:
+          _location = null;
           throw new Exception(
               "Veuillez autoriser la géolocalisation pour continuer");
           break;
       }
+    }).catchError((error) {
+      _location = null;
     });
     await this.refresh();
   }

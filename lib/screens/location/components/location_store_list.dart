@@ -1,84 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
-import '../../../model/commerce.dart';
-
-// import 'popup.dart';
-import '../location_screen.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-import "../../../model/database/commerce_model.dart";
+import 'package:latlong/latlong.dart';
+import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+
 import "popup.dart";
+import '../location_screen.dart';
+import '../../../helper/rating_and_comment_count.dart';
+import '../../../model/commerce.dart';
+import '../../../services/location_service.dart';
+import '../../../services/user_manager.dart';
 
 class LocationStoreList extends State<MapPage> {
   final PopupController _popupLayerController = PopupController();
+
+  List<Marker> _stores = [];
+  List<Marker> _favoriteStores = [];
+  Map<Commerce, RatingAndCommentCount> _ratings = {};
+  Marker _userLocation;
+
+  @override
+  void initState() {
+    if (this.mounted) {
+      setState(() {
+        _ratings = widget.getRatings();
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("salut toi");
-    List<Commerce> markets = widget.getCommerces();
-    List<Marker> locationList = [];
-    // locationList.add(
-    //   MarketMarker(
-    //     market: Market(
-    //         name: 'test marker',
-    //         imagePath: 'assets/images/test.jpg',
-    //         lat: 49.1705,
-    //         long: -0.3650,
-    //         open: "Ouvert"),
-    //   ),
-    // );
-
-    for (var m in markets) {
-      locationList.add(
-        MarketMarker(
-          market: Market(
-              name: m.name,
-              imagePath: 'assets/images/test.jpg',
-              lat: m.latitude,
-              long: m.longitude,
-              open: "Ouvert",
-              commerce: m),
-        ),
-      );
+    UserManager userManager = Provider.of<UserManager>(context);
+    LocationService locationService = Provider.of<LocationService>(context);
+    locationService.addOnChangedFunction((LocationData data) {
+      if (this.mounted) {
+        setState(() {
+          _userLocation = Marker(
+            width: 30,
+            height: 30,
+            point: LatLng(data.latitude, data.longitude),
+            anchorPos: AnchorPos.align(AnchorAlign.top),
+            builder: (ctx) => Icon(Icons.place, color: Colors.red, size: 30),
+          );
+        });
+      }
+    });
+    if (this.mounted) {
+      setState(() {
+        for (Commerce m in widget.getCommerces()) {
+          if (userManager.isLoggedIn() &&
+              userManager
+                  .getLoggedInUser()
+                  .favoriteCommerceIds
+                  .contains(m.id)) {
+            _favoriteStores.add(
+              MarketMarker(
+                color: Colors.blue,
+                market: Market(
+                  name: m.name,
+                  imagePath: m.imageLink,
+                  lat: m.latitude,
+                  long: m.longitude,
+                  open: "Ouvert",
+                  commerce: m,
+                ),
+              ),
+            );
+          } else {
+            _stores.add(
+              MarketMarker(
+                color: Colors.black,
+                market: Market(
+                  name: m.name,
+                  imagePath: m.imageLink,
+                  lat: m.latitude,
+                  long: m.longitude,
+                  open: "Ouvert",
+                  commerce: m,
+                ),
+              ),
+            );
+          }
+        }
+      });
     }
-
     return Scaffold(
       body: FlutterMap(
         options: MapOptions(
           plugins: <MapPlugin>[PopupMarkerPlugin()],
-          // center: LatLng(0.0, 0.0),
           center: LatLng(49.1705, -0.3650),
           zoom: 12.0,
+          minZoom: 12.0,
+          slideOnBoundaries: true,
+          swPanBoundary: LatLng(49.0705, -0.4650),
+          nePanBoundary: LatLng(49.2705, -0.2650),
           interactiveFlags: InteractiveFlag.all - InteractiveFlag.rotate,
           onTap: (_) => _popupLayerController.hidePopup(),
-          // zoom: 1.0,
         ),
         layers: [
           TileLayerOptions(
             urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             subdomains: <String>['a', 'b', 'c'],
           ),
-          // MarkerLayerOptions(
-          //   markers: [
-          //     new Marker(
-          //       width: 40.0,
-          //       height: 40.0,
-          //       point: new LatLng(49.1705, -0.3650),
-          //       builder: (ctx) => new Container(
-          //         child: Icon(Icons.place),
-          //       ),
-          //     ),
-          //   ],
-          // ),
           PopupMarkerLayerOptions(
-              markers: locationList,
-              popupSnap: PopupSnap.top,
-              popupController: _popupLayerController,
-              popupBuilder: (_, Marker marker) {
-                if (marker is MarketMarker) {
-                  return MarketMarkerPopup(market: marker.market);
-                }
-                return Card(child: const Text('Not a market'));
-              })
+            markers: _stores +
+                _favoriteStores +
+                (locationService.isEnabled() && _userLocation != null
+                    ? [_userLocation]
+                    : []),
+            popupSnap: PopupSnap.top,
+            popupController: _popupLayerController,
+            popupBuilder: (ctx, Marker marker) {
+              if (marker is MarketMarker) {
+                return MarketMarkerPopup(market: marker.market);
+              }
+              return Card(child: const Text('Not a market'));
+            },
+          ),
         ],
       ),
     );

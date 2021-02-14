@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-import 'package:hello_caen/model/commerce.dart';
-import 'package:hello_caen/screens/generated_screens/generated_store_screen.dart';
 import 'package:latlong/latlong.dart';
+
+import '../../generated_screens/generated_store_screen.dart';
 import '../../../constants.dart';
+import '../../../model/commerce.dart';
 
 class Market {
   static const double size = 25;
@@ -26,18 +26,22 @@ class Market {
 }
 
 class MarketMarker extends Marker {
-  MarketMarker({@required this.market})
-      : super(
+  final Color color;
+  final Market market;
+
+  MarketMarker({
+    @required this.market,
+    this.color = primaryColor,
+  }) : super(
           anchorPos: AnchorPos.align(AnchorAlign.top),
           height: Market.size,
           width: Market.size,
           point: LatLng(market.lat, market.long),
           builder: (BuildContext ctx) => IconTheme(
-              data: IconThemeData(color: primaryColor),
-              child: Icon(Icons.place)),
+            data: IconThemeData(color: color),
+            child: Icon(Icons.place),
+          ),
         );
-
-  final Market market;
 }
 
 class MarketMarkerPopup extends StatelessWidget {
@@ -47,31 +51,30 @@ class MarketMarkerPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+      width: 250,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Hero(
+          tag: market.commerce.id,
+          child: Image.network(
+            market.imagePath,
+            height: 50,
+          ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Image.asset(
-                market.imagePath,
-                width: 50,
-                height: 50,
-              ),
-              title: Text(market.name),
-              subtitle: Text(market.open),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => GeneratedStoreScreen(
-                          data: market.commerce,
-                        )),
-              ),
-            )
-          ],
+        title: Text(
+          market.name,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(market.open),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GeneratedStoreScreen(data: market.commerce),
+          ),
         ),
       ),
     );

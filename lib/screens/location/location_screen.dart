@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+
 import 'components/location_store_list.dart';
+import '../../helper/rating_and_comment_count.dart';
 import '../../model/commerce.dart';
-
-// /// Screen displayed by default for all users.
-// class LocationScreen extends StatelessWidget {
-//   /// Name of the route where is the screen.
-//   static final String routeName = "/location";
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MapPage();
-//   }
-// }
 
 class MapPage extends StatefulWidget {
   final List<Commerce> Function() getCommerces;
+  final Map<Commerce, RatingAndCommentCount> Function() getRatings;
+  final Map<Commerce, double> Function() getCommerceDistances;
+
   MapPage({
     Key key,
     @required this.getCommerces,
+    @required this.getRatings,
+    @required this.getCommerceDistances,
   }) : super(key: key);
 
   @override

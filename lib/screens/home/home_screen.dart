@@ -73,7 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
         refreshCodes: _refreshCodes,
         refreshCommerceTypes: _refreshCommerceTypes,
       ),
-      MapPage(getCommerces: getCommerces),
+      MapPage(
+        getCommerces: getCommerces,
+        getCommerceDistances: getCommerceDistances,
+        getRatings: getRatings,
+      ),
       AccountProfilePage(widget),
     ];
     super.initState();

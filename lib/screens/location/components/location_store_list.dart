@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import "popup.dart";
 import '../location_screen.dart';
+import '../../../helper/rating_and_comment_count.dart';
 import '../../../model/commerce.dart';
 import '../../../services/location_service.dart';
 import '../../../services/user_manager.dart';
@@ -15,7 +16,18 @@ class LocationStoreList extends State<MapPage> {
   final PopupController _popupLayerController = PopupController();
 
   List<Marker> _stores = [];
+  Map<Commerce, RatingAndCommentCount> _ratings = {};
   Marker _userLocation;
+
+  @override
+  void initState() {
+    if (this.mounted) {
+      setState(() {
+        _ratings = widget.getRatings();
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +99,10 @@ class LocationStoreList extends State<MapPage> {
             popupController: _popupLayerController,
             popupBuilder: (ctx, Marker marker) {
               if (marker is MarketMarker) {
-                return MarketMarkerPopup(market: marker.market);
+                return MarketMarkerPopup(
+                  market: marker.market,
+                  rating: _ratings[marker.market.commerce],
+                );
               }
               return Card(child: const Text('Not a market'));
             },

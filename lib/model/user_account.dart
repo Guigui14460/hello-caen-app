@@ -72,23 +72,8 @@ class User with Compare<User> {
   void removeFavoriteEnterprise(String valueId) =>
       this.favoriteCommerceIds.remove(valueId);
 
-  /// Gets the widget to display the profile picture.
-  Widget getProfilePictureWdget() {
-    return null;
-  }
-
-  /// Gets the widget to display the full name.
-  Widget getFullNameWidget() {
-    return Text(firstName + " " + lastName);
-  }
-
-  /// Gets the widgets to display favorite commerces.
-  Widget getFavoriteCommercesWidget() {
-    return null;
-  }
-
   /// Gets the widget to display user sex.
-  Widget getSexWidget() {
+  String getSexWidget() {
     String sex;
     switch (this.sex) {
       case Sex.Female:
@@ -102,7 +87,7 @@ class User with Compare<User> {
         break;
       default:
     }
-    return Text(sex);
+    return sex;
   }
 
   /// Gets the actual age of the user.
@@ -115,11 +100,6 @@ class User with Compare<User> {
   /// Is an anonymous user.
   bool isAnonymous() {
     return this.firstName == null;
-  }
-
-  /// Builds the widget representing the small profile.
-  Widget buildSmallProfile() {
-    return null;
   }
 
   /// Gets and creates an anonymous user.

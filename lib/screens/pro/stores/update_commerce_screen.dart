@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'preview_commerce.dart';
-import '../components/map_object.dart';
+import '../../../components/map_object.dart';
 import '../../../constants.dart';
 import '../../../components/app_bar.dart';
 import '../../../components/default_button.dart';

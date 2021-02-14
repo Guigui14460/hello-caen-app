@@ -125,10 +125,13 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                         title: "Paramètres du compte",
                         iconData: Icons.settings,
                         onTap: () => Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) =>
-                                    AccountParametersScreen())),
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => AccountParametersScreen(
+                              firstTime: false,
+                            ),
+                          ),
+                        ),
                         isDarkMode: isDarkMode,
                       ),
                       SizedBox(height: getProportionateScreenHeight(20)),

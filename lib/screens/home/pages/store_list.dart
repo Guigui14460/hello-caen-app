@@ -270,7 +270,10 @@ class _StoreListPageState extends State<StoreListPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => GeneratedStoreScreen(data: commerce),
+                builder: (context) => GeneratedStoreScreen(
+                  data: commerce,
+                  rating: _ratings[commerce],
+                ),
               ),
             );
           },

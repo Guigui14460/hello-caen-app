@@ -168,11 +168,14 @@ class _HomePageState extends State<HomePage> {
                           rating: _ratings[_sponsoredStore],
                           heroAnimationActivated: false,
                           onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => GeneratedStoreScreen(
-                                        data: _sponsoredStore,
-                                      ))),
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GeneratedStoreScreen(
+                                data: _sponsoredStore,
+                                rating: _ratings[_sponsoredStore],
+                              ),
+                            ),
+                          ),
                         )
                       : Text(
                           "Aucun commerce sponsorisé disponible pour le moment")),
@@ -246,9 +249,11 @@ class _HomePageState extends State<HomePage> {
                     heroAnimationActivated: false,
                     onTap: () => Navigator.push(
                       context,
-                      CupertinoPageRoute(
-                        builder: (context) =>
-                            GeneratedStoreScreen(data: keys[index]),
+                      MaterialPageRoute(
+                        builder: (context) => GeneratedStoreScreen(
+                          data: keys[index],
+                          rating: _ratings[keys[index]],
+                        ),
                       ),
                     ),
                   ),
@@ -282,11 +287,14 @@ class _HomePageState extends State<HomePage> {
                     width: double.infinity,
                     height: 105,
                     rating: _ratings[favoriteStores[index]],
+                    heroAnimationActivated: false,
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            GeneratedStoreScreen(data: favoriteStores[index]),
+                        builder: (context) => GeneratedStoreScreen(
+                          data: favoriteStores[index],
+                          rating: _ratings[favoriteStores[index]],
+                        ),
                       ),
                     ),
                   ),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 
-import '../../../constants.dart';
-import '../../../helper/zoombuttons_plugin.dart';
-import '../../../services/size_config.dart';
+import '../constants.dart';
+import '../helper/zoombuttons_plugin.dart';
+import '../services/size_config.dart';
 
 // ignore: must_be_immutable
 class MapObject extends StatefulWidget {

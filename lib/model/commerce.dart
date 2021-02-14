@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'comment.dart';
 import 'database/commerce_type_model.dart';
@@ -32,8 +31,6 @@ class Commerce {
   /// Link for the image representing the commerce.
   String imageLink;
 
-  List<Comment> comments = [];
-
   /// Constructor.
   Commerce(
       {this.id,
@@ -55,7 +52,7 @@ class Commerce {
   }
 
   /// Gets the mean of all ratings.
-  double getRating() {
+  double getRating(List<Comment> comments) {
     if (comments.length == 0) {
       return double.nan;
     }
@@ -67,34 +64,8 @@ class Commerce {
     return rating;
   }
 
-  /// Gets the rating bar widget.
-  Widget getRatingBar() {
-    return RatingBarIndicator(
-      rating: this.getRating(),
-      direction: Axis.horizontal,
-      itemCount: 5,
-      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
-    );
-  }
-
   /// Gets the image widget.
-  Image getImage() {
-    return Image.network(this.imageLink);
-  }
-
-  void setComments(List<Comment> comments) {
-    this.comments = comments;
-  }
-
-  void addComment(Comment comment) {
-    this.comments.add(comment);
-  }
-
-  void removeComment(Comment comment) {
-    this.comments.remove(comment);
+  ImageProvider getImage() {
+    return NetworkImage(this.imageLink);
   }
 }

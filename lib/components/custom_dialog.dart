@@ -79,9 +79,12 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: TextButton(
-                    onPressed: widget.onPressed,
-                    child: Text(widget.text,
-                        style: TextStyle(color: Colors.black, fontSize: 18))),
+                  onPressed: widget.onPressed,
+                  child: Text(
+                    widget.text,
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                ),
               ),
             ],
           ),

@@ -34,9 +34,6 @@ class ThemeManager with ChangeNotifier {
   ThemeData _getDarkTheme() {
     return ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      textTheme: TextTheme(
-          // headline1: TextStyle(color: primaryColor),
-          ),
       brightness: Brightness.dark,
       primaryColor: ternaryColor,
       appBarTheme: getAppBarTheme(),

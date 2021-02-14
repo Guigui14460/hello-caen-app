@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       MapPage(
         getCommerces: getCommerces,
         getCommerceDistances: getCommerceDistances,
+        getRatings: getRatings,
       ),
       AccountProfilePage(widget),
     ];

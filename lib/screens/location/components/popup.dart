@@ -4,6 +4,7 @@ import 'package:latlong/latlong.dart';
 
 import '../../generated_screens/generated_store_screen.dart';
 import '../../../constants.dart';
+import '../../../helper/rating_and_comment_count.dart';
 import '../../../model/commerce.dart';
 
 class Market {
@@ -45,8 +46,10 @@ class MarketMarker extends Marker {
 }
 
 class MarketMarkerPopup extends StatelessWidget {
-  const MarketMarkerPopup({Key key, this.market}) : super(key: key);
+  const MarketMarkerPopup({Key key, this.market, this.rating})
+      : super(key: key);
   final Market market;
+  final RatingAndCommentCount rating;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +76,10 @@ class MarketMarkerPopup extends StatelessWidget {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => GeneratedStoreScreen(data: market.commerce),
+            builder: (context) => GeneratedStoreScreen(
+              data: market.commerce,
+              rating: rating,
+            ),
           ),
         ),
       ),

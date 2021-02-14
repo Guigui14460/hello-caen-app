@@ -16,7 +16,7 @@ class AccountParametersScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       appBar: MyAppBar(
-        automaticBackArrow: false,
+        automaticBackArrow: !firstTime,
         actions: [Icon(Icons.info_outline_rounded)],
         actionsCallback: [() => _info(context)],
       ),

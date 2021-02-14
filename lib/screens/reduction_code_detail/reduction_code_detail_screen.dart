@@ -4,15 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'reduction_code_detail_qr_code_screen.dart';
-import '../generated_screens/generated_store_screen.dart';
 import '../sign_in/sign_in_screen.dart';
 import '../../components/app_bar.dart';
 import '../../components/custom_dialog.dart';
 import '../../components/default_button.dart';
-import '../../model/commerce.dart';
 import '../../model/reduction_code.dart';
 import '../../model/reduction_code_used.dart';
-import '../../model/database/commerce_model.dart';
 import '../../model/database/reduction_code_model.dart';
 import '../../model/database/reduction_code_used_model.dart';
 import '../../services/size_config.dart';
@@ -33,7 +30,6 @@ class ReductionCodeDetailScreen extends StatefulWidget {
 
 class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
   List<ReductionCodeUsed> _used = [];
-  Commerce _commerce;
 
   @override
   void initState() {
@@ -44,11 +40,6 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
         .then((value) {
       setState(() {
         _used = value;
-      });
-    });
-    CommerceModel().getById(widget.code.commerceId).then((value) {
-      setState(() {
-        _commerce = value;
       });
     });
     super.initState();
@@ -151,16 +142,6 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                           TextStyle(fontSize: getProportionateScreenWidth(14)),
                     ),
                     SizedBox(height: getProportionateScreenHeight(20)),
-                    _getCommerceButton(
-                        title: "Voir le commerce",
-                        iconData: Icons.store_rounded,
-                        isDarkMode: isDarkMode,
-                        onTap: () => Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) =>
-                                    GeneratedStoreScreen(data: _commerce)))),
-                    SizedBox(height: getProportionateScreenHeight(20)),
                     Text(
                       (codeAvailableLeft == 0
                           ? "Plus de code disponible"
@@ -224,84 +205,5 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
             },
           );
         });
-  }
-
-  Widget _getCommerceButton(
-      {String title,
-      IconData iconData,
-      VoidCallback onTap,
-      Color lightModeBackgroundcolor = const Color(0xffe3e3e3),
-      Color darkModeBackgroundcolor = const Color(0xff515151),
-      Color lightModeForegroundcolor = Colors.black,
-      Color darkModeForegroundcolor = Colors.white,
-      bool isDarkMode = false,
-      bool showRightArrow = true}) {
-    return InkWell(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          color:
-              isDarkMode ? darkModeBackgroundcolor : lightModeBackgroundcolor,
-        ),
-        width: double.infinity,
-        height: getProportionateScreenHeight(50),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          child: (showRightArrow
-              ? Row(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          iconData,
-                          color: isDarkMode
-                              ? darkModeForegroundcolor
-                              : lightModeForegroundcolor,
-                        ),
-                        SizedBox(width: getProportionateScreenWidth(10)),
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: getProportionateScreenHeight(17),
-                            color: isDarkMode
-                                ? darkModeForegroundcolor
-                                : lightModeForegroundcolor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: isDarkMode
-                          ? darkModeForegroundcolor
-                          : lightModeForegroundcolor,
-                    ),
-                  ],
-                )
-              : Row(
-                  children: [
-                    Icon(
-                      iconData,
-                      color: isDarkMode
-                          ? darkModeForegroundcolor
-                          : lightModeForegroundcolor,
-                    ),
-                    SizedBox(width: getProportionateScreenWidth(10)),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: getProportionateScreenHeight(17),
-                        color: isDarkMode
-                            ? darkModeForegroundcolor
-                            : lightModeForegroundcolor,
-                      ),
-                    ),
-                  ],
-                )),
-        ),
-      ),
-      onTap: onTap,
-    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../components/app_bar.dart';
@@ -10,6 +11,12 @@ import '../../../model/database/comment_model.dart';
 import '../../../model/database/commerce_model.dart';
 import '../../../services/size_config.dart';
 import '../../../services/theme_manager.dart';
+
+import 'package:hello_caen/components/app_bar.dart';
+import 'package:hello_caen/model/commerce.dart';
+import 'package:hello_caen/services/size_config.dart';
+
+
 
 class GeneratedStorePage extends StatefulWidget {
   final Commerce data;
@@ -88,6 +95,23 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                                 "Localisation",
                                 style: TextStyle(fontSize: 15),
                               )),
+                          Container(
+                              margin: EdgeInsets.only(left: getProportionateScreenHeight(50)),
+                            child:
+                          Opacity(
+                              opacity: 0.5,
+                              child: Text(
+                                "Ouvert ?",
+                                style: TextStyle(fontSize: 15),
+
+                              ))),
+                          Container(
+                            width: 20,
+                            height: getProportionateScreenHeight(10),
+                            margin: EdgeInsets.only(left: getProportionateScreenHeight(10)),
+                            padding: EdgeInsets.only(top: getProportionateScreenHeight(10), right: getProportionateScreenHeight(20)),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)), color :Colors.red ),
+                          ),
                         ])),
                     Container(
                       padding: EdgeInsets.only(top: 10),
@@ -107,19 +131,7 @@ class _GeneratedStorePageState extends State<GeneratedStorePage> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: 100,
-                      height: 100,
-                      margin: EdgeInsets.only(left: 50),
-                      padding: EdgeInsets.only(top: 10, right: 20),
-                      color: Colors.green,
-                      child: Center(
-                        child: Text(
-                          widget.data.timetables,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
+
                     Container(
                       height: getProportionateScreenHeight(160),
                       margin: EdgeInsets.only(top: 10),

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import "popup.dart";
 import '../location_screen.dart';
-import '../../../helper/rating_and_comment_count.dart';
 import '../../../model/commerce.dart';
 import '../../../services/location_service.dart';
 import '../../../services/user_manager.dart';
@@ -17,18 +16,7 @@ class LocationStoreList extends State<MapPage> {
 
   List<Marker> _stores = [];
   List<Marker> _favoriteStores = [];
-  Map<Commerce, RatingAndCommentCount> _ratings = {};
   Marker _userLocation;
-
-  @override
-  void initState() {
-    if (this.mounted) {
-      setState(() {
-        _ratings = widget.getRatings();
-      });
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

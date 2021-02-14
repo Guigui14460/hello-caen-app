@@ -15,7 +15,6 @@ class LocationStoreList extends State<MapPage> {
   final PopupController _popupLayerController = PopupController();
 
   List<Marker> _stores = [];
-  List<Marker> _favoriteStores = [];
   Marker _userLocation;
 
   @override
@@ -36,41 +35,28 @@ class LocationStoreList extends State<MapPage> {
       }
     });
     if (this.mounted) {
+      bool isUserLoggedIn = userManager.isLoggedIn();
       setState(() {
         for (Commerce m in widget.getCommerces()) {
-          if (userManager.isLoggedIn() &&
-              userManager
-                  .getLoggedInUser()
-                  .favoriteCommerceIds
-                  .contains(m.id)) {
-            _favoriteStores.add(
-              MarketMarker(
-                color: Colors.blue,
-                market: Market(
-                  name: m.name,
-                  imagePath: m.imageLink,
-                  lat: m.latitude,
-                  long: m.longitude,
-                  open: "Ouvert",
-                  commerce: m,
-                ),
+          _stores.add(
+            MarketMarker(
+              color: (isUserLoggedIn &&
+                      userManager
+                          .getLoggedInUser()
+                          .favoriteCommerceIds
+                          .contains(m.id)
+                  ? Colors.blue
+                  : Colors.black),
+              market: Market(
+                name: m.name,
+                imagePath: m.imageLink,
+                lat: m.latitude,
+                long: m.longitude,
+                open: "Ouvert",
+                commerce: m,
               ),
-            );
-          } else {
-            _stores.add(
-              MarketMarker(
-                color: Colors.black,
-                market: Market(
-                  name: m.name,
-                  imagePath: m.imageLink,
-                  lat: m.latitude,
-                  long: m.longitude,
-                  open: "Ouvert",
-                  commerce: m,
-                ),
-              ),
-            );
-          }
+            ),
+          );
         }
       });
     }
@@ -94,7 +80,6 @@ class LocationStoreList extends State<MapPage> {
           ),
           PopupMarkerLayerOptions(
             markers: _stores +
-                _favoriteStores +
                 (locationService.isEnabled() && _userLocation != null
                     ? [_userLocation]
                     : []),

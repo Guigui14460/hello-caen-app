@@ -48,7 +48,7 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     UserManager userManager = Provider.of<UserManager>(context);
-    bool isDarkMode = Provider.of<ThemeManager>(context).isDarkMode();
+    Provider.of<ThemeManager>(context).isDarkMode();
     int codeAvailableLeft = widget.code.maxAvailableCodes - _used.length;
     return SafeArea(
         child: Scaffold(

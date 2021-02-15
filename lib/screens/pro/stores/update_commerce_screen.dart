@@ -125,18 +125,20 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
           actionsCallback: [
             () {
               return Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (context) => PreviewCommerceScreen(
-                            name: _name,
-                            description: _description,
-                            latitude: _selectedLocation.latitude,
-                            longitude: _selectedLocation.longitude,
-                            image: _image,
-                            imageLink: _imageLink,
-                            type: _type,
-                            timetables: _timetables,
-                          )));
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => PreviewCommerceScreen(
+                    name: _name,
+                    description: _description,
+                    latitude: _selectedLocation.latitude,
+                    longitude: _selectedLocation.longitude,
+                    image: _image,
+                    imageLink: _imageLink,
+                    type: _type,
+                    timetables: _timetables,
+                  ),
+                ),
+              );
             }
           ],
         ),
@@ -145,8 +147,9 @@ class _UpdateCommerceScreenState extends State<UpdateCommerceScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: getProportionateScreenWidth(20),
-                  vertical: getProportionateScreenHeight(10)),
+                horizontal: getProportionateScreenWidth(20),
+                vertical: getProportionateScreenHeight(10),
+              ),
               child: Column(
                 children: [
                   Text(

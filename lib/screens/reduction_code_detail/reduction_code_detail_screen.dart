@@ -30,6 +30,7 @@ class ReductionCodeDetailScreen extends StatefulWidget {
 
 class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
   List<ReductionCodeUsed> _used = [];
+  bool _currentUserAlreadyUseCode = false;
 
   @override
   void initState() {
@@ -38,9 +39,22 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
             isEqualTo:
                 ReductionCodeModel().getDocumentReference(widget.code.id))
         .then((value) {
-      setState(() {
-        _used = value;
-      });
+      if (this.mounted) {
+        setState(() {
+          _used = value;
+        });
+      }
+      UserManager userManager = UserManager.instance;
+      if (userManager.isLoggedIn() &&
+          value.firstWhere((element) =>
+                  element.userId == userManager.getLoggedInUser().id) !=
+              null) {
+        if (this.mounted) {
+          setState(() {
+            _currentUserAlreadyUseCode = true;
+          });
+        }
+      }
     });
     super.initState();
   }
@@ -158,7 +172,9 @@ class _ReductionCodeDetailScreenState extends State<ReductionCodeDetailScreen> {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
-                (userManager.isLoggedIn() && codeAvailableLeft != 0
+                (userManager.isLoggedIn() &&
+                        codeAvailableLeft != 0 &&
+                        !_currentUserAlreadyUseCode
                     ? DefaultButton(
                         text: "Voir le QR code",
                         height: getProportionateScreenHeight(50),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'comment.dart';
 import 'database/commerce_model.dart';
 import 'database/user_model.dart';
 
@@ -38,5 +39,17 @@ class SubComment {
 
   DocumentReference getCommerceRef() {
     return CommerceModel().getDocumentReference(this.commentId);
+  }
+
+  Comment convertToComment() {
+    return Comment(
+      id: id,
+      authorId: authorId,
+      dateAdded: dateAdded,
+      dateModified: dateModified,
+      commerceId: commentId,
+      text: text,
+      rating: 0,
+    );
   }
 }

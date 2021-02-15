@@ -3,9 +3,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'button.dart';
 import 'small_profile.dart';
+import 'subcomment_widget.dart';
 import '../../../model/comment.dart';
-import '../../../model/database/user_model.dart';
+import '../../../model/sub_comment.dart';
 import '../../../model/user_account.dart';
+import '../../../model/database/comment_model.dart';
+import '../../../model/database/sub_comment_model.dart';
+import '../../../model/database/user_model.dart';
 import '../../../services/size_config.dart';
 
 class CommentWidget extends StatelessWidget {
@@ -38,7 +42,6 @@ class CommentWidget extends StatelessWidget {
                 onPressedToDelete: onPressedToDelete,
               );
             },
-            // TODO: load subcomment here
             future: UserModel().getById(comment.authorId),
           ),
           SizedBox(height: getProportionateScreenHeight(8)),
@@ -71,13 +74,57 @@ class CommentWidget extends StatelessWidget {
           SmallButton(
             name: "Ajouter un sous-commentaire",
             icon: Icon(Icons.add),
-            onPressed: () {
-              // TODO: add subcomment here
-            },
+            onPressed: _addSubComment,
           ),
+          _buildSubCommentsWidget(),
           SizedBox(height: getProportionateScreenHeight(20)),
         ],
       ),
     );
+  }
+
+  Widget _buildSubCommentsWidget() {
+    return FutureBuilder(
+      builder: (BuildContext context, AsyncSnapshot<List<SubComment>> snap) {
+        if (snap.connectionState == ConnectionState.none || !snap.hasData) {
+          return Text("Erreur lors du chargement des sous-commentaires");
+        }
+        if (snap.data.length == 0) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("Aucun sous-commentaire")],
+          );
+        }
+        return ExpansionTile(
+          leading: Icon(Icons.mode_comment),
+          title:
+              Text("Sous-commentaires (" + snap.data.length.toString() + ")"),
+          children: List<Widget>.generate(
+            snap.data.length,
+            (index) {
+              return SubCommentWidget(
+                subcomment: snap.data[index],
+                onPressedToDelete: _updateSubComment,
+                onPressedToUpdate: _deleteSubComment,
+              );
+            },
+          ),
+        );
+      },
+      future: SubCommentModel().where("comment",
+          isEqualTo: CommentModel().getDocumentReference(comment.id)),
+    );
+  }
+
+  void _addSubComment() {
+    // TODO: faire corps
+  }
+
+  void _updateSubComment() {
+    // TODO: faire corps
+  }
+
+  void _deleteSubComment() {
+    // TODO: faire corps
   }
 }

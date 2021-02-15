@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../model/rating.dart';
 
 class RatingAndCommentCount {
-  final double ratingMean;
-  final int commentCount;
+  double ratingMean;
+  int commentCount;
 
   RatingAndCommentCount._(
       {@required this.ratingMean, @required this.commentCount});
@@ -23,5 +23,11 @@ class RatingAndCommentCount {
       ratingMean: mean,
       commentCount: length,
     );
+  }
+
+  void update(double oldSingleValue, double newSingleValue) {
+    this.ratingMean =
+        ((ratingMean * commentCount) - oldSingleValue + newSingleValue) /
+            commentCount;
   }
 }

@@ -67,28 +67,99 @@ class SmallProfile extends StatelessWidget {
             ],
           ),
         ),
-        (userManager.getLoggedInUser().id == user.id
-            ? IconButton(
-                padding: EdgeInsets.zero,
-                alignment: Alignment.topRight,
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.blue,
+        _buildPopupMenuButton(userManager),
+        // (userManager.getLoggedInUser().id == user.id
+        //     ? IconButton(
+        //         padding: EdgeInsets.zero,
+        //         alignment: Alignment.topRight,
+        //         icon: Icon(
+        //           Icons.edit,
+        //           color: Colors.blue,
+        //         ),
+        //         onPressed: onPressedToUpdate,
+        //       )
+        //     : Container()),
+        // (userManager.getLoggedInUser().id == user.id
+        //     ? IconButton(
+        //         padding: EdgeInsets.zero,
+        //         alignment: Alignment.topRight,
+        //         icon: Icon(
+        //           Icons.delete,
+        //           color: Colors.red,
+        //         ),
+        //         onPressed: onPressedToDelete,
+        //       )
+        //     : Container()),
+      ],
+    );
+  }
+
+  Widget _buildPopupMenuButton(UserManager userManager) {
+    bool isOwner = userManager.getLoggedInUser().id == user.id;
+    return PopupMenuButton(
+      onSelected: (value) {
+        switch (value) {
+          case 1:
+            // TODO: report comment
+            break;
+          case 2:
+            onPressedToUpdate();
+            break;
+          case 3:
+            onPressedToDelete();
+            break;
+          default:
+        }
+      },
+      itemBuilder: (context) => [
+        (!isOwner
+            ? PopupMenuItem(
+                child: Row(
+                  children: [
+                    Icon(Icons.report),
+                    SizedBox(width: 8),
+                    Text("Signaler"),
+                  ],
                 ),
-                onPressed: onPressedToUpdate,
+                value: 1,
               )
-            : Container()),
-        (userManager.getLoggedInUser().id == user.id
-            ? IconButton(
-                padding: EdgeInsets.zero,
-                alignment: Alignment.topRight,
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.red,
+            : null),
+        (isOwner
+            ? PopupMenuItem(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.edit,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Modifier",
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ],
                 ),
-                onPressed: onPressedToDelete,
+                value: 2,
               )
-            : Container()),
+            : null),
+        (isOwner
+            ? PopupMenuItem(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Supprimer",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+                value: 3,
+              )
+            : null),
       ],
     );
   }

@@ -7,16 +7,19 @@ import 'package:provider/provider.dart';
 import 'components/button.dart';
 import 'components/comment_widget.dart';
 import 'components/create_update_delete_comment_modal.dart';
+import 'components/reduction_code_overview.dart';
 import '../../components/app_bar.dart';
 import '../../components/map_object.dart';
 import '../../helper/rating_and_comment_count.dart';
 import '../../model/comment.dart';
 import '../../model/commerce.dart';
 import '../../model/rating.dart';
+import '../../model/reduction_code.dart';
 import '../../model/user_account.dart';
 import '../../model/database/comment_model.dart';
 import '../../model/database/commerce_model.dart';
 import '../../model/database/rating_model.dart';
+import '../../model/database/reduction_code_model.dart';
 import '../../model/database/user_model.dart';
 import '../../services/size_config.dart';
 import '../../services/theme_manager.dart';
@@ -204,6 +207,10 @@ class _GeneratedStoreScreenState extends State<GeneratedStoreScreen> {
                           ),
                         ),
                         _buildSection(
+                          "Codes de réduction associés",
+                          _buildAssociatedReductionCodeWidget(),
+                        ),
+                        _buildSection(
                           "Localisation dans Caen",
                           MapObject(
                             height: 250,
@@ -215,6 +222,14 @@ class _GeneratedStoreScreenState extends State<GeneratedStoreScreen> {
                             slideOnBoundaries: true,
                           ),
                         ),
+                        Text(
+                          "Commentaires",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(height: getProportionateScreenHeight(4)),
                         _buildMyComment(context, userManager),
                         _buildOtherComment(userManager),
                       ],
@@ -248,6 +263,29 @@ class _GeneratedStoreScreenState extends State<GeneratedStoreScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildAssociatedReductionCodeWidget() {
+    return FutureBuilder(
+        future: ReductionCodeModel().where("commerce",
+            isEqualTo: CommerceModel().getDocumentReference(widget.data.id)),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ReductionCode>> snap) {
+          if (snap.connectionState == ConnectionState.none || !snap.hasData) {
+            return Text("Erreur lors du chargement du profil");
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                snap.data.length,
+                (index) => ReductionCodeOverviewWidget(
+                  code: snap.data[index],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   Widget _buildMyComment(BuildContext context, UserManager userManager) {
@@ -289,6 +327,7 @@ class _GeneratedStoreScreenState extends State<GeneratedStoreScreen> {
         (_errorLoadingData
             ? null
             : (String content, double rating) async {
+                double oldRating = _myComment.rating;
                 _myComment.text = content;
                 _myComment.rating = rating;
                 _myRating.rating = rating;
@@ -297,12 +336,13 @@ class _GeneratedStoreScreenState extends State<GeneratedStoreScreen> {
                     .then((comment) async {
                   await RatingModel()
                       .update(_myRating.id, _myRating)
-                      .then((rating) {
-                    if (this.mounted && comment && rating) {
+                      .then((ratingBool) {
+                    if (this.mounted && comment && ratingBool) {
                       setState(() {
                         _myComment = _myComment;
                         _myRating = _myRating;
                       });
+                      widget.rating.update(oldRating, rating);
                       Navigator.pop(context);
                     }
                   });

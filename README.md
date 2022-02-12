@@ -1,167 +1,75 @@
-# Appli Hello Caen
+# Hello Caen Application
 
-## Instructions pour production
-- Créer un projet Firebase
-- Créer 2 applications (une pour iOS et une autre pour Android)
-- Activer L'authentification, le cloud storage, le cloud firestore et le cloud messaging
-- Pour l'authentification, activer les authentifications avec email/mdp, Google et Facebook
-- Lancer la commande `keytool -list -v -keystore your_keystore_name -alias your_alias_name` pour générer les clés SHA1 et SHA 256 pour la production (Remplacez your_keystore_name par le chemin d'accès complet et le nom du magasin de clés, y compris l'extension .keystore. Remplacez your_alias_name par l'alias que vous avez attribué au certificat lorsque vous l'avez créé)
-- Ajouter les 2 clés dans l'application android créée sur Firebase (https://stackoverflow.com/questions/54557479/flutter-and-google-sign-in-plugin-platformexceptionsign-in-failed-com-google/54696963#54696963)
+University project made in "Software creativity" in 3rd year of Computer Science degree at the University of Caen Normandy in order to make us create an application which designed for a problem that we want to fill up.
 
-- If error with Google Auth, see this link https://github.com/flutter/flutter/issues/27599
-- See test with this link https://pub.dev/packages/flutter_facebook_auth#android
+## Table of contents
 
+  - [Table of contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Setup](#setup)
+  - [Commands](#commands)
+  - [Authors](#authors)
+  - [License](#license)
 
-Keystore (alias key) :
-- command to run to generate SHA1 and SHA256 : `keytool -list -v -keystore .\keystore\key.jks -alias key`
-- put password from `android/key.properties` file
+## Introduction
+The goal of this project was to realize applications (code and/or nocode) answering a precise need of a customer, a group or an association. We joined a group of salesmen who founded the group "Hello Caen" and we realized an application allowing to answer their expectations. The application is able to :
+- display the list of all businesses (registered on the platform and nearby)
+- notification system in case of good deals for a favorite business
+- rate and comment on businesses
 
-## Flutter
+The code is however incomplete due to a lack of time (only the administration part has not been completely realized).
 
-### Installation de Flutter
-
-https://flutter.dev/docs/get-started/install
-
-### Documentation de Flutter et du langage Dart
-
-https://flutter.dev/docs
-
-https://api.dart.dev/stable/2.10.4/index.html
-
-### Testage de l'application
-
-https://flutter.dev/docs/cookbook/testing
-
-### Déploiement de l'application
-
-https://flutter.dev/docs/deployment/android
-
-https://flutter.dev/docs/deployment/ios
-
-## Quelques info
-Compte admin test (id `5ePTSGGFgnVxe6rhUA4Rg9Nyb2p1`) :
+### Test accounts
+Admin test Account (id `5ePTSGGFgnVxe6rhUA4Rg9Nyb2p1`) :
 - email : `admin@hellocaen.com`
 - mdp : `admin1`
 
-Compte pro test (id `JE0tQJgslDQ42gaTL771pSgKtht1`) :
+PRO test Account (id `JE0tQJgslDQ42gaTL771pSgKtht1`) :
 - email : `pro1.test@cafe1.com`
 - mdp : `pro123`
 
-Compte user test (id `97RehF9j2me9LWWLPQTJYQDqGn73`) :
+User test Account (id `97RehF9j2me9LWWLPQTJYQDqGn73`) :
 - email : `user.test@gmail.com`
 - mdp : `user12`
 
-## Tutoriels à regarder et expérimenter
-
-https://www.youtube.com/playlist?list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ
-
-https://www.youtube.com/playlist?list=PL4cUxeGkcC9itfjle0ji1xOZ2cjRGY_WB
-
-https://www.youtube.com/playlist?list=PL4cUxeGkcC9jUPIes_B8vRjn1_GaplOPQ
-
-https://www.youtube.com/playlist?list=PL4cUxeGkcC9j--TKIdkb3ISfRbJeJYQwC
-
-## Contenu de l'application
-
-### Documenter le code de l'application
-
-Lancer la commande suivante pour installer :
-
-```bash
-$ flutter pub global activate dartdoc
+## Setup
+We recommand to use the [documentation](https://flutter.dev/docs/get-started/install) to get started with Flutter.
+To install dependencies, execute the following command :
+```sh
+$ flutter pub get
 ```
 
-Puis celle-ci pour regénérer la documentation :
+To test the application, we recommand to install Android Studio/Xcode or VSCode.
 
-```bash
+## Commands
+- Run tests :
+```sh
+$ flutter test
+```
+
+- Build application :
+```sh
+$ flutter build
+```
+
+- Run application :
+```sh
+$ flutter run
+```
+
+- Generate documentation
+```sh
+$ flutter pub global activate dartdoc # activate once
 $ dartdoc
 ```
 
-https://dart.dev/guides/language/effective-dart/documentation
+## Authors
+- [BOCAGE Arthur](https://github.com/TurluTwoD)
+- [PIERRE Corentin](https://github.com/coco-ia)
+- [PIGNARD Alexandre](https://github.com/Myrani)
+- [LETELLIER Guillaume](https://github.com/Guigui14460)
 
-### Liste des packages à utiliser
+## License
+Project under the GPL-3.0 license.
 
-Google Maps (carte intéractive + API) : https://pub.dev/packages/google_maps_flutter
-
-Géolocalisation : https://pub.dev/packages/geolocation ou https://pub.dev/packages/geolocator ou https://pub.dev/packages/flutter_background_geolocation (dernier à tester en priorité)
-
-Localisation (**utilisé**) : https://pub.dev/packages/location
-
-Base de données (Firebase) : https://pub.dev/packages/firebase_core
-Envoie de notification à tous les utilisateurs via Firebase : https://pub.dev/packages/firebase_messaging
-
-Sauvegarde des préférences sur appareil : https://pub.dev/packages/shared_preferences
-
-Envoie de notifications locales : https://pub.dev/packages/flutter_local_notifications
-
-Si besoin, un package pour rendre des widgets plus réutilisable : https://pub.dev/packages/provider
-
-Scanner de code barre : https://pub.dev/packages/flutter_barcode_scanner/example
-
-Générateur de code barre : https://pub.dev/packages/barcode/example
-
-### Tutoriels pour avoir des idées sur le visuel
-
-https://www.youtube.com/c/TheFlutterWay/videos
-
-https://www.youtube.com/c/MarcusNg/videos
-
-https://www.youtube.com/playlist?list=PLxUBb2A_UUy8OlaNZpS2mfL8xpHcnd_Af
-
-https://mightytechno.com/create-hyperlink-for-text-in-flutter/
-
-https://mightytechno.com/flutter-app-bar/
-
-https://mightytechno.com/dark-light-theme-flutter-app/
-
-Certains widgets qu'on pourrait utiliser (rappel : Material vient d'Android et Cupertino d'iOS mais chacun utilisable sur les 2 plateformes mobiles) : https://gallery.flutter.dev/#/
-
-Mode sombre : https://www.youtube.com/watch?v=MnTEHs-ZP0E
-
-Sidebar : https://www.youtube.com/watch?v=n2wtljWWnpU
-
-Animation d'un collapse : https://stackoverflow.com/questions/49029841/how-to-animate-collapse-elements-in-flutter
-
-Graphique pour les statistiques (pro et admin) : https://medium.com/flutter/beautiful-animated-charts-for-flutter-164940780b8c
-
-Video Player : https://www.youtube.com/watch?v=XP-4BiWsuaQ
-
-### Tutoriels pour avoir des idées pour le backend
-
-https://www.youtube.com/watch?v=wV9bd56ypmQ
-
-https://medium.com/comerge/implementing-push-notifications-in-flutter-apps-aef98451e8f1
-
-https://carmine.dev/posts/flutternotifications/
-
-https://stackoverflow.com/questions/62255486/flutter-how-to-keep-the-app-running-on-background
-
-https://stackoverflow.com/questions/53450029/flutter-cross-platform-way-to-keep-application-running-in-the-backgroundexecuting-dart-in-the-background-with-flutter-plugins-and-geofencing-2b3e40a1a124
-
-https://github.com/bkonyi/FlutterGeofencing
-
-https://flutter.dev/docs/cookbook/networking/fetch-data
-
-https://www.youtube.com/playlist?list=PL342JVRNQxEAcQdnNeN0JmMzfcm6VtLxS
-
-Local storage : https://www.youtube.com/watch?v=auspHSmtVII, https://www.raywenderlich.com/7426050-firebase-tutorial-for-flutter-getting-started
-
-Fetch data in the background : https://pub.dev/packages/background_fetch, https://medium.com/vrt-digital-studio/flutter-workmanager-81e0cfbd6f6e
-
-Ajout de tâches répétitives en arrière-plan : https://github.com/fluttercommunity/flutter_workmanager
-
-QR Code : https://medium.com/flutter-community/building-flutter-qr-code-generator-scanner-and-sharing-app-703e73b228d3
-
-Video player : https://www.youtube.com/watch?v=7IG5kRFIMZw
-
-Geolocalisation : https://medium.com/swlh/working-with-geolocation-and-geocoding-in-flutter-and-integration-with-maps-16fb0bc35ede et https://medium.com/flutter-community/exploring-google-maps-in-flutter-8a86d3783d24 et https://gist.github.com/deven98/9925ed6bf2cba0aa6d13d307075c59cb
-
-Firebase upload images : https://www.c-sharpcorner.com/article/upload-image-file-to-firebase-storage-using-flutter/
-
-#### Google Maps
-
-https://github.com/marchdev-tk/flutter_google_maps
-
-https://medium.com/flutter/google-maps-and-flutter-cfb330f9a245
-
-https://blog.codemagic.io/creating-a-route-calculator-using-google-maps/
+N.B.: The source code has been published because it will never be used.

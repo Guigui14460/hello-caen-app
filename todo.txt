@@ -1,0 +1,31 @@
+Page "Bons plans" :
+	- Ajouter un bouton "Près de ma localisation"
+	- Ajouter un bouton pour ne montrer que les commerces mis en favoris
+
+Base de données :
+	- Utiliser une base de données SQL pour simplifier les jointures
+	- Créer une API pour avoir un cache (évite de tout recalculer)
+	- Champs à ajouter :
+		Restrictions sur les horaires
+		Gallerie photo (carousel) + vidéo de présentation (url Youtube ou upload)
+	- Pagination de données (https://medium.com/flutterdevs/pagination-in-flutter-with-firebase-firestore-96d6cc11aef2)
+	- Regrouper les requêtes en transactions (pour éviter de trop nombreux échanges de données) (https://medium.com/@debnathakash8/firestore-transactions-batchedwrites-with-flutter-e675c941572f)
+		CUD
+	- Espace pour du contenu sponsorisé
+
+Code :
+	- Ajouter la preview des commerces (nom, rating, image)
+	- Page information avec les noms des devs
+	- Mettre des meilleurs noms aux fichiers, collections et attributs
+	- Espace Admin
+		- Statistiques
+		- Modération
+	- Espace pour du contenu sponsorisé
+	- Système de notification
+		- Notifier lorsqu'il reste que 10% d'un code en favori
+	- Intégrer Cloud Messaging
+	- Espace abonnement pour passer à un compte pro (option pour créer des commerces, voir les stats sur les commerces)
+	- Améliorer système de localisation
+	- Faire en sorte que ça tourne en arrière-plan
+	- Espace "Contactez-nous" (ouvrir Instagram depuis l'appli, système de chat avec un modo/admin)
+	- Carte personnalisée (https://www.google.com/earth/outreach/learn/visualize-your-data-on-a-custom-map-using-google-my-maps/)

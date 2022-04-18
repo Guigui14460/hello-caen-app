@@ -67,6 +67,8 @@ $ dartdoc
 - [BOCAGE Arthur](https://github.com/TurluTwoD)
 - [PIERRE Corentin](https://github.com/coco-ia)
 - [PIGNARD Alexandre](https://github.com/Myrani)
+- BOIZIAU Kévin
+- LEROUX Simon
 - [LETELLIER Guillaume](https://github.com/Guigui14460)
 
 ## License
